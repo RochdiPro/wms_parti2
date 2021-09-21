@@ -1,0 +1,34 @@
+<h1 mat-dialog-title>Modifier Rayon</h1>
+
+<div mat-dialog-content>
+    <form>
+    
+        <div class="form-group">
+            <label>Libelle</label>
+            <input type="text" class ="form-control" id = "libelle"     [(ngModel)] = "rayon.libelle"   name = "libelle">
+        </div>
+ 
+        <div class="form-group">
+            <label>Hauteur</label>
+            <input type="text" class ="form-control" id = "hauteur"     [(ngModel)] = "rayon.hauteur"   name = "hauteur">
+        </div>
+        <div class="form-group">
+            <label>Largeur</label>
+            <input type="text" class ="form-control" id = "largeur"     [(ngModel)] = "rayon.largeur"   name = "largeur">
+        </div>
+        <mat-form-field appearance="fill">
+            <mat-label>Famille Logistique</mat-label>
+            <mat-select name="famille" [(ngModel)] = "rayon.familleLogistique.libelle" id = "famille" >
+               <mat-option value="option1"></mat-option>             
+               <mat-option *ngFor="let f of Famille_Logistique"  [value]="f.libelle"  >{{f.libelle}}</mat-option>
+            </mat-select>
+         </mat-form-field>
+    
+    </form>
+</div>
+
+<div mat-dialog-actions class="float-right">
+    <button class="mb-2 mr-2 btn btn-success"   (click) = "onSubmit()">Valider</button>
+    <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>
+
+</div>

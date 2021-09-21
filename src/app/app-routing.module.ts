@@ -9,7 +9,7 @@ import { EditBonReceptionComponent } from './WMS/Bon-Reception/edit-bon-receptio
 import { ListerBonReceptionComponent } from './WMS/Bon-Reception/lister-bon-reception/lister-bon-reception.component';
 import { ModifierBonReceptionComponent } from './WMS/Bon-Reception/modifier-bon-reception/modifier-bon-reception.component';
 import { MenuWmsComponent } from './WMS/menu-wms/menu-wms.component';
-import { CartographieComponent } from './WMS/Stockage/Cartographie/cartographie/cartographie.component';
+import { CartographieComponent } from './WMS/Stockage/cartographie/cartographie.component';
   import { EditStockageComponent } from './WMS/Stockage/entree/edit-stockage/edit-stockage.component';
 import { EntreeBonReceptionComponent } from './WMS/Stockage/entree/entree-bon-reception/entree-bon-reception.component';
    

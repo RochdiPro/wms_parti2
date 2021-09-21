@@ -20,11 +20,72 @@ Locals(): Observable<any> {
 
  );
 }
-//recuperer local by id
+//service  récupérer local by id
 getLocalById(id: number): Observable<any>{
   return this.httpClient.get<any>(`${wms+"/WMS/Local"}/${id}`);
 }
 
+
+//CRUD famille logistique
+//service récupérer la liste des famille
+ListeFamilleLogistique(): Observable<any> {  
+  return this.httpClient.get(wms+"WMS/Touts_FamilleLogistiques").pipe(
+    catchError(this.handleError)
+
+ );
+}
+//service  récupérer la liste des sous famille
+ListeSouFamilleLogistique(): Observable<any> {  
+  return this.httpClient.get(wms+"WMS/Touts_SousFamilleLogistiques").pipe(
+    catchError(this.handleError)
+
+ );
+}
+
+//service récupérer la liste des sous famille par famille
+SouFamilleLogistiqueParFamille(famille:any): Observable<any> {  
+  return this.httpClient.get(wms+"WMS/SousFamille_Famille",{params:{ keyword: famille}}).pipe(
+    catchError(this.handleError)
+
+ );
+}
+
+
+///////CRUD rayon
+//service ajouter rayon
+
+getRayonById(id: number): Observable<any>{
+  return this.httpClient.get<any>(`${wms+"/WMS/Rayon"}/${id}`);
+}
+
+ajoutRayon(rayon:any): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajout_Rayon",rayon).pipe(
+    catchError(this.handleError)
+ );
+}
+
+//service modifier rayon
+editRayon(id: number, rayon: any): Observable<Object>{
+  return this.httpClient.put(`${wms+"/WMS/Modifier_Rayon"}/${id}`, rayon);
+}
+
+supprimerRayon(id: number): Observable<any> {  
+  return this.httpClient.delete(`${wms+"/WMS/Supprimer_Rayon"}/${id}`);
+}
+
+
+///////CRUD etage
+
+getEtageById(id: number): Observable<any>{
+  return this.httpClient.get<any>(`${wms+"/WMS/Etage"}/${id}`);
+}
+
+
+supprimerEtage(id: number): Observable<any> {  
+  return this.httpClient.delete(`${wms+"/WMS/Supprimer_Etage"}/${id}`);
+}
+
+///////CRUD emplacment
 
 //afficher erreur
 private handleError(error:any) {

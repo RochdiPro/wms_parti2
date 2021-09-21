@@ -21,9 +21,13 @@ import { ModifierBonReceptionComponent } from './WMS/Bon-Reception/modifier-bon-
 import { BonRejetComponent } from './WMS/Bon-Reception/bon-rejet/bon-rejet.component';
 import { EditStockageComponent } from './WMS/Stockage/entree/edit-stockage/edit-stockage.component';
 import { EntreeBonReceptionComponent } from './WMS/Stockage/entree/entree-bon-reception/entree-bon-reception.component';
-import { CartographieComponent, DialogOpenCartographie } from './WMS/Stockage/Cartographie/cartographie/cartographie.component';
+ 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { CartographieComponent, DialogAjouterEmplacment, DialogAjouterEtage, DialogAjouterRayon, DialogEditEtage, DialogEditRayon, DialogOpenCartographie } from './WMS/Stockage/cartographie/cartographie.component';
+import { PortalModule } from '@angular/cdk/portal';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -44,7 +48,12 @@ import { MatInputModule } from '@angular/material/input';
     EditStockageComponent,
     EntreeBonReceptionComponent,
     CartographieComponent,
-    DialogOpenCartographie
+    DialogOpenCartographie,
+    DialogAjouterRayon,
+    DialogEditRayon,
+    DialogAjouterEtage,
+    DialogEditEtage,
+    DialogAjouterEmplacment
   ],
   exports: [
 
@@ -63,10 +72,13 @@ import { MatInputModule } from '@angular/material/input';
     FormsModule, ReactiveFormsModule,
     MatSelectModule,
     MatDialogModule,
-
-
-
-
+   
+    PortalModule,
+  
+    MatNativeDateModule,
+   
+     MatButtonModule,
+ 
   ],
   providers: [],
   bootstrap: [AppComponent]

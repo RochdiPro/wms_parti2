@@ -36,7 +36,7 @@
           </div>
            <div class="col-md-3 mb-3">
               <div class="example-button-container">
-                 <button mat-mini-fab color="primary"  aria-label="Example icon button with a plus icon">
+                 <button (click)="openDialogAjouterRayon()"  mat-mini-fab color="primary"  aria-label="Example icon button with a plus icon">
                    <mat-icon>add</mat-icon>
                  </button>
                </div>
@@ -83,7 +83,7 @@
                  
           </div>
            <div class="col-md-3 mb-3">
-              <button mat-mini-fab color="primary"   aria-label="Example icon button with a plus icon">
+              <button   (click)="openDialogAjoutEtage()" mat-mini-fab color="primary"   aria-label="Example icon button with a plus icon">
                  <mat-icon>add</mat-icon>
                </button>
 
@@ -122,20 +122,17 @@
            </div>
         </div>
         <div class="row">
+        
+         <div class="col-md-9 mb-3">
+             
+               
+        </div>
            <div class="col-md-3 mb-3">
-              <mat-form-field>
-                 <mat-label>Position</mat-label>
-                 <input matInput placeholder="00" formControlName="positionx" required maxlength="2" pattern="[0-9]{2}"
-                    title="Position X d'emplacement constitué de Chiffre"  
-                    >
-                 <mat-error *ngIf="positionFormGroup.controls['positionx'].hasError('required')">
-                    Position X est obligatoire!
-                 </mat-error>
-              </mat-form-field>
+            <button (click)="openDialogAjoutEmplacment()" mat-mini-fab color="primary"   aria-label="Example icon button with a plus icon">
+               <mat-icon>add</mat-icon>
+             </button>
            </div>
-           <button mat-mini-fab color="primary"   aria-label="Example icon button with a plus icon">
-              <mat-icon>add</mat-icon>
-            </button>
+       
          </div>
         <div class="col-md-12">
            <div class="main-card mb-12 card">
