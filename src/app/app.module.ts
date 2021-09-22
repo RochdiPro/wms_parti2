@@ -24,10 +24,12 @@ import { EntreeBonReceptionComponent } from './WMS/Stockage/entree/entree-bon-re
  
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { CartographieComponent, DialogAjouterEmplacment, DialogAjouterEtage, DialogAjouterRayon, DialogEditEtage, DialogEditRayon, DialogOpenCartographie } from './WMS/Stockage/cartographie/cartographie.component';
+import { CartographieComponent, DialogAjouterEmplacment, DialogAjouterEtage, DialogAjouterRayon, DialogEditEmplacement, DialogEditEtage, DialogEditRayon, DialogOpenCartographie } from './WMS/Stockage/cartographie/cartographie.component';
 import { PortalModule } from '@angular/cdk/portal';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
+import { NgxBarcodeModule } from 'ngx-barcode';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { MatButtonModule } from '@angular/material/button';
     DialogEditRayon,
     DialogAjouterEtage,
     DialogEditEtage,
-    DialogAjouterEmplacment
+    DialogAjouterEmplacment,
+    DialogEditEmplacement,
+
   ],
   exports: [
 
@@ -65,19 +69,18 @@ import { MatButtonModule } from '@angular/material/button';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule, ReactiveFormsModule,
     MatIconModule,
     MatStepperModule,
     MatInputModule,
     MatFormFieldModule,
-    FormsModule, ReactiveFormsModule,
     MatSelectModule,
     MatDialogModule,
-   
-    PortalModule,
-  
     MatNativeDateModule,
-   
-     MatButtonModule,
+    MatButtonModule,
+    FormsModule, ReactiveFormsModule,
+    PortalModule,
+    NgxBarcodeModule, QRCodeModule,
  
   ],
   providers: [],

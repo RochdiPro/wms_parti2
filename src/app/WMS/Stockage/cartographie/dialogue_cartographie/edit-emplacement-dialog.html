@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Modifier Emplacement</h1>
+
+<div mat-dialog-content>
+    <form>
+    
+        <div class="form-group">
+            <label>Libelle</label>
+            <input type="text" class ="form-control" id = "libelle"     [(ngModel)] = "emplacement.libelle"   name = "libelle">
+        </div>
+ 
+        <div class="form-group">
+            <label>Hauteur</label>
+            <input type="text" class ="form-control" id = "hauteur"     [(ngModel)] = "emplacement.hauteur"   name = "hauteur">
+        </div>
+        <div class="form-group">
+            <label>Largeur</label>
+            <input type="text" class ="form-control" id = "largeur"     [(ngModel)] = "emplacement.largeur"   name = "largeur">
+        </div>
+    
+    
+    </form>
+</div>
+
+<div mat-dialog-actions class="float-right">
+    <button class="mb-2 mr-2 btn btn-success"   (click) = "onSubmit()">Valider</button>
+    <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>
+
+</div>

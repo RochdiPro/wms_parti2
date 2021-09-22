@@ -5,6 +5,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MatStepper } from '@angular/material/stepper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { QRCodeComponent } from 'angularx-qrcode';
+import { NgxBarcodeComponent } from 'ngx-barcode';
 import Swal from 'sweetalert2';
 import { StockageService } from '../stockage.service';
 
@@ -14,7 +16,10 @@ import { StockageService } from '../stockage.service';
   styleUrls: ['./cartographie.component.scss']
 })
 export class CartographieComponent implements OnInit {
+
   @ViewChild('stepper') private myStepper: MatStepper;
+  @ViewChild("qrcode", { static: true }) qrcode: QRCodeComponent
+  @ViewChild(NgxBarcodeComponent) barcode: NgxBarcodeComponent
 
   //declaration formGroup
   localFormGroup: FormGroup;
@@ -22,7 +27,39 @@ export class CartographieComponent implements OnInit {
   etageFormGroup: FormGroup;
   positionFormGroup: FormGroup;
   disableSelect = new FormControl(false);
+
   isLinear = false;
+
+  //definition de la code a bare 
+  elementType: any = "img";
+  value = 'L0 R0 E0 X0 Y0';
+  format: any = 'CODE128';
+  lineColor = '#000000';
+  width = 2;
+  height = 100;
+  displayValue = true;
+  fontOptions = '';
+  font = 'monospace';
+  textAlign = 'center';
+  textPosition = 'bottom';
+  textMargin = 2;
+  fontSize = 20;
+  background = '#ffffff';
+  margin = 10;
+  marginTop = 10;
+  marginBottom = 10;
+  marginLeft = 10;
+  marginRight = 10;
+  get values(): string[] {
+    return this.value.split('\n');
+  }
+  codeList: string[] = [
+    'CODE128',
+    'CODE128A', 'CODE128B',    
+    'CODE39',
+
+  ];
+
 
   //Declaration du tableau 
   locals: any = [];
@@ -32,11 +69,13 @@ export class CartographieComponent implements OnInit {
 
   libelleLocal: any;
   libelleRayon: any;
+  libelleEtage: any;
+  libellePosition: any;
 
   localselect: any;
   rayonselect: any
-
-
+  etageselect: any
+  positionselect: any
   constructor(public dialog: MatDialog, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient, private sanitizer: DomSanitizer) {
 
   }
@@ -87,7 +126,7 @@ export class CartographieComponent implements OnInit {
     this.libelleLocal = this.localselect.libelle
     this.rayons = this.localselect.rayons
     const dialogRef = this.dialog.open(DialogOpenCartographie, {
-      width: 'auto',
+      width: '1200px',
       data: { local: this.localselect }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -127,7 +166,7 @@ export class CartographieComponent implements OnInit {
     });
   }
 
-  //ouvrir la boite dialogue DialogAjouterRayon 
+  //ouvrir la boite dialogue DialogEditRayon 
   openDialogEditRayon(numero: any, rayon: any) {
 
     const dialogRef = this.dialog.open(DialogEditRayon, {
@@ -174,8 +213,15 @@ export class CartographieComponent implements OnInit {
     })
   }
 
-
-
+  //selectionner et accedé un etage
+  SelectEtage(etage: any) {
+    this.etageselect = etage
+    console.log(etage)
+    this.libelleEtage = this.etageselect.libelle
+    this.positions = this.etageselect.positions
+    this.goForward();
+  }
+  //ouvrir la boite dialogue DialogAjouterEtage
   openDialogAjoutEtage() {
     const dialogRef = this.dialog.open(DialogAjouterEtage, {
       width: 'auto',
@@ -191,8 +237,19 @@ export class CartographieComponent implements OnInit {
     });
   }
 
-  modifierEtage(id: any) { }
+  //ouvrir la boite dialogue DialogEditEtage
+  openDialoEditEtage(numero: any, Etage: any) {
 
+    const dialogRef = this.dialog.open(DialogEditEtage, {
+      width: 'auto',
+      data: { idEtage: numero, etage: Etage }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+
+  }
+  //supprimer un etage
   supprimerEtage(id: number) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -225,26 +282,168 @@ export class CartographieComponent implements OnInit {
     })
   }
 
+  
+  //selcetionner emplacment/position
+  selectPosition(position: any) {
+    this.positionselect = position
+    // = this.positionselect
+    console.log(position)
+    this.libellePosition = this.positionselect.libelle
+    this.value = "L0" + this.localselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id + "P0" + this.positionselect.id
+    console.log("value ", this.value)
+    this.goForward();
+  }
+   //ouvrir la boite dialogue DialogEditEmplacement
+  openDialoEditEmplacment(position: any) {
 
-
-  openDialogAjoutEmplacment() {
-    const dialogRef = this.dialog.open(DialogAjouterEmplacment, {
+    const dialogRef = this.dialog.open(DialogEditEmplacement, {
       width: 'auto',
-      data: { rayon: this.rayonselect }
+      data: { position: position }
     });
     dialogRef.afterClosed().subscribe(result => {
- 
+
     });
+
+  }
+//ouvrir la boite dialogue DialogAjouterEmplacment
+openDialogAjoutEmplacment() {
+  const dialogRef = this.dialog.open(DialogAjouterEmplacment, {
+    width: 'auto',
+    data: { rayon: this.rayonselect }
+  });
+  dialogRef.afterClosed().subscribe(result => {
+
+  });
+}
+  //supprimer un emplacement
+supprimerPosition(id: number) {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-success',
+      cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: false
+  })
+
+  swalWithBootstrapButtons.fire({
+    title: 'Tu est sure?',
+    text: "Vous voulez vraiment supprimer cette position!!!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Oui, Supprimer!',
+    cancelButtonText: 'Non, Annuler!',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.service.supprimerEtage(id).subscribe(data => {
+        console.log(data);
+        //        this.ListePosition(this.etageselect.id);
+        swalWithBootstrapButtons.fire(
+          'Suppresion Effecté!',
+          'Position Supprimé Avec Sucées.',
+          'success'
+        )
+      })
+
+    }
+  })
+}
+  //enregistrer code a bare comme une image 
+saveBRAsImage(){
+    // fetches base 64 date from image
+    console.log((<HTMLInputElement>document.getElementById('barcode')));
+    console.log(this.barcode)
+    const parentElement = this.barcode.bcElement.nativeElement.firstChild.src;
+
+    let blobData = this.convertBase64ToBlob(parentElement);
+
+    // saves as image
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) { //IE
+      window.navigator.msSaveOrOpenBlob(blobData, 'BRcode');
+    } else { // chrome
+      const blob = new Blob([blobData], { type: "image/png" });
+      const url = window.URL.createObjectURL(blob);
+      // window.open(url);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'BRcode';
+      link.click();
+    }
+
+    if (window.navigator.msSaveOrOpenBlob) // IE10+
+      window.navigator.msSaveOrOpenBlob(blobData, 'BRcode');
+    else {
+      const blob = new Blob([blobData], { type: "image/png" });
+      var url = window.URL.createObjectURL(blob);
+      window.open(url);
+    }
+
+}
+
+ //enregistrer QR code comme une image 
+saveQRAsImage(){
+  // fetches base 64 date from image
+  console.log(this.qrcode)
+
+  const parentElement = this.qrcode.qrcElement.nativeElement.firstChild.src;
+
+  let blobData = this.convertBase64ToBlob(parentElement);
+  console.log("blobData", blobData)
+
+  // saves as image
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) { //IE
+    window.navigator.msSaveOrOpenBlob(blobData, 'Qrcode');
+  } else { // chrome
+    const blob = new Blob([blobData], { type: "image/png" });
+    console.log("blob", blob)
+
+    const url = window.URL.createObjectURL(blob);
+    console.log("url", url)
+    // window.open(url);
+    const link = document.createElement('a');
+    console.log("link", link)
+
+    link.href = url;
+    link.download = 'Qrcode';
+    link.click();
   }
 
+  if (window.navigator.msSaveOrOpenBlob) // IE10+
+    window.navigator.msSaveOrOpenBlob(blobData, 'Qrcode');
+  else {
+    const blob = new Blob([blobData], { type: "image/png" });
+    var url = window.URL.createObjectURL(blob);
+    window.open(url);
+  }
+}
 
 
-  //aller au step precedente 
+
+
+//convertir image de la Base64 en Blob
+private convertBase64ToBlob(Base64Image: any) {
+  // decouper en deux partie
+  const parts = Base64Image.split(';base64,');
+  //MAINTENIR LE TYPE DE CONTENU
+  const imageType = parts[0].split(':')[1];
+  // DECODE BASE64 STRING
+  const decodedData = window.atob(parts[1]);
+  // CRÉER UNIT8ARRAY DE TAILLE MÊME QUE LA LONGUEUR DES DONNÉES DE LIGNE
+  const uInt8Array = new Uint8Array(decodedData.length);
+  // ININSÉRER TOUS LES CODES DE CARACTÈRES DANS UINT8ARRAY
+  for (let i = 0; i < decodedData.length; ++i) {
+    uInt8Array[i] = decodedData.charCodeAt(i);
+  }
+  //RETOURNER L'IMAGE BLOB APRÈS LA CONVERSION
+  return new Blob([uInt8Array], { type: imageType });
+}
+
+  //aller à la step precedente 
   goBack() {
     this.myStepper.previous();
   }
 
-  //aller au step suivante 
+  //aller à la step suivante 
   goForward() {
     this.myStepper.next();
   }
@@ -270,6 +469,8 @@ export class DialogOpenCartographie {
     this.local = data.local
 
     this.libelleLocal = data.local.libelle
+    this.rayons = data.local.rayons
+
   }
 
   selectPosition(position: any) {
@@ -302,7 +503,7 @@ export class DialogAjouterRayon {
       this.Famille_Logistique = data;
     });
     console.log(data.local)
- //   this.rayon.local = data.local;
+    //   this.rayon.local = data.local;
 
   }
 
@@ -380,7 +581,7 @@ export class DialogEditRayon {
 })
 export class DialogAjouterEtage {
   dataTab: any
-  etage: any 
+  etage: any
   Sous_Famille_Logistique: any = [];
   constructor(public dialogRef: MatDialogRef<DialogAjouterEtage>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
@@ -392,9 +593,9 @@ export class DialogAjouterEtage {
 
   }
   onSubmit() {
- 
+
   }
- 
+
   //fermer dialogue
   close() {
     this.dialogRef.close();
@@ -454,20 +655,47 @@ export class DialogEditEtage {
 })
 export class DialogAjouterEmplacment {
   dataTab: any
-  emplacement: any 
-   constructor(public dialogRef: MatDialogRef<DialogAjouterEmplacment>,
+  emplacement: any
+  constructor(public dialogRef: MatDialogRef<DialogAjouterEmplacment>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-    
+
 
   }
   onSubmit() {
- 
+
   }
- 
+
   //fermer dialogue
   close() {
     this.dialogRef.close();
   }
 
 }
+
+///////////
+//dialog modifier emplacment
+@Component({
+  selector: 'edit-rayon-emplacement',
+  templateUrl: 'dialogue_cartographie/edit-emplacement-dialog.html',
+})
+export class DialogEditEmplacement {
+  dataTab: any
+  emplacement: any
+  constructor(public dialogRef: MatDialogRef<DialogEditEmplacement>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
+
+
+  }
+  onSubmit() {
+
+  }
+
+  //fermer dialogue
+  close() {
+    this.dialogRef.close();
+  }
+
+}
+
+
 
