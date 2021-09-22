@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Etage } from '../Classe/Stockage/Etage';
+import { Position } from '../Classe/Stockage/Position';
 
 const infonet = '/ERP/';
 const wms = '/WMS/';
@@ -75,17 +77,41 @@ supprimerRayon(id: number): Observable<any> {
 
 
 ///////CRUD etage
-
 getEtageById(id: number): Observable<any>{
   return this.httpClient.get<any>(`${wms+"/WMS/Etage"}/${id}`);
 }
 
+ajoutEtageToRayon(etage:Etage): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajout_Etage", etage).pipe(
+    catchError(this.handleError)
 
+ );
+}
+editEtage(id: number, etage: Etage): Observable<Object>{
+  return this.httpClient.put(`${wms+"/WMS/Modifier_Etage"}/${id}`, etage);
+}
 supprimerEtage(id: number): Observable<any> {  
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Etage"}/${id}`);
 }
 
 ///////CRUD emplacment
+
+GetPositionById(id: number): Observable<Position>{
+  return this.httpClient.get<Position>(`${wms+"/WMS/Position"}/${id}`);
+}
+ajoutPosition(pos:Position): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajout_Position",pos).pipe(
+    catchError(this.handleError)
+ );
+}
+editPosition(id: number,file:any): Observable<Object>{
+  
+  return this.httpClient.put(`${wms+"/WMS/Modifier_Position"}/${id}`,{ observe: 'response' }
+  )  ;
+}
+supprimerPosition(id: number): Observable<any> {  
+  return this.httpClient.delete(`${wms+"/WMS/Supprimer_Position"}/${id}`);
+}
 
 //afficher erreur
 private handleError(error:any) {
@@ -98,5 +124,13 @@ private handleError(error:any) {
     errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
   }
   return throwError(errorMessage);
+}
+
+//recupere ID dernier position ajoutéé
+LastIDPos(): Observable<any> {  
+  return this.httpClient.get(wms+"WMS/LastIDPos").pipe(
+    catchError(this.handleError)
+
+ );
 }
 }

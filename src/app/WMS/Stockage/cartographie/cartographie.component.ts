@@ -309,7 +309,12 @@ export class CartographieComponent implements OnInit {
 openDialogAjoutEmplacment() {
   const dialogRef = this.dialog.open(DialogAjouterEmplacment, {
     width: 'auto',
-    data: { rayon: this.rayonselect }
+    data: { 
+      rayon: this.rayonselect,
+      etageselect:this.etageselect,
+      localselect:this.localselect,
+      rayonselect:this.rayonselect,
+      }
   });
   dialogRef.afterClosed().subscribe(result => {
 
@@ -417,9 +422,6 @@ saveQRAsImage(){
   }
 }
 
-
-
-
 //convertir image de la Base64 en Blob
 private convertBase64ToBlob(Base64Image: any) {
   // decouper en deux partie
@@ -467,7 +469,6 @@ export class DialogOpenCartographie {
   constructor(public dialogRef: MatDialogRef<DialogOpenCartographie>,
     @Inject(MAT_DIALOG_DATA) public data: any, private service: StockageService, private http: HttpClient) {
     this.local = data.local
-
     this.libelleLocal = data.local.libelle
     this.rayons = data.local.rayons
 
@@ -570,9 +571,7 @@ export class DialogEditRayon {
 
 }
 
-
 //////////////////////
-
 
 //dialog add etage
 @Component({
@@ -585,15 +584,24 @@ export class DialogAjouterEtage {
   Sous_Famille_Logistique: any = [];
   constructor(public dialogRef: MatDialogRef<DialogAjouterEtage>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-    /* this.service.SouFamilleLogistiqueParFamille(this.data.rayon.familleLogistique.id).subscribe((data: any) => {
+      this.service.SouFamilleLogistiqueParFamille(this.data.rayon.familleLogistique.id).subscribe((data: any) => {
       console.log("Sous Famille", data)
       this.Sous_Famille_Logistique = data
-    }); */
-    //his.etage.rayon = data.rayon
+    });  
+    // this.etage.rayon = data.rayon
 
   }
   onSubmit() {
-
+    console.log(this.etage)
+    this.service.ajoutEtageToRayon(this.etage).subscribe(data => {
+      console.log(data);
+      Swal.fire(
+        'Ajout Effecté',
+        'Etage Ajouté Avec Sucées',
+        'success'
+      )
+    },
+      error => console.log(error));
   }
 
   //fermer dialogue
@@ -635,8 +643,6 @@ export class DialogEditEtage {
       this.close();
     }
       , error => console.log(error));
-
-
   }
   //fermer dialogue
   close() {
@@ -656,13 +662,41 @@ export class DialogEditEtage {
 export class DialogAjouterEmplacment {
   dataTab: any
   emplacement: any
+  value:any
+  
+  positions: any = [];
+
+  localselect: any; rayonselect: any; etageselect: any;positionselect: any
+
   constructor(public dialogRef: MatDialogRef<DialogAjouterEmplacment>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-
-
-  }
+      this.emplacement.local = data.localselect
+      this.emplacement.rayon = data.rayonselect
+      this.emplacement.etage = data.etageselect
+      console.log(this.emplacement)
+    }
   onSubmit() {
-
+    this.service.LastIDPos().subscribe(data => {
+      this.emplacement.id = data;
+      this.value = "L0" + this.localselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id + "P0" + this.emplacement.id
+      console.log("value ", this.value)
+      this.emplacement.reference = data.value
+      console.log(this.emplacement)
+      this.service.ajoutPosition(this.emplacement).subscribe(data => {
+        console.log("ajouuuut", data);
+        Swal.fire(
+          'Ajout Effecté',
+          'Emplacement Ajouté Avec Sucées',
+          'success'
+        )
+        this.service.getEtageById(this.etageselect.id).subscribe(data => {
+          this.etageselect = data;
+          console.log("newww2", this.etageselect)
+          this.positions = this.etageselect.positions
+        }, error => console.log(error));
+      },
+        error => console.log(error));
+    })
   }
 
   //fermer dialogue
