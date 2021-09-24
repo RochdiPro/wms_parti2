@@ -58,7 +58,7 @@
                         <ul class="list-group">
                            <button class="list-group-item-action list-group-item " style="width: 90px;
                        height: 400px;">
-                              <br> <b>Rayon {{rayon.libelle}}</b> {{rayon.familleLogistique.libelle}} <br>
+                              <br> <b>Rayon {{rayon.libelle}}</b><br> {{rayon.familleLogistique.libelle}} 
                               <div class="row" style="align-items: center;">
                                  <button class="  mb-1 mr-1 btn " (click)="SelectRayon(rayon)">
                                     <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
@@ -195,43 +195,62 @@
    <mat-step>
       <ng-template matStepLabel>Cloture</ng-template>
       <h4>Information Emplacement</h4>
+
+
+      <div class="row">
+
+         <div class="col-md-3 mb-3">
+            <h6><strong>Local:</strong></h6>
+            {{libelleLocal}}
+         </div>
+         <div class="col-md-3 mb-3">
+            <h6><strong>Rayon:</strong></h6> {{libelleRayon}}
+         </div>
+         <div class="col-md-3 mb-3">
+            <h6><strong>Etage:</strong></h6> {{libelleEtage}}
+         </div>
+         <div class="col-md-3 mb-3">
+            <h6><strong>Emplacement:</strong></h6>
+            {{libellePosition}}
+
+            <br>
+         </div>
+      </div>
+
+
       <div class="row">
          <div class="col-md-6 mb-3">
             <div class="card-border mb-8 card card-body ">
                <h5 class="card-title">Code a bare</h5>
-               <div class="col-md-4">
-                  <div fxLayout="column">
-                     <div class="col-md-4">
-                        <div fxLayout="column">
-                           <div class="row">
-                              <mat-label>Format Code</mat-label>
-                              <mat-select placeholder="bc-format" [(ngModel)]="format">
-                                 <mat-option *ngFor="let code of codeList" [value]="code">{{code}}</mat-option>
-                              </mat-select>
-                           </div>
-                           <br />
-                           <div class="row">
-                              <input type="checkbox" [(ngModel)]="displayValue">&nbsp;
-                              &nbsp;Afficher Code
-                           </div>
+               <div fxLayout="column">
+                  <div class="col-md-4">
+                     <div fxLayout="column">
+                        <div class="row">
+                           <mat-label>Format Code</mat-label>
+                           <mat-select placeholder="bc-format" [(ngModel)]="format">
+                              <mat-option *ngFor="let code of codeList" [value]="code">{{code}}</mat-option>
+                           </mat-select>
+                        </div>
+                        <br />
+                        <div class="row">
+                           <input type="checkbox" [(ngModel)]="displayValue">&nbsp;
+                           &nbsp;Afficher Code
                         </div>
                      </div>
-                     <div fxLayoutAlign="space-around center" fxLayout="column">
-                        <ngx-barcode id="barcode" #barcode *ngFor="let bcValue of values" [bc-value]="value"
-                           [bc-element-type]="elementType" [bc-format]="format" [bc-line-color]="lineColor"
-                           [bc-width]="width" [bc-height]="height" [bc-display-value]="displayValue"
-                           [bc-font-options]="fontOptions" [bc-font]="font" [bc-text-align]="textAlign"
-                           [bc-text-margin]="textMargin" [bc-font-size]="fontSize" [bc-background]="background"
-                           [bc-margin]="margin" [bc-margin-top]="marginTop" [bc-margin-bottom]="marginBottom"
-                           [bc-margin-left]="marginLeft" [bc-margin-right]="marginRight">
-                        </ngx-barcode>
-                     </div>
-                     <div fxLayoutAlign="space-around center" fxLayout="column">
-                       <div class="row">
-                        <button class="pe-7s-download btn btn-primary" (click)="saveBRAsImage()">Imprimer Code a Barre
-                        </button>
-                       </div> 
-                     </div>
+                  </div>
+                  <div fxLayoutAlign="space-around center" fxLayout="column">
+                     <ngx-barcode id="barcode" #barcode *ngFor="let bcValue of values" [bc-value]="value"
+                        [bc-element-type]="elementType" [bc-format]="format" [bc-line-color]="lineColor"
+                        [bc-width]="width" [bc-height]="height" [bc-display-value]="displayValue"
+                        [bc-font-options]="fontOptions" [bc-font]="font" [bc-text-align]="textAlign"
+                        [bc-text-margin]="textMargin" [bc-font-size]="fontSize" [bc-background]="background"
+                        [bc-margin]="margin" [bc-margin-top]="marginTop" [bc-margin-bottom]="marginBottom"
+                        [bc-margin-left]="marginLeft" [bc-margin-right]="marginRight">
+                     </ngx-barcode>
+                  </div>
+                  <div fxLayoutAlign="space-around center" >
+                     <button class="pe-7s-download btn btn-primary" (click)="saveBRAsImage()">Imprimer Code a Barre
+                     </button>
                   </div>
                </div>
             </div>
@@ -240,7 +259,7 @@
          <div class="col-md-5 mb-3" style="align-content: center;">
             <div class="card-border mb-8 card card-body">
                <h5 class="card-title">QR Code</h5>
-               <div fxLayout="column">
+               <div fxLayout="column center">
                   <div fxLayoutAlign="space-around center" fxLayout="column">
                      <qrcode id="qr" #qrcode [qrdata]="value" [width]="200" elementType="img"
                         [errorCorrectionLevel]="'M'">

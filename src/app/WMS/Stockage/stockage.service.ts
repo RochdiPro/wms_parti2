@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Etage } from '../Classe/Stockage/Etage';
 import { Position } from '../Classe/Stockage/Position';
+import { Rayon } from '../Classe/Stockage/Rayon';
 
 const infonet = '/ERP/';
 const wms = '/WMS/';
@@ -57,17 +58,17 @@ SouFamilleLogistiqueParFamille(famille:any): Observable<any> {
 //service ajouter rayon
 
 getRayonById(id: number): Observable<any>{
-  return this.httpClient.get<any>(`${wms+"/WMS/Rayon"}/${id}`);
+  return this.httpClient.get<Rayon>(`${wms+"/WMS/Rayon"}/${id}`);
 }
 
-ajoutRayon(rayon:any): Observable<any> {  
+ajoutRayon(rayon:Rayon): Observable<any> {  
   return this.httpClient.post(wms+"WMS/Ajout_Rayon",rayon).pipe(
     catchError(this.handleError)
  );
 }
 
 //service modifier rayon
-editRayon(id: number, rayon: any): Observable<Object>{
+editRayon(id: number, rayon: Rayon): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_Rayon"}/${id}`, rayon);
 }
 
@@ -78,7 +79,7 @@ supprimerRayon(id: number): Observable<any> {
 
 ///////CRUD etage
 getEtageById(id: number): Observable<any>{
-  return this.httpClient.get<any>(`${wms+"/WMS/Etage"}/${id}`);
+  return this.httpClient.get<Etage>(`${wms+"/WMS/Etage"}/${id}`);
 }
 
 ajoutEtageToRayon(etage:Etage): Observable<any> {  

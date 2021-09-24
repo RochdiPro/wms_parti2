@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { NgxBarcodeComponent } from 'ngx-barcode';
 import Swal from 'sweetalert2';
+import { Etage } from '../../Classe/Stockage/Etage';
+import { Position } from '../../Classe/Stockage/Position';
+import { Rayon } from '../../Classe/Stockage/Rayon';
 import { StockageService } from '../stockage.service';
 
 @Component({
@@ -132,8 +135,6 @@ export class CartographieComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.service.getLocalById(this.localselect.id).subscribe(data => {
         this.localselect = data;
-        console.log("newww", data)
-        console.log("newww2", this.localselect)
         this.rayons = this.localselect.rayons
 
       }, error => console.log(error));
@@ -298,7 +299,7 @@ export class CartographieComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogEditEmplacement, {
       width: 'auto',
-      data: { position: position }
+      data: { emplacement: position }
     });
     dialogRef.afterClosed().subscribe(result => {
 
@@ -317,9 +318,17 @@ openDialogAjoutEmplacment() {
       }
   });
   dialogRef.afterClosed().subscribe(result => {
-
+    console.log("id etage seelect",this.etageselect.id)
+    this.service.getEtageById(this.etageselect.id).subscribe(data => {
+      this.etageselect = data;
+       this.positions = this.etageselect.positions
+    }, error => console.log(error));
   });
+   
 }
+
+
+ 
   //supprimer un emplacement
 supprimerPosition(id: number) {
   const swalWithBootstrapButtons = Swal.mixin({
@@ -494,7 +503,7 @@ export class DialogOpenCartographie {
 })
 export class DialogAjouterRayon {
   dataTab: any
-  rayon: any
+  rayon: Rayon=new Rayon()
   Famille_Logistique: any = [];
   constructor(public dialogRef: MatDialogRef<DialogAjouterRayon>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
@@ -504,7 +513,7 @@ export class DialogAjouterRayon {
       this.Famille_Logistique = data;
     });
     console.log(data.local)
-    //   this.rayon.local = data.local;
+    this.rayon.local = data.local;
 
   }
 
@@ -538,7 +547,7 @@ export class DialogAjouterRayon {
 })
 export class DialogEditRayon {
   dataTab: any
-  rayon: any
+  rayon: Rayon
   Famille_Logistique: any = [];
   constructor(public dialogRef: MatDialogRef<DialogEditRayon>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
@@ -580,7 +589,7 @@ export class DialogEditRayon {
 })
 export class DialogAjouterEtage {
   dataTab: any
-  etage: any
+  etage: Etage=new Etage()
   Sous_Famille_Logistique: any = [];
   constructor(public dialogRef: MatDialogRef<DialogAjouterEtage>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
@@ -588,7 +597,7 @@ export class DialogAjouterEtage {
       console.log("Sous Famille", data)
       this.Sous_Famille_Logistique = data
     });  
-    // this.etage.rayon = data.rayon
+     this.etage.rayon = data.rayon
 
   }
   onSubmit() {
@@ -639,7 +648,7 @@ export class DialogEditEtage {
   }
   onSubmit() {
     console.log(this.dataTab.idEtage)
-    this.service.editRayon(this.dataTab.idEtage, this.etage).subscribe(data => {
+    this.service.editEtage(this.dataTab.idEtage, this.etage).subscribe(data => {
       this.close();
     }
       , error => console.log(error));
@@ -661,12 +670,10 @@ export class DialogEditEtage {
 })
 export class DialogAjouterEmplacment {
   dataTab: any
-  emplacement: any
+  emplacement: Position=new Position()
   value:any
-  
   positions: any = [];
-
-  localselect: any; rayonselect: any; etageselect: any;positionselect: any
+ 
 
   constructor(public dialogRef: MatDialogRef<DialogAjouterEmplacment>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
@@ -678,7 +685,7 @@ export class DialogAjouterEmplacment {
   onSubmit() {
     this.service.LastIDPos().subscribe(data => {
       this.emplacement.id = data;
-      this.value = "L0" + this.localselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id + "P0" + this.emplacement.id
+      this.value = "L0" + this.emplacement.local.id + "R" + this.emplacement.rayon.libelle + "E0" + this.emplacement.etage.id + "P0" + this.emplacement.id
       console.log("value ", this.value)
       this.emplacement.reference = data.value
       console.log(this.emplacement)
@@ -689,11 +696,6 @@ export class DialogAjouterEmplacment {
           'Emplacement Ajouté Avec Sucées',
           'success'
         )
-        this.service.getEtageById(this.etageselect.id).subscribe(data => {
-          this.etageselect = data;
-          console.log("newww2", this.etageselect)
-          this.positions = this.etageselect.positions
-        }, error => console.log(error));
       },
         error => console.log(error));
     })
@@ -717,10 +719,18 @@ export class DialogEditEmplacement {
   emplacement: any
   constructor(public dialogRef: MatDialogRef<DialogEditEmplacement>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-
+        this.emplacement=data.emplacement
+   
+   
 
   }
   onSubmit() {
+    console.log(this.dataTab.idRayon)
+    this.service.editPosition(this.data.emplacement.id, this.emplacement).subscribe(data => {
+      this.close();
+    }
+      , error => console.log(error));
+
 
   }
 
