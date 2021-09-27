@@ -6,5 +6,6 @@ export class Rayon {
     familleLogistique:any
     largeur:any;
     hauteur:any;
+    profondeur:any
     etages:any
 }

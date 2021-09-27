@@ -58,7 +58,7 @@ export class CartographieComponent implements OnInit {
   }
   codeList: string[] = [
     'CODE128',
-    'CODE128A', 'CODE128B',    
+    'CODE128A', 'CODE128B',
     'CODE39',
 
   ];
@@ -128,7 +128,7 @@ export class CartographieComponent implements OnInit {
     this.localselect = local;
     this.libelleLocal = this.localselect.libelle
     this.rayons = this.localselect.rayons
-    const dialogRef = this.dialog.open(DialogOpenCartographie, {
+    const dialogRef = this.dialog.open(DialogOpenCartographie2, {
       width: '1200px',
       data: { local: this.localselect }
     });
@@ -158,7 +158,8 @@ export class CartographieComponent implements OnInit {
       data: { local: this.localselect }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.service.getLocalById(this.localselect.id).subscribe(data => {
+      console.log("ddddddd", this.localselect.id_Local)
+      this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
         this.localselect = data;
         console.log("Local", this.localselect)
         this.rayons = this.localselect.rayons
@@ -206,7 +207,10 @@ export class CartographieComponent implements OnInit {
             'Rayon Supprimé Avec Sucées.',
             'success'
           )
-          this.rayons = this.localselect.rayons
+          this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
+            this.localselect = data;
+            this.rayons = this.localselect.rayons
+          }, error => console.log(error));
 
         })
 
@@ -277,13 +281,17 @@ export class CartographieComponent implements OnInit {
             'Etage Supprimé Avec Sucées.',
             'success'
           )
+          this.service.getRayonById(this.rayonselect.id).subscribe(data => {
+            this.rayonselect = data;
+            this.etages = this.rayonselect.etages
+          }, error => console.log(error));
         })
 
       }
     })
   }
 
-  
+
   //selcetionner emplacment/position
   selectPosition(position: any) {
     this.positionselect = position
@@ -294,7 +302,7 @@ export class CartographieComponent implements OnInit {
     console.log("value ", this.value)
     this.goForward();
   }
-   //ouvrir la boite dialogue DialogEditEmplacement
+  //ouvrir la boite dialogue DialogEditEmplacement
   openDialoEditEmplacment(position: any) {
 
     const dialogRef = this.dialog.open(DialogEditEmplacement, {
@@ -306,64 +314,64 @@ export class CartographieComponent implements OnInit {
     });
 
   }
-//ouvrir la boite dialogue DialogAjouterEmplacment
-openDialogAjoutEmplacment() {
-  const dialogRef = this.dialog.open(DialogAjouterEmplacment, {
-    width: 'auto',
-    data: { 
-      rayon: this.rayonselect,
-      etageselect:this.etageselect,
-      localselect:this.localselect,
-      rayonselect:this.rayonselect,
+  //ouvrir la boite dialogue DialogAjouterEmplacment
+  openDialogAjoutEmplacment() {
+    const dialogRef = this.dialog.open(DialogAjouterEmplacment, {
+      width: 'auto',
+      data: {
+        rayon: this.rayonselect,
+        etageselect: this.etageselect,
+        localselect: this.localselect,
+        rayonselect: this.rayonselect,
       }
-  });
-  dialogRef.afterClosed().subscribe(result => {
-    console.log("id etage seelect",this.etageselect.id)
-    this.service.getEtageById(this.etageselect.id).subscribe(data => {
-      this.etageselect = data;
-       this.positions = this.etageselect.positions
-    }, error => console.log(error));
-  });
-   
-}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("id etage seelect", this.etageselect.id)
+      this.service.getEtageById(this.etageselect.id).subscribe(data => {
+        this.etageselect = data;
+        this.positions = this.etageselect.positions
+      }, error => console.log(error));
+    });
+
+  }
 
 
- 
+
   //supprimer un emplacement
-supprimerPosition(id: number) {
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: 'btn btn-success',
-      cancelButton: 'btn btn-danger'
-    },
-    buttonsStyling: false
-  })
+  supprimerPosition(id: number) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
 
-  swalWithBootstrapButtons.fire({
-    title: 'Tu est sure?',
-    text: "Vous voulez vraiment supprimer cette position!!!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Oui, Supprimer!',
-    cancelButtonText: 'Non, Annuler!',
-    reverseButtons: true
-  }).then((result) => {
-    if (result.isConfirmed) {
-      this.service.supprimerEtage(id).subscribe(data => {
-        console.log(data);
-        //        this.ListePosition(this.etageselect.id);
-        swalWithBootstrapButtons.fire(
-          'Suppresion Effecté!',
-          'Position Supprimé Avec Sucées.',
-          'success'
-        )
-      })
+    swalWithBootstrapButtons.fire({
+      title: 'Tu est sure?',
+      text: "Vous voulez vraiment supprimer cette position!!!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui, Supprimer!',
+      cancelButtonText: 'Non, Annuler!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.service.supprimerEtage(id).subscribe(data => {
+          console.log(data);
+          //        this.ListePosition(this.etageselect.id);
+          swalWithBootstrapButtons.fire(
+            'Suppresion Effecté!',
+            'Position Supprimé Avec Sucées.',
+            'success'
+          )
+        })
 
-    }
-  })
-}
+      }
+    })
+  }
   //enregistrer code a bare comme une image 
-saveBRAsImage(){
+  saveBRAsImage() {
     // fetches base 64 date from image
     console.log((<HTMLInputElement>document.getElementById('barcode')));
     console.log(this.barcode)
@@ -392,62 +400,62 @@ saveBRAsImage(){
       window.open(url);
     }
 
-}
-
- //enregistrer QR code comme une image 
-saveQRAsImage(){
-  // fetches base 64 date from image
-  console.log(this.qrcode)
-
-  const parentElement = this.qrcode.qrcElement.nativeElement.firstChild.src;
-
-  let blobData = this.convertBase64ToBlob(parentElement);
-  console.log("blobData", blobData)
-
-  // saves as image
-  if (window.navigator && window.navigator.msSaveOrOpenBlob) { //IE
-    window.navigator.msSaveOrOpenBlob(blobData, 'Qrcode');
-  } else { // chrome
-    const blob = new Blob([blobData], { type: "image/png" });
-    console.log("blob", blob)
-
-    const url = window.URL.createObjectURL(blob);
-    console.log("url", url)
-    // window.open(url);
-    const link = document.createElement('a');
-    console.log("link", link)
-
-    link.href = url;
-    link.download = 'Qrcode';
-    link.click();
   }
 
-  if (window.navigator.msSaveOrOpenBlob) // IE10+
-    window.navigator.msSaveOrOpenBlob(blobData, 'Qrcode');
-  else {
-    const blob = new Blob([blobData], { type: "image/png" });
-    var url = window.URL.createObjectURL(blob);
-    window.open(url);
-  }
-}
+  //enregistrer QR code comme une image 
+  saveQRAsImage() {
+    // fetches base 64 date from image
+    console.log(this.qrcode)
 
-//convertir image de la Base64 en Blob
-private convertBase64ToBlob(Base64Image: any) {
-  // decouper en deux partie
-  const parts = Base64Image.split(';base64,');
-  //MAINTENIR LE TYPE DE CONTENU
-  const imageType = parts[0].split(':')[1];
-  // DECODE BASE64 STRING
-  const decodedData = window.atob(parts[1]);
-  // CRÉER UNIT8ARRAY DE TAILLE MÊME QUE LA LONGUEUR DES DONNÉES DE LIGNE
-  const uInt8Array = new Uint8Array(decodedData.length);
-  // ININSÉRER TOUS LES CODES DE CARACTÈRES DANS UINT8ARRAY
-  for (let i = 0; i < decodedData.length; ++i) {
-    uInt8Array[i] = decodedData.charCodeAt(i);
+    const parentElement = this.qrcode.qrcElement.nativeElement.firstChild.src;
+
+    let blobData = this.convertBase64ToBlob(parentElement);
+    console.log("blobData", blobData)
+
+    // saves as image
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) { //IE
+      window.navigator.msSaveOrOpenBlob(blobData, 'Qrcode');
+    } else { // chrome
+      const blob = new Blob([blobData], { type: "image/png" });
+      console.log("blob", blob)
+
+      const url = window.URL.createObjectURL(blob);
+      console.log("url", url)
+      // window.open(url);
+      const link = document.createElement('a');
+      console.log("link", link)
+
+      link.href = url;
+      link.download = 'Qrcode';
+      link.click();
+    }
+
+    if (window.navigator.msSaveOrOpenBlob) // IE10+
+      window.navigator.msSaveOrOpenBlob(blobData, 'Qrcode');
+    else {
+      const blob = new Blob([blobData], { type: "image/png" });
+      var url = window.URL.createObjectURL(blob);
+      window.open(url);
+    }
   }
-  //RETOURNER L'IMAGE BLOB APRÈS LA CONVERSION
-  return new Blob([uInt8Array], { type: imageType });
-}
+
+  //convertir image de la Base64 en Blob
+  private convertBase64ToBlob(Base64Image: any) {
+    // decouper en deux partie
+    const parts = Base64Image.split(';base64,');
+    //MAINTENIR LE TYPE DE CONTENU
+    const imageType = parts[0].split(':')[1];
+    // DECODE BASE64 STRING
+    const decodedData = window.atob(parts[1]);
+    // CRÉER UNIT8ARRAY DE TAILLE MÊME QUE LA LONGUEUR DES DONNÉES DE LIGNE
+    const uInt8Array = new Uint8Array(decodedData.length);
+    // ININSÉRER TOUS LES CODES DE CARACTÈRES DANS UINT8ARRAY
+    for (let i = 0; i < decodedData.length; ++i) {
+      uInt8Array[i] = decodedData.charCodeAt(i);
+    }
+    //RETOURNER L'IMAGE BLOB APRÈS LA CONVERSION
+    return new Blob([uInt8Array], { type: imageType });
+  }
 
   //aller à la step precedente 
   goBack() {
@@ -494,6 +502,38 @@ export class DialogOpenCartographie {
 
 }
 
+//dialog open cartographie 
+@Component({
+  selector: 'open-cartographieV2',
+  templateUrl: 'dialogue_cartographie/open-cartographieV2.html',
+  styleUrls: ['./cartographie.component.scss']
+})
+export class DialogOpenCartographie2 {
+  rayons: any = [];
+  etages: any = [];
+  positions: any = [];
+  positionselect: any
+  libelleLocal: any
+  local: any
+  constructor(public dialogRef: MatDialogRef<DialogOpenCartographie2>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private service: StockageService, private http: HttpClient) {
+    this.local = data.local
+    this.libelleLocal = data.local.libelle
+    this.rayons = data.local.rayons
+
+  }
+
+  selectPosition(position: any) {
+    this.positionselect = position
+    console.log("position:", position)
+  }
+  //fermer dialogue
+  close() {
+    this.dialogRef.close();
+  }
+
+}
+
 //////////////////////////
 
 //dialog ajouter un rayon dans un local
@@ -503,7 +543,7 @@ export class DialogOpenCartographie {
 })
 export class DialogAjouterRayon {
   dataTab: any
-  rayon: Rayon=new Rayon()
+  rayon: Rayon = new Rayon()
   Famille_Logistique: any = [];
   constructor(public dialogRef: MatDialogRef<DialogAjouterRayon>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
@@ -520,15 +560,30 @@ export class DialogAjouterRayon {
   //valider l'ajout du rayon
   onSubmit() {
     console.log(this.rayon)
-    this.service.ajoutRayon(this.rayon).subscribe(data => {
-      console.log(data);
-      Swal.fire(
-        'Ajout Effecté',
-        'Rayon Ajouté Avec Sucées',
-        'success'
-      )
+
+    this.service.LibelleRayonExiste(this.rayon.local.id_Local, this.rayon.libelle).subscribe(data => {
+      if (data == true) {
+        Swal.fire(
+          'Erreur',
+          'Rayon avec ce libelle deja existe',
+          'error'
+        )
+      }
+      if (data == false) {
+        this.service.ajoutRayon(this.rayon).subscribe(data => {
+          console.log(data);
+          Swal.fire(
+            'Ajout Effecté',
+            'Rayon Ajouté Avec Sucées',
+            'success'
+          )
+          this.close()
+        },
+          error => console.log(error));
+      }
     },
       error => console.log(error));
+
   }
 
   //fermer dialogue
@@ -589,19 +644,30 @@ export class DialogEditRayon {
 })
 export class DialogAjouterEtage {
   dataTab: any
-  etage: Etage=new Etage()
+  etage: Etage = new Etage()
   Sous_Famille_Logistique: any = [];
   constructor(public dialogRef: MatDialogRef<DialogAjouterEtage>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-      this.service.SouFamilleLogistiqueParFamille(this.data.rayon.familleLogistique.id).subscribe((data: any) => {
+    this.service.SouFamilleLogistiqueParFamille(this.data.rayon.familleLogistique.id).subscribe((data: any) => {
       console.log("Sous Famille", data)
       this.Sous_Famille_Logistique = data
-    });  
-     this.etage.rayon = data.rayon
+    });
+    this.etage.rayon = data.rayon
 
   }
   onSubmit() {
-    console.log(this.etage)
+    console.log("eee",this.etage)
+    this.service.LibelleEtageExiste(this.etage.rayon.id, this.etage.libelle).subscribe(data => {
+      console.log("ddd",data)
+      if (data == true) {
+        Swal.fire(
+          'Erreur',
+          'Etage avec ce libelle deja existe',
+          'error'
+        )
+      }
+      if (data == false) {
+        
     this.service.ajoutEtageToRayon(this.etage).subscribe(data => {
       console.log(data);
       Swal.fire(
@@ -609,8 +675,16 @@ export class DialogAjouterEtage {
         'Etage Ajouté Avec Sucées',
         'success'
       )
+      this.close()
     },
       error => console.log(error));
+      }
+    },
+    error => console.log(error));
+
+
+
+
   }
 
   //fermer dialogue
@@ -670,18 +744,18 @@ export class DialogEditEtage {
 })
 export class DialogAjouterEmplacment {
   dataTab: any
-  emplacement: Position=new Position()
-  value:any
+  emplacement: Position = new Position()
+  value: any
   positions: any = [];
- 
+
 
   constructor(public dialogRef: MatDialogRef<DialogAjouterEmplacment>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-      this.emplacement.local = data.localselect
-      this.emplacement.rayon = data.rayonselect
-      this.emplacement.etage = data.etageselect
-      console.log(this.emplacement)
-    }
+    this.emplacement.local = data.localselect
+    this.emplacement.rayon = data.rayonselect
+    this.emplacement.etage = data.etageselect
+    console.log(this.emplacement)
+  }
   onSubmit() {
     this.service.LastIDPos().subscribe(data => {
       this.emplacement.id = data;
@@ -696,6 +770,7 @@ export class DialogAjouterEmplacment {
           'Emplacement Ajouté Avec Sucées',
           'success'
         )
+        this.close()
       },
         error => console.log(error));
     })
@@ -719,9 +794,9 @@ export class DialogEditEmplacement {
   emplacement: any
   constructor(public dialogRef: MatDialogRef<DialogEditEmplacement>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-        this.emplacement=data.emplacement
-   
-   
+    this.emplacement = data.emplacement
+
+
 
   }
   onSubmit() {

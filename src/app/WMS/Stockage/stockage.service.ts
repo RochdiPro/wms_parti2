@@ -18,14 +18,25 @@ export class StockageService {
 
 //Service liste du locals
 Locals(): Observable<any> {  
-  return this.httpClient.get(wms+"WMS/Touts_Locals").pipe(
+  return this.httpClient.get(wms+"WMS/Locals").pipe(
     catchError(this.handleError)
 
  );
 }
 //service  récupérer local by id
-getLocalById(id: number): Observable<any>{
-  return this.httpClient.get<any>(`${wms+"/WMS/Local"}/${id}`);
+getLocalById(Id_Local: any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/Local",{params:{ Id_Local: Id_Local}}).pipe(
+    catchError(this.handleError)
+  );
+ 
+}
+
+//service verifer l'exsitance du libelle du rayon dans un local
+LibelleRayonExiste(local: any,lib: any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/LibelleRayonExiste",{params:{ local: local,lib:lib}}).pipe(
+    catchError(this.handleError)
+  );
+ 
 }
 
 
@@ -55,6 +66,8 @@ SouFamilleLogistiqueParFamille(famille:any): Observable<any> {
 
 
 ///////CRUD rayon
+
+
 //service ajouter rayon
 
 getRayonById(id: number): Observable<any>{
@@ -95,6 +108,13 @@ supprimerEtage(id: number): Observable<any> {
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Etage"}/${id}`);
 }
 
+//service verifer l'exsitance du libelle du rayon dans un local
+LibelleEtageExiste(rayon: any,lib: any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/LibelleEtageExiste",{params:{ rayon: rayon,lib:lib}}).pipe(
+    catchError(this.handleError)
+  );
+ 
+}
 ///////CRUD emplacment
 
 GetPositionById(id: number): Observable<Position>{
