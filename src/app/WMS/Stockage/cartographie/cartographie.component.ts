@@ -514,6 +514,7 @@ export class DialogOpenCartographie2 {
   positions: any = [];
   positionselect: any
   libelleLocal: any
+  rochdi:any
   local: any
   constructor(public dialogRef: MatDialogRef<DialogOpenCartographie2>,
     @Inject(MAT_DIALOG_DATA) public data: any, private service: StockageService, private http: HttpClient) {
