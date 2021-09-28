@@ -21,7 +21,7 @@ import { EntreeBonReceptionComponent } from './WMS/Stockage/entree/entree-bon-re
  
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { CartographieComponent, DialogAjouterEmplacment, DialogAjouterEtage, DialogAjouterRayon, DialogEditEmplacement, DialogEditEtage, DialogEditRayon, DialogOpenCartographie, DialogOpenCartographie2 } from './WMS/Stockage/cartographie/cartographie.component';
+import { CartographieComponent, DialogAjouterEmplacment, DialogAjouterEtage, DialogAjouterHalle, DialogAjouterRayon, DialogEditEmplacement, DialogEditEtage, DialogEditHalle, DialogEditRayon, DialogOpenCartographie, DialogOpenCartographie2 } from './WMS/Stockage/cartographie/cartographie.component';
 import { PortalModule } from '@angular/cdk/portal';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -46,6 +46,8 @@ import { FamilleLogistiqueComponent } from './WMS/Stockage/famille-logistique/fa
     CartographieComponent,
     DialogOpenCartographie,
     DialogOpenCartographie2,
+    DialogAjouterHalle,
+    DialogEditHalle,
     DialogAjouterRayon,
     DialogEditRayon,
     DialogAjouterEtage,

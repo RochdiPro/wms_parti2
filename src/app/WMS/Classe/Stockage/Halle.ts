@@ -1,12 +1,12 @@
-export class Rayon {
+export class Halle {
 
-    id:any
+    Id_Haule:any
     libelle:any
     local:any;
     familleLogistique:any
+    description:any
     largeur:any;
     hauteur:any;
     profondeur:any
-    etages:any
-    halle:any
+    rayons:any
 }

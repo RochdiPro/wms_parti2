@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>Nouveau Halle</h1>
+
+<div mat-dialog-content>
+    <form>
+    
+        <div class="form-group">
+            <label>Libelle</label>
+            <input type="text" class ="form-control" id = "libelle"     [(ngModel)] = "halle.libelle"   name = "libelle">
+        </div>
+    
+        <div class="form-group">
+            <label>Hauteur (CM)</label>
+            <input type="text" class ="form-control" id = "hauteur"     [(ngModel)] = "halle.hauteur"   name = "hauteur">
+        </div>
+        <div class="form-group">
+            <label>Largeur (CM)</label>
+            <input type="text" class ="form-control" id = "largeur"     [(ngModel)] = "halle.largeur"   name = "largeur">
+        </div>
+        <div class="form-group">
+            <label>Profondeur (M²)</label>
+            <input type="text" class ="form-control" id = "profondeur"     [(ngModel)] = "halle.profondeur"   name = "profondeur">
+        </div>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Famille Logistique</mat-label>
+            <mat-select name="famille" [(ngModel)] = "halle.familleLogistique" id = "famille" >
+               <mat-option value="option1"></mat-option>             
+               <mat-option *ngFor="let f of Famille_Logistique"  [value]="f"  >{{f.libelle}}</mat-option>
+            </mat-select>
+         </mat-form-field>
+    
+    </form>
+</div>
+
+<div mat-dialog-actions class="float-right">
+    <button class="mb-2 mr-2 btn btn-success"   (click) = "onSubmit()">Valider</button>
+    <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>
+
+</div>

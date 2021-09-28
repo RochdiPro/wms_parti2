@@ -8,5 +8,4 @@ export class Rayon {
     hauteur:any;
     profondeur:any
     etages:any
-    halle:any
 }

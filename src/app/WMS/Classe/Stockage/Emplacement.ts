@@ -1,14 +1,16 @@
 export class Emplacement {
-    id:any
-    libelle:any
-
-   code_barre:any
-    local:any;
-   rayon:any;
+   
+  id:any
+  libelle:any
   etage:any;
-  position_x:any;
-  position_y:any;
-  etat:any='Libre';
+  etat :any='Libre';
+  largeur:any;
+  hauteur:any;
+ qr_code:any;
+  barre_code:any;
+  local:any
+  rayon:any
   articles:any
-
+  detail:any
+  reference:any
 }

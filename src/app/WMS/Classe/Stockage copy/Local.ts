@@ -5,6 +5,7 @@ export class Local {
  tel:any
  adresse:any
  responsable:any
+ rayons:any;
  halles:any;
 
 }

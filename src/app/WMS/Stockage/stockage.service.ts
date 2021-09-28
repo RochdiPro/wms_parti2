@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Etage } from '../Classe/Stockage/Etage';
-import { Position } from '../Classe/Stockage/Position';
+import { Halle } from '../Classe/Stockage/Halle';
+import { Emplacement } from '../Classe/Stockage/Emplacement';
 import { Rayon } from '../Classe/Stockage/Rayon';
 
 const infonet = '/ERP/';
@@ -64,16 +65,42 @@ SouFamilleLogistiqueParFamille(famille:any): Observable<any> {
  );
 }
 
+//////CRUD rayon
+
+
+//service recuperer halle par id
+getHalleById(Id_Halle: any): Observable<any>{
+    return this.httpClient.get<Halle>(wms+"WMS/Halle",{params:{ Id_Halle: Id_Halle}}).pipe(
+      catchError(this.handleError)
+    );
+}
+//service ajouter halle
+
+ajoutHalle(halle:Halle): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajout_Halle",halle).pipe(
+    catchError(this.handleError)
+ );
+}
+
+//service modifier halle
+editHalle(id: number, halle: Halle): Observable<Object>{
+  return this.httpClient.put(`${wms+"/WMS/Modifier_Halle"}/${id}`, halle);
+}
+
+//service supprimer  halle
+supprimerHalle(id: number): Observable<any> {  
+  return this.httpClient.delete(`${wms+"/WMS/Supprimer_Halle"}/${id}`);
+}
 
 ///////CRUD rayon
 
 
-//service ajouter rayon
 
+//service recuperer rayon par id
 getRayonById(id: number): Observable<any>{
   return this.httpClient.get<Rayon>(`${wms+"/WMS/Rayon"}/${id}`);
 }
-
+//service ajouter rayon
 ajoutRayon(rayon:Rayon): Observable<any> {  
   return this.httpClient.post(wms+"WMS/Ajout_Rayon",rayon).pipe(
     catchError(this.handleError)
@@ -84,26 +111,30 @@ ajoutRayon(rayon:Rayon): Observable<any> {
 editRayon(id: number, rayon: Rayon): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_Rayon"}/${id}`, rayon);
 }
-
+//service spprimer rayon
 supprimerRayon(id: number): Observable<any> {  
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Rayon"}/${id}`);
 }
 
 
 ///////CRUD etage
+
+//service recuperer etage par id
 getEtageById(id: number): Observable<any>{
   return this.httpClient.get<Etage>(`${wms+"/WMS/Etage"}/${id}`);
 }
-
+//service ajouter etage
 ajoutEtageToRayon(etage:Etage): Observable<any> {  
   return this.httpClient.post(wms+"WMS/Ajout_Etage", etage).pipe(
     catchError(this.handleError)
-
  );
 }
+
+//service modifier etage
 editEtage(id: number, etage: Etage): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_Etage"}/${id}`, etage);
 }
+//service spprimer etage
 supprimerEtage(id: number): Observable<any> {  
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Etage"}/${id}`);
 }
@@ -117,21 +148,23 @@ LibelleEtageExiste(rayon: any,lib: any): Observable<any>{
 }
 ///////CRUD emplacment
 
-GetPositionById(id: number): Observable<Position>{
-  return this.httpClient.get<Position>(`${wms+"/WMS/Position"}/${id}`);
+//service recuperer position par id
+GetEmplacmentById(id: number): Observable<Emplacement>{
+  return this.httpClient.get<Emplacement>(`${wms+"/WMS/Emplacment"}/${id}`);
 }
-ajoutPosition(pos:Position): Observable<any> {  
-  return this.httpClient.post(wms+"WMS/Ajout_Position",pos).pipe(
+//service ajouter emplacment
+ajoutEmplacment(pos:Emplacement): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajout_Emplacment",pos).pipe(
     catchError(this.handleError)
  );
 }
-editPosition(id: number,file:any): Observable<Object>{
+editEmplacment(id: number,file:any): Observable<Object>{
   
-  return this.httpClient.put(`${wms+"/WMS/Modifier_Position"}/${id}`,{ observe: 'response' }
+  return this.httpClient.put(`${wms+"/WMS/Modifier_Emplacment"}/${id}`,{ observe: 'response' }
   )  ;
 }
-supprimerPosition(id: number): Observable<any> {  
-  return this.httpClient.delete(`${wms+"/WMS/Supprimer_Position"}/${id}`);
+supprimerEmplacment(id: number): Observable<any> {  
+  return this.httpClient.delete(`${wms+"/WMS/Supprimer_Emplacment"}/${id}`);
 }
 
 //afficher erreur

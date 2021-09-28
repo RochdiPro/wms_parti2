@@ -8,9 +8,10 @@ import { Router } from '@angular/router';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { NgxBarcodeComponent } from 'ngx-barcode';
 import Swal from 'sweetalert2';
+import { Emplacement } from '../../Classe/Stockage/Emplacement';
 import { Etage } from '../../Classe/Stockage/Etage';
-import { Position } from '../../Classe/Stockage/Position';
-import { Rayon } from '../../Classe/Stockage/Rayon';
+import { Halle } from '../../Classe/Stockage/Halle';
+ import { Rayon } from '../../Classe/Stockage/Rayon';
 import { StockageService } from '../stockage.service';
 
 @Component({
@@ -26,9 +27,10 @@ export class CartographieComponent implements OnInit {
 
   //declaration formGroup
   localFormGroup: FormGroup;
+  halleFormGroup: FormGroup;
   rayonFormGroup: FormGroup;
   etageFormGroup: FormGroup;
-  positionFormGroup: FormGroup;
+  emplacmentFormGroup: FormGroup;
   disableSelect = new FormControl(false);
 
   isLinear = false;
@@ -66,19 +68,22 @@ export class CartographieComponent implements OnInit {
 
   //Declaration du tableau 
   locals: any = [];
+  halles: any = [];
   rayons: any = [];
   etages: any = [];
-  positions: any = [];
+  emplacements: any = [];
 
   libelleLocal: any;
   libelleRayon: any;
+  libelleHalle: any;
   libelleEtage: any;
-  libellePosition: any;
+  libelleEmplacement: any;
 
   localselect: any;
+  halleselect: any;
   rayonselect: any
   etageselect: any
-  positionselect: any
+  emplacmentselect: any
   constructor(public dialog: MatDialog, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient, private sanitizer: DomSanitizer) {
 
   }
@@ -89,6 +94,10 @@ export class CartographieComponent implements OnInit {
     this.localFormGroup = this._formBuilder.group({
       localFormGroup: ['', Validators.required]
     });
+    this.halleFormGroup = this._formBuilder.group({
+      halleFormGroup: ['', Validators.required],
+      halle: ['', Validators.required],
+    });
     this.rayonFormGroup = this._formBuilder.group({
       rayonFormGroup: ['', Validators.required],
       rayon: ['', Validators.required],
@@ -97,8 +106,8 @@ export class CartographieComponent implements OnInit {
       etageFormGroup: ['', Validators.required],
       etage: ['', Validators.required],
     });
-    this.positionFormGroup = this._formBuilder.group({
-      positionFormGroup: ['', Validators.required],
+    this.emplacmentFormGroup = this._formBuilder.group({
+      emplacmentFormGroup: ['', Validators.required],
       positiony: ['', Validators.required],
       positionx: ['', Validators.required],
       nbEmp: ['', Validators.required],
@@ -117,8 +126,7 @@ export class CartographieComponent implements OnInit {
     console.log("Local selctionner", local)
     this.localselect = local;
     this.libelleLocal = this.localselect.libelle
-    this.rayons = this.localselect.rayons
-
+    this.halles = this.localselect.halles
     this.goForward();
   }
 
@@ -142,6 +150,78 @@ export class CartographieComponent implements OnInit {
     });
 
   }
+  //selectionner un halle 
+  SelectHalle(halle: any) {
+    this.halleselect = halle
+    this.libelleHalle = this.halleselect.libelle
+    this.rayons = this.halleselect.rayons
+    this.goForward();
+  }
+
+  //ouvrir la boite dialogue DialogAjouterHalle
+  openDialogAjouterHalle() {
+    const dialogRef = this.dialog.open(DialogAjouterHalle, {
+      width: 'auto',
+      data: { local: this.localselect }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+       this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
+        this.localselect = data;
+        console.log("Local", this.localselect)
+        this.halles = this.localselect.halles
+      }, error => console.log(error));
+
+    });
+  }
+  //ouvrir la boite dialogue DialogEditRayon 
+  openDialogEditHalle(numero: any, halle: any) {
+
+    const dialogRef = this.dialog.open(DialogEditHalle, {
+      width: 'auto',
+      data: { idHalle: numero, halle: halle }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+
+  }
+  //supprimer un halle
+  supprimerHalle(id: number) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+      title: 'Tu est sure?',
+      text: "Vous voulez vraimeent retirer cette rayon de local !",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui, Supprimer!',
+      cancelButtonText: 'Non, Annuler!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.service.supprimerRayon(id).subscribe(data => {
+          console.log(data);
+          swalWithBootstrapButtons.fire(
+            'Suppresion Effecté!',
+            'Rayon Supprimé Avec Sucées.',
+            'success'
+          )
+          this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
+            this.localselect = data;
+            this.rayons = this.localselect.rayons
+          }, error => console.log(error));
+
+        })
+
+      }
+    })
+  }
 
   //selectionner un rayon 
   SelectRayon(rayon: any) {
@@ -155,11 +235,10 @@ export class CartographieComponent implements OnInit {
   openDialogAjouterRayon() {
     const dialogRef = this.dialog.open(DialogAjouterRayon, {
       width: 'auto',
-      data: { local: this.localselect }
+      data: { local: this.localselect ,halle: this.halleselect }
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log("ddddddd", this.localselect.id_Local)
-      this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
+       this.service.getHalleById(this.halleselect.id).subscribe(data => {
         this.localselect = data;
         console.log("Local", this.localselect)
         this.rayons = this.localselect.rayons
@@ -223,7 +302,7 @@ export class CartographieComponent implements OnInit {
     this.etageselect = etage
     console.log(etage)
     this.libelleEtage = this.etageselect.libelle
-    this.positions = this.etageselect.positions
+    this.emplacements = this.etageselect.emplacments
     this.goForward();
   }
   //ouvrir la boite dialogue DialogAjouterEtage
@@ -293,21 +372,21 @@ export class CartographieComponent implements OnInit {
 
 
   //selcetionner emplacment/position
-  selectPosition(position: any) {
-    this.positionselect = position
-    // = this.positionselect
-    console.log(position)
-    this.libellePosition = this.positionselect.libelle
-    this.value = "L0" + this.localselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id + "P0" + this.positionselect.id
+  selectEmplacment(emp: any) {
+    this.emplacmentselect = emp
+    // = this.emplacmentselect
+    console.log(emp)
+    this.libelleEmplacement = this.emplacmentselect.libelle
+    this.value = "L0" + this.localselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id + "P0" + this.emplacmentselect.id
     console.log("value ", this.value)
     this.goForward();
   }
   //ouvrir la boite dialogue DialogEditEmplacement
-  openDialoEditEmplacment(position: any) {
+  openDialoEditEmplacment(emp: any) {
 
     const dialogRef = this.dialog.open(DialogEditEmplacement, {
       width: 'auto',
-      data: { emplacement: position }
+      data: { emplacement: emp }
     });
     dialogRef.afterClosed().subscribe(result => {
 
@@ -329,7 +408,7 @@ export class CartographieComponent implements OnInit {
       console.log("id etage seelect", this.etageselect.id)
       this.service.getEtageById(this.etageselect.id).subscribe(data => {
         this.etageselect = data;
-        this.positions = this.etageselect.positions
+        this.emplacements = this.etageselect.emplacments
       }, error => console.log(error));
     });
 
@@ -338,7 +417,7 @@ export class CartographieComponent implements OnInit {
 
 
   //supprimer un emplacement
-  supprimerPosition(id: number) {
+  supprimerEmplacment(id: number) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -349,7 +428,7 @@ export class CartographieComponent implements OnInit {
 
     swalWithBootstrapButtons.fire({
       title: 'Tu est sure?',
-      text: "Vous voulez vraiment supprimer cette position!!!",
+      text: "Vous voulez vraiment supprimer cette Emplacement!!!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui, Supprimer!',
@@ -479,8 +558,8 @@ export class CartographieComponent implements OnInit {
 export class DialogOpenCartographie {
   rayons: any = [];
   etages: any = [];
-  positions: any = [];
-  positionselect: any
+  emplacements: any = [];
+  emplacmentselect: any
   libelleLocal: any
   local: any
   constructor(public dialogRef: MatDialogRef<DialogOpenCartographie>,
@@ -492,7 +571,7 @@ export class DialogOpenCartographie {
   }
 
   selectPosition(position: any) {
-    this.positionselect = position
+    this.emplacmentselect = position
     console.log("position:", position)
   }
   //fermer dialogue
@@ -512,9 +591,8 @@ export class DialogOpenCartographie2 {
   rayons: any = [];
   etages: any = [];
   positions: any = [];
-  positionselect: any
+  emplacmentselect: any
   libelleLocal: any
-  rochdi:any
   local: any
   constructor(public dialogRef: MatDialogRef<DialogOpenCartographie2>,
     @Inject(MAT_DIALOG_DATA) public data: any, private service: StockageService, private http: HttpClient) {
@@ -525,9 +603,68 @@ export class DialogOpenCartographie2 {
   }
 
   selectPosition(position: any) {
-    this.positionselect = position
+    this.emplacmentselect = position
     console.log("position:", position)
   }
+  //fermer dialogue
+  close() {
+    this.dialogRef.close();
+  }
+
+}
+//////////////////////////
+
+//dialog ajouter un halle dans un local
+@Component({
+  selector: 'ajouter-halle-dialog',
+  templateUrl: 'dialogue_cartographie/ajouter-halle-dialog.html',
+})
+export class DialogAjouterHalle {
+  dataTab: any
+  halle: Halle = new Halle()
+  Famille_Logistique: any = [];
+  constructor(public dialogRef: MatDialogRef<DialogAjouterHalle>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
+
+    //recuperer liste de famille logistique
+    this.service.ListeFamilleLogistique().subscribe((data: any) => {
+      this.Famille_Logistique = data;
+    });
+    console.log(data.local)
+    this.halle.local = data.local;
+    
+
+  }
+
+  //valider l'ajout d' halle
+  onSubmit() {
+    console.log(this.halle)
+
+    this.service.LibelleRayonExiste(this.halle.local.id_Local, this.halle.libelle).subscribe(data => {
+      if (data == true) {
+        Swal.fire(
+          'Erreur',
+          'Halle avec ce libelle deja existe',
+          'error'
+        )
+      }
+      if (data == false) {
+        this.service.ajoutHalle(this.halle).subscribe(data => {
+          console.log(data);
+          Swal.fire(
+            'Ajout Effecté',
+            'Rayon Ajouté Avec Sucées',
+            'success'
+          )
+          this.close()
+        },
+          error => console.log(error));
+      }
+    },
+      error => console.log(error));
+
+  }
+
   //fermer dialogue
   close() {
     this.dialogRef.close();
@@ -537,6 +674,37 @@ export class DialogOpenCartographie2 {
 
 //////////////////////////
 
+//dialog edit rayon
+@Component({
+  selector: 'edit-halle-dialog',
+  templateUrl: 'dialogue_cartographie/edit-halle-dialog.html',
+})
+export class DialogEditHalle{
+  dataTab: any
+  halle: Halle
+  Famille_Logistique: any = [];
+  constructor(public dialogRef: MatDialogRef<DialogEditHalle>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
+    this.dataTab = data
+    this.halle = data.halle
+    this.service.ListeFamilleLogistique().subscribe((data: any) => {
+      this.Famille_Logistique = data;
+     });
+  }
+  onSubmit() {
+    console.log(this.dataTab.idRayon)
+    this.service.editHalle(this.dataTab.idHalle, this.halle).subscribe(data => {
+      this.close();
+    }
+      , error => console.log(error));
+  }
+  //fermer dialogue
+  close() {
+    this.dialogRef.close();
+  }
+
+}
+//////////
 //dialog ajouter un rayon dans un local
 @Component({
   selector: 'ajouter-rayon-dialog',
@@ -555,6 +723,7 @@ export class DialogAjouterRayon {
     });
     console.log(data.local)
     this.rayon.local = data.local;
+    this.rayon.halle = data.halle;
 
   }
 
@@ -657,9 +826,9 @@ export class DialogAjouterEtage {
 
   }
   onSubmit() {
-    console.log("eee",this.etage)
+    console.log("eee", this.etage)
     this.service.LibelleEtageExiste(this.etage.rayon.id, this.etage.libelle).subscribe(data => {
-      console.log("ddd",data)
+      console.log("ddd", data)
       if (data == true) {
         Swal.fire(
           'Erreur',
@@ -668,24 +837,20 @@ export class DialogAjouterEtage {
         )
       }
       if (data == false) {
-        
-    this.service.ajoutEtageToRayon(this.etage).subscribe(data => {
-      console.log(data);
-      Swal.fire(
-        'Ajout Effecté',
-        'Etage Ajouté Avec Sucées',
-        'success'
-      )
-      this.close()
-    },
-      error => console.log(error));
+
+        this.service.ajoutEtageToRayon(this.etage).subscribe(data => {
+          console.log(data);
+          Swal.fire(
+            'Ajout Effecté',
+            'Etage Ajouté Avec Sucées',
+            'success'
+          )
+          this.close()
+        },
+          error => console.log(error));
       }
     },
-    error => console.log(error));
-
-
-
-
+      error => console.log(error));
   }
 
   //fermer dialogue
@@ -695,9 +860,7 @@ export class DialogAjouterEtage {
 
 }
 
-
 ////////////////////////
-
 
 //dialog edit rayon
 @Component({
@@ -718,8 +881,6 @@ export class DialogEditEtage {
       this.Sous_Famille = data;
       // console.log(data)
     });
-
-
   }
   onSubmit() {
     console.log(this.dataTab.idEtage)
@@ -735,7 +896,6 @@ export class DialogEditEtage {
 
 }
 
-
 /////////////////////////////
 
 //dialog ajouter emplacment
@@ -745,11 +905,9 @@ export class DialogEditEtage {
 })
 export class DialogAjouterEmplacment {
   dataTab: any
-  emplacement: Position = new Position()
+  emplacement: Emplacement = new Emplacement()
   value: any
-  positions: any = [];
-
-
+  emplacements: any = [];
   constructor(public dialogRef: MatDialogRef<DialogAjouterEmplacment>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.emplacement.local = data.localselect
@@ -757,6 +915,7 @@ export class DialogAjouterEmplacment {
     this.emplacement.etage = data.etageselect
     console.log(this.emplacement)
   }
+
   onSubmit() {
     this.service.LastIDPos().subscribe(data => {
       this.emplacement.id = data;
@@ -764,7 +923,7 @@ export class DialogAjouterEmplacment {
       console.log("value ", this.value)
       this.emplacement.reference = data.value
       console.log(this.emplacement)
-      this.service.ajoutPosition(this.emplacement).subscribe(data => {
+      this.service.ajoutEmplacment(this.emplacement).subscribe(data => {
         console.log("ajouuuut", data);
         Swal.fire(
           'Ajout Effecté',
@@ -776,12 +935,10 @@ export class DialogAjouterEmplacment {
         error => console.log(error));
     })
   }
-
   //fermer dialogue
   close() {
     this.dialogRef.close();
   }
-
 }
 
 ///////////
@@ -796,20 +953,14 @@ export class DialogEditEmplacement {
   constructor(public dialogRef: MatDialogRef<DialogEditEmplacement>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.emplacement = data.emplacement
-
-
-
   }
   onSubmit() {
     console.log(this.dataTab.idRayon)
-    this.service.editPosition(this.data.emplacement.id, this.emplacement).subscribe(data => {
+    this.service.editEmplacment(this.data.emplacement.id, this.emplacement).subscribe(data => {
       this.close();
     }
       , error => console.log(error));
-
-
   }
-
   //fermer dialogue
   close() {
     this.dialogRef.close();
