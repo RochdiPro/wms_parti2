@@ -21,13 +21,14 @@ import { EntreeBonReceptionComponent } from './WMS/Stockage/entree/entree-bon-re
  
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { CartographieComponent, DialogAjouterEmplacment, DialogAjouterEtage, DialogAjouterHalle, DialogAjouterRayon, DialogEditEmplacement, DialogEditEtage, DialogEditHalle, DialogEditRayon, DialogOpenCartographie, DialogOpenCartographie2 } from './WMS/Stockage/cartographie/cartographie.component';
+import { CartographieComponent, DialogAjouterEmplacment, DialogAjouterEtage, DialogAjouterHalle, DialogAjouterRayon, DialogEditEmplacement, DialogEditEtage, DialogEditHalle, DialogEditOrdreRayon, DialogEditRayon, DialogOpenCartographie, DialogOpenCartographie2 } from './WMS/Stockage/cartographie/cartographie.component';
 import { PortalModule } from '@angular/cdk/portal';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { QRCodeModule } from 'angularx-qrcode';
 import { FamilleLogistiqueComponent } from './WMS/Stockage/famille-logistique/famille-logistique.component';
+import { SortPipe } from './WMS/Stockage/cartographie/sort';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,7 @@ import { FamilleLogistiqueComponent } from './WMS/Stockage/famille-logistique/fa
     SubChildComponent,
     MenuWmsComponent,
   
-
+    SortPipe,
     //stockage
     EditStockageComponent,
     EntreeBonReceptionComponent,
@@ -50,6 +51,7 @@ import { FamilleLogistiqueComponent } from './WMS/Stockage/famille-logistique/fa
     DialogEditHalle,
     DialogAjouterRayon,
     DialogEditRayon,
+    DialogEditOrdreRayon,
     DialogAjouterEtage,
     DialogEditEtage,
     DialogAjouterEmplacment,

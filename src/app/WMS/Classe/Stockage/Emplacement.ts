@@ -13,4 +13,5 @@ export class Emplacement {
   articles:any
   detail:any
   reference:any
+  halle:any
 }

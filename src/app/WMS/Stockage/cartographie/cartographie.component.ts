@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
@@ -11,14 +11,16 @@ import Swal from 'sweetalert2';
 import { Emplacement } from '../../Classe/Stockage/Emplacement';
 import { Etage } from '../../Classe/Stockage/Etage';
 import { Halle } from '../../Classe/Stockage/Halle';
- import { Rayon } from '../../Classe/Stockage/Rayon';
+import { Rayon } from '../../Classe/Stockage/Rayon';
 import { StockageService } from '../stockage.service';
 
 @Component({
   selector: 'app-cartographie',
   templateUrl: './cartographie.component.html',
-  styleUrls: ['./cartographie.component.scss']
+  styleUrls: ['./cartographie.component.scss'],
+
 })
+
 export class CartographieComponent implements OnInit {
 
   @ViewChild('stepper') private myStepper: MatStepper;
@@ -37,7 +39,7 @@ export class CartographieComponent implements OnInit {
 
   //definition de la code a bare 
   elementType: any = "img";
-  value = 'L0 R0 E0 X0 Y0';
+  value = 'L0 H0 R0 E0 P0';
   format: any = 'CODE128';
   lineColor = '#000000';
   width = 2;
@@ -87,6 +89,7 @@ export class CartographieComponent implements OnInit {
   constructor(public dialog: MatDialog, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient, private sanitizer: DomSanitizer) {
 
   }
+
   ngOnInit() {
 
     this.ListLocals();
@@ -125,7 +128,7 @@ export class CartographieComponent implements OnInit {
   SelectLocal(local: any, id: any) {
     console.log("Local selctionner", local)
     this.localselect = local;
-    this.libelleLocal = this.localselect.libelle
+    this.libelleLocal = this.localselect.nom_Local
     this.halles = this.localselect.halles
     this.goForward();
   }
@@ -153,7 +156,7 @@ export class CartographieComponent implements OnInit {
   //selectionner un halle 
   SelectHalle(halle: any) {
     this.halleselect = halle
-    this.libelleHalle = this.halleselect.libelle
+     this.libelleHalle = this.halleselect.libelle
     this.rayons = this.halleselect.rayons
     this.goForward();
   }
@@ -165,7 +168,7 @@ export class CartographieComponent implements OnInit {
       data: { local: this.localselect }
     });
     dialogRef.afterClosed().subscribe(result => {
-       this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
+      this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
         this.localselect = data;
         console.log("Local", this.localselect)
         this.halles = this.localselect.halles
@@ -194,7 +197,6 @@ export class CartographieComponent implements OnInit {
       },
       buttonsStyling: false
     })
-
     swalWithBootstrapButtons.fire({
       title: 'Tu est sure?',
       text: "Vous voulez vraimeent retirer cette rayon de local !",
@@ -235,10 +237,10 @@ export class CartographieComponent implements OnInit {
   openDialogAjouterRayon() {
     const dialogRef = this.dialog.open(DialogAjouterRayon, {
       width: 'auto',
-      data: { local: this.localselect ,halle: this.halleselect }
+      data: { local: this.localselect, halle: this.halleselect }
     });
     dialogRef.afterClosed().subscribe(result => {
-       this.service.getHalleById(this.halleselect.id).subscribe(data => {
+      this.service.getHalleById(this.halleselect.id).subscribe(data => {
         this.localselect = data;
         console.log("Local", this.localselect)
         this.rayons = this.localselect.rayons
@@ -377,7 +379,7 @@ export class CartographieComponent implements OnInit {
     // = this.emplacmentselect
     console.log(emp)
     this.libelleEmplacement = this.emplacmentselect.libelle
-    this.value = "L0" + this.localselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id + "P0" + this.emplacmentselect.id
+    this.value = "L0" + this.localselect.id_Local +"H0" + this.halleselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id + "P0" + this.emplacmentselect.id
     console.log("value ", this.value)
     this.goForward();
   }
@@ -402,6 +404,8 @@ export class CartographieComponent implements OnInit {
         etageselect: this.etageselect,
         localselect: this.localselect,
         rayonselect: this.rayonselect,
+        halleselect: this.halleselect,
+
       }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -436,16 +440,19 @@ export class CartographieComponent implements OnInit {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.service.supprimerEtage(id).subscribe(data => {
+        this.service.supprimerEmplacment(id).subscribe(data => {
           console.log(data);
           //        this.ListePosition(this.etageselect.id);
           swalWithBootstrapButtons.fire(
             'Suppresion Effecté!',
-            'Position Supprimé Avec Sucées.',
+            'Emplacement Supprimé Avec Sucées.',
             'success'
           )
         })
-
+        this.service.getEtageById(this.etageselect.id).subscribe(data => {
+          this.etageselect = data;
+          this.emplacements = this.etageselect.emplacments
+        }, error => console.log(error));
       }
     })
   }
@@ -623,24 +630,17 @@ export class DialogAjouterHalle {
   dataTab: any
   halle: Halle = new Halle()
   Famille_Logistique: any = [];
+  local: any
   constructor(public dialogRef: MatDialogRef<DialogAjouterHalle>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-
-    //recuperer liste de famille logistique
-    this.service.ListeFamilleLogistique().subscribe((data: any) => {
-      this.Famille_Logistique = data;
-    });
-    console.log(data.local)
     this.halle.local = data.local;
-    
-
-  }
+    this.local = data.local;
+   }
 
   //valider l'ajout d' halle
   onSubmit() {
     console.log(this.halle)
-
-    this.service.LibelleRayonExiste(this.halle.local.id_Local, this.halle.libelle).subscribe(data => {
+    this.service.LibelleHalleExiste(this.local.id_Local, this.halle.libelle).subscribe(data => {
       if (data == true) {
         Swal.fire(
           'Erreur',
@@ -653,7 +653,7 @@ export class DialogAjouterHalle {
           console.log(data);
           Swal.fire(
             'Ajout Effecté',
-            'Rayon Ajouté Avec Sucées',
+            'Halle Ajouté Avec Sucées',
             'success'
           )
           this.close()
@@ -679,7 +679,7 @@ export class DialogAjouterHalle {
   selector: 'edit-halle-dialog',
   templateUrl: 'dialogue_cartographie/edit-halle-dialog.html',
 })
-export class DialogEditHalle{
+export class DialogEditHalle {
   dataTab: any
   halle: Halle
   Famille_Logistique: any = [];
@@ -689,7 +689,7 @@ export class DialogEditHalle{
     this.halle = data.halle
     this.service.ListeFamilleLogistique().subscribe((data: any) => {
       this.Famille_Logistique = data;
-     });
+    });
   }
   onSubmit() {
     console.log(this.dataTab.idRayon)
@@ -714,7 +714,7 @@ export class DialogAjouterRayon {
   dataTab: any
   rayon: Rayon = new Rayon()
   Famille_Logistique: any = [];
-  constructor(public dialogRef: MatDialogRef<DialogAjouterRayon>,
+  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
 
     //recuperer liste de famille logistique
@@ -730,7 +730,6 @@ export class DialogAjouterRayon {
   //valider l'ajout du rayon
   onSubmit() {
     console.log(this.rayon)
-
     this.service.LibelleRayonExiste(this.rayon.local.id_Local, this.rayon.libelle).subscribe(data => {
       if (data == true) {
         Swal.fire(
@@ -740,16 +739,56 @@ export class DialogAjouterRayon {
         )
       }
       if (data == false) {
-        this.service.ajoutRayon(this.rayon).subscribe(data => {
-          console.log(data);
-          Swal.fire(
-            'Ajout Effecté',
-            'Rayon Ajouté Avec Sucées',
-            'success'
-          )
-          this.close()
+        this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.rayon.ordreX,this.rayon.ordreY).subscribe(data => {
+          console.log("odre eee", data)
+          if (data != null) {
+            const swalWithBootstrapButtons = Swal.mixin({
+              customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+              },
+              buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+              title: 'Rayon avec ce ordre déja existe ',
+              text: "Vous voulez modifer l'odre cette rayon !",
+              icon: 'error',
+              showCancelButton: true,
+              confirmButtonText: 'Oui',
+              cancelButtonText: 'Non, Annuler',
+              reverseButtons: true
+            }).then((result) => {
+              if (result.isConfirmed) {
+                //modifer ordre rayon
+                const dialogRef = this.dialog.open(DialogEditOrdreRayon, {
+                  width: 'auto',
+                  data: { idRayon: data.id, rayon: data }
+                });
+                dialogRef.afterClosed().subscribe(result => {
+
+                });
+
+              }
+            })
+
+          }
+          if (data == null) {
+
+            this.service.ajoutRayon(this.rayon).subscribe(data => {
+              console.log(data);
+              Swal.fire(
+                'Ajout Effecté',
+                'Rayon Ajouté Avec Sucées',
+                'success'
+              )
+              this.close()
+            },
+              error => console.log(error));
+          }
         },
           error => console.log(error));
+
       }
     },
       error => console.log(error));
@@ -807,6 +846,52 @@ export class DialogEditRayon {
 
 //////////////////////
 
+
+
+//dialog edit rayon
+@Component({
+  selector: 'edit-ordre-rayon',
+  templateUrl: 'dialogue_cartographie/edit-ordre-rayon.html',
+})
+export class DialogEditOrdreRayon {
+  dataTab: any
+  rayon: Rayon
+  constructor(public dialogRef: MatDialogRef<DialogEditRayon>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
+
+    this.dataTab = data
+    this.rayon = data.rayon
+  }
+  onSubmit() {
+    console.log(this.dataTab.idRayon)
+    this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.rayon.ordreX,this.rayon.ordreY).subscribe(data => {
+      console.log("odre eee", data)
+      if (data != null) {
+        Swal.fire(
+          'Erreur',
+          'Rayon '+data.id+' à deja cette ordre!',
+          'error'
+        )
+      }
+      if (data == null) {
+        this.service.editRayon(this.dataTab.idRayon, this.rayon).subscribe(data => {
+          this.close();
+        }
+          , error => console.log(error));
+      }
+    },
+      error => console.log(error));
+  }
+
+
+  //fermer dialogue
+  close() {
+    this.dialogRef.close();
+  }
+
+}
+
+//////////////
 //dialog add etage
 @Component({
   selector: 'ajouter-etage-dialog',
@@ -837,7 +922,16 @@ export class DialogAjouterEtage {
         )
       }
       if (data == false) {
-
+        this.service.OrdreEtageExiste(this.etage.rayon.id, this.etage.ordre).subscribe(data => {
+          console.log("odre eee", data)
+          if (data != null) {
+            Swal.fire(
+              'Erreur',
+              'Etage avec ce ordre déja existe',
+              'error'
+            )
+          }
+          if (data == null) {
         this.service.ajoutEtageToRayon(this.etage).subscribe(data => {
           console.log(data);
           Swal.fire(
@@ -846,6 +940,9 @@ export class DialogAjouterEtage {
             'success'
           )
           this.close()
+        },
+          error => console.log(error));
+          }
         },
           error => console.log(error));
       }
@@ -913,15 +1010,16 @@ export class DialogAjouterEmplacment {
     this.emplacement.local = data.localselect
     this.emplacement.rayon = data.rayonselect
     this.emplacement.etage = data.etageselect
+    this.emplacement.halle = data.halleselect
     console.log(this.emplacement)
   }
 
   onSubmit() {
     this.service.LastIDPos().subscribe(data => {
       this.emplacement.id = data;
-      this.value = "L0" + this.emplacement.local.id + "R" + this.emplacement.rayon.libelle + "E0" + this.emplacement.etage.id + "P0" + this.emplacement.id
+      this.value = "L0" + this.emplacement.local.id_Local +"H0" + this.emplacement.halle.id+ "R" + this.emplacement.rayon.libelle + "E0" + this.emplacement.etage.id + "P0" + this.emplacement.id
       console.log("value ", this.value)
-      this.emplacement.reference = data.value
+      this.emplacement.reference = this.value
       console.log(this.emplacement)
       this.service.ajoutEmplacment(this.emplacement).subscribe(data => {
         console.log("ajouuuut", data);
@@ -944,7 +1042,7 @@ export class DialogAjouterEmplacment {
 ///////////
 //dialog modifier emplacment
 @Component({
-  selector: 'edit-rayon-emplacement',
+  selector: 'edit-emplacement-dialog',
   templateUrl: 'dialogue_cartographie/edit-emplacement-dialog.html',
 })
 export class DialogEditEmplacement {

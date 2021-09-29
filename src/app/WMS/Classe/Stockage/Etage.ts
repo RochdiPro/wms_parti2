@@ -3,7 +3,7 @@ export class Etage {
     libelle:any
     rayon:any;
     local:any;
-
+    ordre:any
     sousFamilleLogistique:any
     largeur:any;
     hauteur:any;

@@ -1,9 +1,8 @@
 export class Halle {
 
-    Id_Haule:any
+    id:any
     libelle:any
     local:any;
-    familleLogistique:any
     description:any
     largeur:any;
     hauteur:any;

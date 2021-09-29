@@ -39,7 +39,13 @@ LibelleRayonExiste(local: any,lib: any): Observable<any>{
   );
  
 }
-
+//service verifer l'exsitance du libelle du rayon dans un local
+LibelleHalleExiste(local: any,lib: any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/LibelleHalleExiste",{params:{ local: local,lib:lib}}).pipe(
+    catchError(this.handleError)
+  );
+ 
+}
 
 //CRUD famille logistique
 //service récupérer la liste des famille
@@ -116,7 +122,18 @@ supprimerRayon(id: number): Observable<any> {
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Rayon"}/${id}`);
 }
 
-
+//service verifer l'exsitance d'ordre du rayon dans un local
+OrdreRayonExiste(halle: any,ordre_x: any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/OrdreRayonExiste",{params:{ halle: halle,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+    catchError(this.handleError)
+  );
+}
+//service verifer l'exsitance d'ordre d'etage dans un rayon
+OrdreEtageExiste(rayon: any,ordre:any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/OrdreEtageExiste",{params:{ rayon: rayon,ordre:ordre}}).pipe(
+    catchError(this.handleError)
+  );
+}
 ///////CRUD etage
 
 //service recuperer etage par id
@@ -139,13 +156,13 @@ supprimerEtage(id: number): Observable<any> {
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Etage"}/${id}`);
 }
 
-//service verifer l'exsitance du libelle du rayon dans un local
+//service verifer l'exsitance du libelle d'etage dans un local
 LibelleEtageExiste(rayon: any,lib: any): Observable<any>{
   return this.httpClient.get<any>(wms+"WMS/LibelleEtageExiste",{params:{ rayon: rayon,lib:lib}}).pipe(
     catchError(this.handleError)
   );
- 
 }
+
 ///////CRUD emplacment
 
 //service recuperer position par id

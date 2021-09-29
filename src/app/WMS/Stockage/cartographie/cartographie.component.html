@@ -54,9 +54,9 @@
                <div class="card-body">
                   <div>
                      <ul class="list-group">
-                        <button class="list-group-item-action list-group-item " style="width: 90px;
-                    height: 400px;">
-                           <br> <b>Halle {{halle.libelle}}</b><br> {{halle.familleLogistique.libelle}} 
+                        <button class="list-group-item-action list-group-item " style="width: 150px;
+                    height: 150px;">
+                           <br> <b>Halle {{halle.libelle}}</b><br>
                            <div class="row" style="align-items: center;">
                               <button class="  mb-1 mr-1 btn " (click)="SelectHalle(halle)">
                                  <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
@@ -101,7 +101,7 @@
          <div class="mb-3 card text-white card-body" style="background-color: #ccd8ff      ;">
             <h5 class="text-white card-title">{{libelleLocal}}</h5>
             <div class="row">
-               <div class="col-md-2" *ngFor="let rayon of rayons;  let i = index ">
+               <div class="col-md-2" *ngFor="let rayon of rayons | sort:{ property: 'ordreX', descending: false }">
                   <div class="card-body">
                      <div>
                         <ul class="list-group">

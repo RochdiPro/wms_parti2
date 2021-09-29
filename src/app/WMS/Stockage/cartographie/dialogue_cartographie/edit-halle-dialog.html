@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Modifier Halle</h1>
+<h1 mat-dialog-title>Modifier Halle {{halle.id}}</h1>
 
 <div mat-dialog-content>
     <form>
@@ -16,13 +16,6 @@
             <label>Largeur (CM)</label>
             <input type="text" class ="form-control" id = "largeur"     [(ngModel)] = "halle.largeur"   name = "largeur">
         </div>
-        <mat-form-field appearance="fill">
-            <mat-label>Famille Logistique</mat-label>
-            <mat-select name="famille" [(ngModel)] = "halle.familleLogistique.libelle" id = "famille" >
-               <mat-option value="option1"></mat-option>             
-               <mat-option *ngFor="let f of Famille_Logistique"  [value]="f.libelle"  >{{f.libelle}}</mat-option>
-            </mat-select>
-         </mat-form-field>
     
     </form>
 </div>

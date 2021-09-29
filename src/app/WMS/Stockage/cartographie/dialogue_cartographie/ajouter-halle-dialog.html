@@ -21,13 +21,6 @@
             <input type="text" class ="form-control" id = "profondeur"     [(ngModel)] = "halle.profondeur"   name = "profondeur">
         </div>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Famille Logistique</mat-label>
-            <mat-select name="famille" [(ngModel)] = "halle.familleLogistique" id = "famille" >
-               <mat-option value="option1"></mat-option>             
-               <mat-option *ngFor="let f of Famille_Logistique"  [value]="f"  >{{f.libelle}}</mat-option>
-            </mat-select>
-         </mat-form-field>
     
     </form>
 </div>

@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Modifier Etage</h1>
+<h1 mat-dialog-title>Modifier Etage {{etage.id}}</h1>
 
 <div mat-dialog-content>
     <form>
@@ -11,9 +11,10 @@
             <label>Hauteur (CM)</label>
             <input type="text" class ="form-control" id = "hauteur"     [(ngModel)] = "etage.hauteur"   name = "hauteur">
         </div>
+      
         <div class="form-group">
-            <label>Largeur (CM)</label>
-            <input type="text" class ="form-control" id = "largeur"     [(ngModel)] = "etage.largeur"   name = "largeur">
+            <label>Ordre </label>
+            <input type="number" class ="form-control" id = "ordre"     [(ngModel)] = "etage.ordre"   name = "ordre">
         </div>
         <mat-form-field appearance="fill">
             <mat-label>Sous Famille Logistique</mat-label>

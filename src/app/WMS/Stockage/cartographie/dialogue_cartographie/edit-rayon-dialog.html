@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Modifier Rayon</h1>
+<h1 mat-dialog-title>Modifier Rayon {{rayon.id}}</h1>
 
 <div mat-dialog-content>
     <form>
@@ -15,6 +15,18 @@
         <div class="form-group">
             <label>Largeur (CM)</label>
             <input type="text" class ="form-control" id = "largeur"     [(ngModel)] = "rayon.largeur"   name = "largeur">
+        </div>
+        <div class="form-group">
+            <label>Profondeur (M²)</label>
+            <input type="text" class ="form-control" id = "profondeur"     [(ngModel)] = "rayon.profondeur"   name = "profondeur">
+        </div>
+        <div class="form-group">
+            <label>Ordre X</label>
+            <input type="number" class ="form-control" id = "ordreX"     [(ngModel)] = "rayon.ordreX"   name = "ordreX">
+        </div>
+        <div class="form-group">
+            <label>Ordre Y</label>
+            <input type="number" class ="form-control" id = "ordreY"     [(ngModel)] = "rayon.ordreY"   name = "ordreY">
         </div>
         <mat-form-field appearance="fill">
             <mat-label>Famille Logistique</mat-label>
