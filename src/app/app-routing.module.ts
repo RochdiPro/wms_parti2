@@ -9,6 +9,7 @@ import { CartographieComponent } from './WMS/Stockage/cartographie/cartographie.
   import { EditStockageComponent } from './WMS/Stockage/entree/edit-stockage/edit-stockage.component';
 import { EntreeBonReceptionComponent } from './WMS/Stockage/entree/entree-bon-reception/entree-bon-reception.component';
 import { FamilleLogistiqueComponent } from './WMS/Stockage/famille-logistique/famille-logistique.component';
+import { TableauComponent } from './WMS/Stockage/tableau/tableau.component';
    
  
 const routes: Routes =
@@ -33,6 +34,8 @@ const routes: Routes =
              { path: 'Entree', component: EntreeBonReceptionComponent},   
              { path: 'Cartographie', component: CartographieComponent},   
              { path: 'Famille-Logistique', component: FamilleLogistiqueComponent},   
+             
+             { path: 'Tab', component: TableauComponent},   
 
           ]
         } 

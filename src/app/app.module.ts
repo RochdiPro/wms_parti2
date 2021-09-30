@@ -29,6 +29,7 @@ import { NgxBarcodeModule } from 'ngx-barcode';
 import { QRCodeModule } from 'angularx-qrcode';
 import { FamilleLogistiqueComponent } from './WMS/Stockage/famille-logistique/famille-logistique.component';
 import { SortPipe } from './WMS/Stockage/cartographie/sort';
+import { TableauComponent } from './WMS/Stockage/tableau/tableau.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,7 @@ import { SortPipe } from './WMS/Stockage/cartographie/sort';
     DialogEditEtage,
     DialogAjouterEmplacment,
 
-
+    TableauComponent,
   ],
   exports: [
 

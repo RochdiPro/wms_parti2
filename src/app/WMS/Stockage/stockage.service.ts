@@ -204,4 +204,19 @@ LastIDPos(): Observable<any> {
 
  );
 }
+
+ 
+
+//max ordre x rayon 
+MaxOrdreX(halle: any): Observable<any>{
+  return this.httpClient.get<Halle>(wms+"WMS/maxOrdreX",{params:{ halle: halle}}).pipe(
+    catchError(this.handleError)
+  );
+}
+//max ordre y rayon 
+MaxOrdreY(halle: any): Observable<any>{
+  return this.httpClient.get<Halle>(wms+"WMS/maxOrdreY",{params:{ halle: halle}}).pipe(
+    catchError(this.handleError)
+  );
+}
 }

@@ -241,9 +241,10 @@ export class CartographieComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       this.service.getHalleById(this.halleselect.id).subscribe(data => {
-        this.localselect = data;
+        this.halleselect = data;
+        this.libelleHalle=this.halleselect.libelle
         console.log("Local", this.localselect)
-        this.rayons = this.localselect.rayons
+        this.rayons = this.halleselect.rayons
       }, error => console.log(error));
 
     });
