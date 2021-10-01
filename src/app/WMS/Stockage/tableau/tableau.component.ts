@@ -12,7 +12,7 @@ export class TableauComponent implements OnInit {
   constructor(private service: StockageService) { }
   x: number
   y: number
-  arr: any [][]=[];
+  arr: any[]=[];
   rayons: Rayon[] = []
   ngOnInit(): void {
     this.arr=[]
@@ -33,7 +33,9 @@ export class TableauComponent implements OnInit {
   }
 
 
-  
+  counter(i: number) {
+    return new Array(i);
+}
   generertableayrayon() {
 var i=0
 var j=0
