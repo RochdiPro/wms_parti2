@@ -12,6 +12,7 @@ import { Emplacement } from '../../Classe/Stockage/Emplacement';
 import { Etage } from '../../Classe/Stockage/Etage';
 import { Halle } from '../../Classe/Stockage/Halle';
 import { Rayon } from '../../Classe/Stockage/Rayon';
+import { ZoneInvalideHall } from '../../Classe/Stockage/ZoneInvalideHall';
 import { StockageService } from '../stockage.service';
 
 @Component({
@@ -68,26 +69,42 @@ export class CartographieComponent implements OnInit {
   ];
 
 
-  //Declaration du tableau 
+  //Declaration du tableaux de (locals/halls/rayons/etages/emplacement)
   locals: any = [];
   halles: any = [];
   rayons: any = [];
   etages: any = [];
   emplacements: any = [];
 
+  //declaration objet(local/hall/rayon/etage/emplacement) selectionné
+  localselect: any;
+  halleselect: any;
+  rayonselect: any
+  etageselect: any
+  emplacmentselect: any
+
+  //declaration du libelle d'objet(local/hall/rayon/etage/emplacement) selectinné
   libelleLocal: any;
   libelleRayon: any;
   libelleHalle: any;
   libelleEtage: any;
   libelleEmplacement: any;
 
-  localselect: any;
-  halleselect: any;
-  rayonselect: any
-  etageselect: any
-  emplacmentselect: any
-  constructor(public dialog: MatDialog, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient, private sanitizer: DomSanitizer) {
+  x: number
+  y: number
+  arr: any[][]=[];
 
+  constructor(public dialog: MatDialog, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient, private sanitizer: DomSanitizer) {
+    for (let i=0 ; i < 2; i++) {
+      // Creates an empty line
+      this.arr.push([]);
+      // Adds cols to the empty line:
+      this.arr[i].push(new Array(this.y));
+      for ( let j =0 ; j < 2; j++) {
+            this.arr[i][j] = "";
+      }
+   
+      }
   }
 
   ngOnInit() {
@@ -124,6 +141,7 @@ export class CartographieComponent implements OnInit {
       this.locals = data;
     });
   }
+
   //selectionner un local
   SelectLocal(local: any, id: any) {
     console.log("Local selctionner", local)
@@ -147,22 +165,30 @@ export class CartographieComponent implements OnInit {
       this.service.getLocalById(this.localselect.id).subscribe(data => {
         this.localselect = data;
         this.rayons = this.localselect.rayons
-
       }, error => console.log(error));
-
     });
-
   }
+
   //selectionner un halle 
   SelectHalle(halle: any) {
     this.halleselect = halle
-     this.libelleHalle = this.halleselect.libelle
+    this.libelleHalle = this.halleselect.libelle
     this.rayons = this.halleselect.rayons
+    this.service.MaxOrdreX(this.halleselect.id).subscribe(data => {
+      this.x = 3;
+      this.service.MaxOrdreY(this.halleselect.id).subscribe(data => {
+        this.y = 2;
+        console.log("y", this.y)
+        console.log("x", this.x)
+        this.generertableayrayon()
+      }, error => console.log(error));
+    }, error => console.log(error));
     this.goForward();
   }
 
-  //ouvrir la boite dialogue DialogAjouterHalle
+  //bouton ajout hall
   openDialogAjouterHalle() {
+    //ouvrir la boite dialogue DialogAjouterHalle
     const dialogRef = this.dialog.open(DialogAjouterHalle, {
       width: 'auto',
       data: { local: this.localselect }
@@ -176,9 +202,10 @@ export class CartographieComponent implements OnInit {
 
     });
   }
-  //ouvrir la boite dialogue DialogEditRayon 
-  openDialogEditHalle(numero: any, halle: any) {
 
+  //bouton edit hall
+  openDialogEditHalle(numero: any, halle: any) {
+    //ouvrir la boite dialogue DialogEditRayon 
     const dialogRef = this.dialog.open(DialogEditHalle, {
       width: 'auto',
       data: { idHalle: numero, halle: halle }
@@ -188,6 +215,7 @@ export class CartographieComponent implements OnInit {
     });
 
   }
+
   //supprimer un halle
   supprimerHalle(id: number) {
     const swalWithBootstrapButtons = Swal.mixin({
@@ -220,7 +248,6 @@ export class CartographieComponent implements OnInit {
           }, error => console.log(error));
 
         })
-
       }
     })
   }
@@ -233,8 +260,9 @@ export class CartographieComponent implements OnInit {
     this.goForward();
   }
 
-  //ouvrir la boite dialogue DialogAjouterRayon 
+  //bouton ajouter rayon
   openDialogAjouterRayon() {
+    //ouvrir la boite dialogue DialogAjouterRayon 
     const dialogRef = this.dialog.open(DialogAjouterRayon, {
       width: 'auto',
       data: { local: this.localselect, halle: this.halleselect }
@@ -242,17 +270,17 @@ export class CartographieComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.service.getHalleById(this.halleselect.id).subscribe(data => {
         this.halleselect = data;
-        this.libelleHalle=this.halleselect.libelle
+        this.libelleHalle = this.halleselect.libelle
         console.log("Local", this.localselect)
         this.rayons = this.halleselect.rayons
+   
       }, error => console.log(error));
-
     });
   }
 
-  //ouvrir la boite dialogue DialogEditRayon 
+  //boutin edit rayon
   openDialogEditRayon(numero: any, rayon: any) {
-
+    //ouvrir la boite dialogue DialogEditRayon 
     const dialogRef = this.dialog.open(DialogEditRayon, {
       width: 'auto',
       data: { idRayon: numero, rayon: rayon }
@@ -295,10 +323,51 @@ export class CartographieComponent implements OnInit {
           }, error => console.log(error));
 
         })
-
       }
     })
   }
+
+  generertableayrayon() {
+    this.arr=[]
+        for (let i=0 ; i <3; i++) {
+          // Creates an empty line
+          this.arr.push([]);
+          // Adds cols to the empty line:
+          this.arr[i].push(new Array(this.y));
+          for ( let j =0 ; j < 3; j++) {
+            this.service.OrdreRayonExiste(1, i+1,j+1).subscribe(data => {
+              console.log(" eee", data)
+              if (data != null) {
+                this.arr[i][j] = data;
+              }
+              else
+               {
+                 //ordre n'exsite pas
+                this.service.ZonneExiste(1, i+1,j+1).subscribe(data => {
+                  console.log(" eee", data)
+                  if (data ==true) {
+                    this.arr[i][j] = "invalide";
+                  } 
+                  else
+                   {
+                    this.arr[i][j] = null;
+                   }
+                } , error => console.log(error));
+
+
+
+               }
+            } , error => console.log(error));
+        
+          }
+       
+          }
+          setTimeout(() => {
+            console.log("array", this.arr);
+          }, 2000);
+        
+        }
+    
 
   //selectionner et accedé un etage
   SelectEtage(etage: any) {
@@ -308,6 +377,7 @@ export class CartographieComponent implements OnInit {
     this.emplacements = this.etageselect.emplacments
     this.goForward();
   }
+
   //ouvrir la boite dialogue DialogAjouterEtage
   openDialogAjoutEtage() {
     const dialogRef = this.dialog.open(DialogAjouterEtage, {
@@ -315,7 +385,6 @@ export class CartographieComponent implements OnInit {
       data: { rayon: this.rayonselect }
     });
     dialogRef.afterClosed().subscribe(result => {
-
       this.service.getRayonById(this.rayonselect.id).subscribe(data => {
         this.rayonselect = data;
         console.log("newww2", this.rayonselect)
@@ -332,10 +401,9 @@ export class CartographieComponent implements OnInit {
       data: { idEtage: numero, etage: Etage }
     });
     dialogRef.afterClosed().subscribe(result => {
-
     });
-
   }
+
   //supprimer un etage
   supprimerEtage(id: number) {
     const swalWithBootstrapButtons = Swal.mixin({
@@ -345,7 +413,6 @@ export class CartographieComponent implements OnInit {
       },
       buttonsStyling: false
     })
-
     swalWithBootstrapButtons.fire({
       title: 'Tu est sure?',
       text: "Vous voulez vraimeent retirer cette etage de rayon !!!",
@@ -380,7 +447,7 @@ export class CartographieComponent implements OnInit {
     // = this.emplacmentselect
     console.log(emp)
     this.libelleEmplacement = this.emplacmentselect.libelle
-    this.value = "L0" + this.localselect.id_Local +"H0" + this.halleselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id + "P0" + this.emplacmentselect.id
+    this.value = "L0" + this.localselect.id_Local + "H0" + this.halleselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id + "P0" + this.emplacmentselect.id
     console.log("value ", this.value)
     this.goForward();
   }
@@ -392,7 +459,6 @@ export class CartographieComponent implements OnInit {
       data: { emplacement: emp }
     });
     dialogRef.afterClosed().subscribe(result => {
-
     });
 
   }
@@ -406,7 +472,6 @@ export class CartographieComponent implements OnInit {
         localselect: this.localselect,
         rayonselect: this.rayonselect,
         halleselect: this.halleselect,
-
       }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -416,7 +481,6 @@ export class CartographieComponent implements OnInit {
         this.emplacements = this.etageselect.emplacments
       }, error => console.log(error));
     });
-
   }
 
 
@@ -430,7 +494,6 @@ export class CartographieComponent implements OnInit {
       },
       buttonsStyling: false
     })
-
     swalWithBootstrapButtons.fire({
       title: 'Tu est sure?',
       text: "Vous voulez vraiment supprimer cette Emplacement!!!",
@@ -457,6 +520,7 @@ export class CartographieComponent implements OnInit {
       }
     })
   }
+
   //enregistrer code a bare comme une image 
   saveBRAsImage() {
     // fetches base 64 date from image
@@ -493,9 +557,7 @@ export class CartographieComponent implements OnInit {
   saveQRAsImage() {
     // fetches base 64 date from image
     console.log(this.qrcode)
-
     const parentElement = this.qrcode.qrcElement.nativeElement.firstChild.src;
-
     let blobData = this.convertBase64ToBlob(parentElement);
     console.log("blobData", blobData)
 
@@ -553,9 +615,13 @@ export class CartographieComponent implements OnInit {
   goForward() {
     this.myStepper.next();
   }
+//compteuur
+  counter(i: number) {
+    return new Array(i);
+}
 }
 
-/////////////////
+////////****************************************************************************************************************/////////
 
 //dialog open cartographie 
 @Component({
@@ -588,7 +654,7 @@ export class DialogOpenCartographie {
   }
 
 }
-
+///////*********************************************************************************************************************/////
 //dialog open cartographie 
 @Component({
   selector: 'open-cartographieV2',
@@ -620,7 +686,7 @@ export class DialogOpenCartographie2 {
   }
 
 }
-//////////////////////////
+/////////////****************************************************************************************************/////////////
 
 //dialog ajouter un halle dans un local
 @Component({
@@ -636,7 +702,7 @@ export class DialogAjouterHalle {
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.halle.local = data.local;
     this.local = data.local;
-   }
+  }
 
   //valider l'ajout d' halle
   onSubmit() {
@@ -663,7 +729,6 @@ export class DialogAjouterHalle {
       }
     },
       error => console.log(error));
-
   }
 
   //fermer dialogue
@@ -673,7 +738,7 @@ export class DialogAjouterHalle {
 
 }
 
-//////////////////////////
+////**********************************************************************************************************************///////
 
 //dialog edit rayon
 @Component({
@@ -684,13 +749,25 @@ export class DialogEditHalle {
   dataTab: any
   halle: Halle
   Famille_Logistique: any = [];
-  constructor(public dialogRef: MatDialogRef<DialogEditHalle>,
+  constructor(public dialog: MatDialog,public dialogRef: MatDialogRef<DialogEditHalle>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.dataTab = data
     this.halle = data.halle
     this.service.ListeFamilleLogistique().subscribe((data: any) => {
       this.Famille_Logistique = data;
     });
+  }
+  OpenZoneInvalide(halle:any,id:any)
+  {
+    const dialogRef = this.dialog.open(DialogAddZoneInvalideHalle, {
+      width: 'auto',
+      data: { idHalle: id, halle: halle }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+
+
   }
   onSubmit() {
     console.log(this.dataTab.idRayon)
@@ -705,7 +782,7 @@ export class DialogEditHalle {
   }
 
 }
-//////////
+/////**********************************************************************************************************************/////
 //dialog ajouter un rayon dans un local
 @Component({
   selector: 'ajouter-rayon-dialog',
@@ -740,7 +817,7 @@ export class DialogAjouterRayon {
         )
       }
       if (data == false) {
-        this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.rayon.ordreX,this.rayon.ordreY).subscribe(data => {
+        this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.rayon.ordreX, this.rayon.ordreY).subscribe(data => {
           console.log("odre eee", data)
           if (data != null) {
             const swalWithBootstrapButtons = Swal.mixin({
@@ -803,7 +880,7 @@ export class DialogAjouterRayon {
 
 }
 
-
+////************************************************************************************************************************////
 
 //dialog edit rayon
 @Component({
@@ -845,7 +922,7 @@ export class DialogEditRayon {
 
 }
 
-//////////////////////
+//////////***********************************************************************************************************////////////
 
 
 
@@ -865,12 +942,12 @@ export class DialogEditOrdreRayon {
   }
   onSubmit() {
     console.log(this.dataTab.idRayon)
-    this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.rayon.ordreX,this.rayon.ordreY).subscribe(data => {
+    this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.rayon.ordreX, this.rayon.ordreY).subscribe(data => {
       console.log("odre eee", data)
       if (data != null) {
         Swal.fire(
           'Erreur',
-          'Rayon '+data.id+' à deja cette ordre!',
+          'Rayon ' + data.id + ' à deja cette ordre!',
           'error'
         )
       }
@@ -892,7 +969,7 @@ export class DialogEditOrdreRayon {
 
 }
 
-//////////////
+//////******************************************************************************************************************////////
 //dialog add etage
 @Component({
   selector: 'ajouter-etage-dialog',
@@ -933,16 +1010,16 @@ export class DialogAjouterEtage {
             )
           }
           if (data == null) {
-        this.service.ajoutEtageToRayon(this.etage).subscribe(data => {
-          console.log(data);
-          Swal.fire(
-            'Ajout Effecté',
-            'Etage Ajouté Avec Sucées',
-            'success'
-          )
-          this.close()
-        },
-          error => console.log(error));
+            this.service.ajoutEtageToRayon(this.etage).subscribe(data => {
+              console.log(data);
+              Swal.fire(
+                'Ajout Effecté',
+                'Etage Ajouté Avec Sucées',
+                'success'
+              )
+              this.close()
+            },
+              error => console.log(error));
           }
         },
           error => console.log(error));
@@ -958,9 +1035,9 @@ export class DialogAjouterEtage {
 
 }
 
-////////////////////////
+///////////********************************************************************************************************/////////////
 
-//dialog edit rayon
+//dialog edit etage
 @Component({
   selector: 'edit-Etage-dialog',
   templateUrl: 'dialogue_cartographie/edit-Etage-dialog.html',
@@ -994,7 +1071,7 @@ export class DialogEditEtage {
 
 }
 
-/////////////////////////////
+///////////**************************************************************************************************//////////////////
 
 //dialog ajouter emplacment
 @Component({
@@ -1018,7 +1095,7 @@ export class DialogAjouterEmplacment {
   onSubmit() {
     this.service.LastIDPos().subscribe(data => {
       this.emplacement.id = data;
-      this.value = "L0" + this.emplacement.local.id_Local +"H0" + this.emplacement.halle.id+ "R" + this.emplacement.rayon.libelle + "E0" + this.emplacement.etage.id + "P0" + this.emplacement.id
+      this.value = "L0" + this.emplacement.local.id_Local + "H0" + this.emplacement.halle.id + "R" + this.emplacement.rayon.libelle + "E0" + this.emplacement.etage.id + "P0" + this.emplacement.id
       console.log("value ", this.value)
       this.emplacement.reference = this.value
       console.log(this.emplacement)
@@ -1040,7 +1117,7 @@ export class DialogAjouterEmplacment {
   }
 }
 
-///////////
+/////********************************************************************************************************************//////
 //dialog modifier emplacment
 @Component({
   selector: 'edit-emplacement-dialog',
@@ -1067,5 +1144,59 @@ export class DialogEditEmplacement {
 
 }
 
+/*********************************************************************************************************************** */
 
 
+/////**********************************************************************************************************************/////
+//dialog ajouter un rayon dans un local
+@Component({
+  selector: 'add-zone_invalide_halle',
+  templateUrl: 'dialogue_cartographie/add-zone_invalide_halle.html',
+})
+export class DialogAddZoneInvalideHalle {
+  dataTab: any
+  halle: Halle = new Halle()
+  zone:ZoneInvalideHall=new ZoneInvalideHall()
+   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
+    this.halle = data.halle;
+       this.zone.halle=this.halle
+  }
+
+  //valider l'ajout du rayon
+  onSubmit() {
+    console.log(this.zone)
+    this.service.ZonneExiste(this.halle.id, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
+      console.log(data)
+       if (data == true) {
+       
+        Swal.fire(
+          'Erreur',
+          'Zone Deja existe',
+          'error'
+        )
+      }
+      if (data == false) {
+
+        this.service.ajoutZoneInvalide(this.zone).subscribe(data => {
+          console.log("new zone ",data);
+          Swal.fire(
+            'Ajout Effecté',
+            'Zone Ajouté Avec Sucées',
+            'success'
+          )
+          this.close()
+        },
+          error => console.log(error));
+      }
+    },
+      error => console.log(error));
+
+  }
+
+  //fermer dialogue
+  close() {
+    this.dialogRef.close();
+  }
+
+}

@@ -30,10 +30,10 @@
          </div>
       </form>
    </mat-step>
-  <!--*************stteper halle-->
+  <!--*************stteper hall-->
   <mat-step [stepControl]="halleFormGroup">
    <form [formGroup]="halleFormGroup">
-      <ng-template matStepLabel>Halle</ng-template>
+      <ng-template matStepLabel>Hall</ng-template>
       <div class="row">
          <div class="col-md-9 mb-3">
          </div>
@@ -56,7 +56,7 @@
                      <ul class="list-group">
                         <button class="list-group-item-action list-group-item " style="width: 150px;
                     height: 150px;">
-                           <br> <b>Halle {{halle.libelle}}</b><br>
+                           <br> <b>Hall {{halle.libelle}}</b><br>
                            <div class="row" style="align-items: center;">
                               <button class="  mb-1 mr-1 btn " (click)="SelectHalle(halle)">
                                  <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
@@ -100,22 +100,27 @@
          </div>
          <div class="mb-3 card text-white card-body" style="background-color: #ccd8ff      ;">
             <h5 class="text-white card-title">{{libelleLocal}} {{libelleHalle}}</h5>
-            <div class="row">
-               <div class="col-md-2" *ngFor="let rayon of rayons | sort:{ property: 'ordreX', descending: false }">
-                  <div class="card-body">
+            <div class="row"  *ngFor=" let in of counter(x) ;let i = index" >
+               <div class="col-md-2" *ngFor=" let is of counter(y) ;let j = index" >
+                  <div class="card-body" *ngIf="arr[i][j] =='invalide' ">
+                     <div> 
+                           <img src="../../../../assets/icon/hachuré.png " width= "90px"  height="250px"  >
+                     </div>
+                  </div>
+                  <div class="card-body" *ngIf="arr[i][j]!= null">
                      <div>
                         <ul class="list-group">
                            <button class="list-group-item-action list-group-item " style="width: 90px;
-                       height: 400px;">
-                              <br> <b>Rayon {{rayon.libelle}}</b><br> {{rayon.familleLogistique.libelle}} 
+                       height: 250px;">
+                              <br> <b>Rayon {{arr[i][j].libelle}} </b><br> 
                               <div class="row" style="align-items: center;">
-                                 <button class="  mb-1 mr-1 btn " (click)="SelectRayon(rayon)">
+                                 <button class="  mb-1 mr-1 btn " (click)="SelectRayon(arr[i][j])">
                                     <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
                                  </button>
-                                 <button class=" mb-1 mr-1 btn " (click)="openDialogEditRayon(rayon.id,rayon)">
+                                 <button class=" mb-1 mr-1 btn " (click)="openDialogEditRayon(arr[i][j].id,arr[i][j])">
                                     <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
                                  </button>
-                                 <button class="  mb-1 mr-1 btn " (click)="supprimerRayon(rayon.id)">
+                                 <button class="  mb-1 mr-1 btn " (click)="supprimerRayon(arr[i][j].id)">
                                     <img src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
                                        width="20" height="20">
                                  </button>
@@ -152,7 +157,7 @@
                      <div class="example-button-container"></div>
                   </div>
                   <ul class="list-group">
-                     <li class="list-group-item list-group-item" *ngFor="let etage of etages"
+                     <li class="list-group-item list-group-item" *ngFor="let etage of etages  | sort:{ property: 'ordreX', descending: false }"
                         style="background-color: #e4e7e5;">
                         <b>Etage {{etage.libelle}}</b>
                         {{etage.sousFamilleLogistique.libelle}}

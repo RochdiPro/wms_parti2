@@ -8,4 +8,6 @@ export class Halle {
     hauteur:any;
     profondeur:any
     rayons:any
+    zonne_invalide:any
+
 }

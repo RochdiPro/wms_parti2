@@ -6,6 +6,7 @@ import { Etage } from '../Classe/Stockage/Etage';
 import { Halle } from '../Classe/Stockage/Halle';
 import { Emplacement } from '../Classe/Stockage/Emplacement';
 import { Rayon } from '../Classe/Stockage/Rayon';
+import { ZoneInvalideHall } from '../Classe/Stockage/ZoneInvalideHall';
 
 const infonet = '/ERP/';
 const wms = '/WMS/';
@@ -87,7 +88,12 @@ ajoutHalle(halle:Halle): Observable<any> {
     catchError(this.handleError)
  );
 }
-
+//service ajouter zone invalide
+ajoutZoneInvalide(zone:ZoneInvalideHall): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/AddZone",zone).pipe(
+    catchError(this.handleError)
+ );
+}
 //service modifier halle
 editHalle(id: number, halle: Halle): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_Halle"}/${id}`, halle);
@@ -97,7 +103,12 @@ editHalle(id: number, halle: Halle): Observable<Object>{
 supprimerHalle(id: number): Observable<any> {  
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Halle"}/${id}`);
 }
-
+//service ZonneExiste
+ZonneExiste(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<ZoneInvalideHall>(wms+"WMS/ZonneExiste",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+    catchError(this.handleError)
+  );
+}
 ///////CRUD rayon
 
 
