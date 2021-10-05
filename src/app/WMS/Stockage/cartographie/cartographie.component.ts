@@ -175,12 +175,12 @@ export class CartographieComponent implements OnInit {
     this.libelleHalle = this.halleselect.libelle
     this.rayons = this.halleselect.rayons
     this.service.MaxOrdreX(this.halleselect.id).subscribe(data => {
-      this.x = 3;
+      this.x = data;
       this.service.MaxOrdreY(this.halleselect.id).subscribe(data => {
-        this.y = 2;
+        this.y = data;
         console.log("y", this.y)
         console.log("x", this.x)
-        this.generertableayrayon()
+        this.generertableayrayon(halle)
       }, error => console.log(error));
     }, error => console.log(error));
     this.goForward();
@@ -273,7 +273,7 @@ export class CartographieComponent implements OnInit {
         this.libelleHalle = this.halleselect.libelle
         console.log("Local", this.localselect)
         this.rayons = this.halleselect.rayons
-   
+        this.generertableayrayon(this.halleselect);
       }, error => console.log(error));
     });
   }
@@ -327,15 +327,16 @@ export class CartographieComponent implements OnInit {
     })
   }
 
-  generertableayrayon() {
+  generertableayrayon(halle:any) {
     this.arr=[]
-        for (let i=0 ; i <3; i++) {
+    console.log("eeee",halle)
+        for (let i=0 ; i <this.x; i++) {
           // Creates an empty line
           this.arr.push([]);
           // Adds cols to the empty line:
           this.arr[i].push(new Array(this.y));
-          for ( let j =0 ; j < 3; j++) {
-            this.service.OrdreRayonExiste(1, i+1,j+1).subscribe(data => {
+          for ( let j =0 ; j < this.y; j++) {
+            this.service.OrdreRayonExiste(halle.id, i+1,j+1).subscribe(data => {
               console.log(" eee", data)
               if (data != null) {
                 this.arr[i][j] = data;
@@ -343,7 +344,7 @@ export class CartographieComponent implements OnInit {
               else
                {
                  //ordre n'exsite pas
-                this.service.ZonneExiste(1, i+1,j+1).subscribe(data => {
+                this.service.ZonneExiste(halle.id, i+1,j+1).subscribe(data => {
                   console.log(" eee", data)
                   if (data ==true) {
                     this.arr[i][j] = "invalide";
@@ -368,7 +369,10 @@ export class CartographieComponent implements OnInit {
         
         }
     
+        SelectZonneInvalide(zone:any,i:any,j:any){
+          console.log("zone",i," ",j)
 
+        }
   //selectionner et accedé un etage
   SelectEtage(etage: any) {
     this.etageselect = etage
@@ -764,7 +768,10 @@ export class DialogEditHalle {
       data: { idHalle: id, halle: halle }
     });
     dialogRef.afterClosed().subscribe(result => {
-
+      this.service.getHalleById(halle.id).subscribe(data => {
+        this.halle = data;
+         
+      }, error => console.log(error));
     });
 
 
@@ -860,6 +867,7 @@ export class DialogAjouterRayon {
                 'Rayon Ajouté Avec Sucées',
                 'success'
               )
+              
               this.close()
             },
               error => console.log(error));

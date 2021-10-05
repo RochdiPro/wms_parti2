@@ -98,21 +98,28 @@
 
             </div>
          </div>
-         <div class="mb-3 card text-white card-body" style="background-color: #ccd8ff      ;">
+         <div class="mb-3 card text-white card-body" style="background-color: #ccd8ff ;">
             <h5 class="text-white card-title">{{libelleLocal}} {{libelleHalle}}</h5>
-            <div class="row"  *ngFor=" let in of counter(x) ;let i = index" >
-               <div class="col-md-2" *ngFor=" let is of counter(y) ;let j = index" >
-                  <div class="card-body" *ngIf="arr[i][j] =='invalide' ">
+            <div class="row"  *ngFor=" let in of counter(x) ;let i = index">
+               <div class="col-md-2" *ngFor=" let is of counter(y) ;let j = index">
+                  
+                  <div class="card-body"   *ngIf="arr[i][j] =='invalide' ">
                      <div> 
-                           <img src="../../../../assets/icon/hachuré.png " width= "90px"  height="250px"  >
+                          <button  class="  mb-1 mr-1 btn " (click)="SelectZonneInvalide(arr[i][j],i,j)"> 
+                           <img src="../../../../assets/icon/hachuré.png " width= "90px"  height="300px"  >
+                        
+                            </button>
+                          
                      </div>
                   </div>
-                  <div class="card-body" *ngIf="arr[i][j]!= null">
+
+                  <div class="card-body"   *ngIf="arr[i][j]!= null  &&  arr[i][j] != 'invalide' " >
+                     
                      <div>
                         <ul class="list-group">
                            <button class="list-group-item-action list-group-item " style="width: 90px;
-                       height: 250px;">
-                              <br> <b>Rayon {{arr[i][j].libelle}} </b><br> 
+                       height: 300px;">
+                              <br> <b>Rayon {{arr[i][j].libelle}}</b><br> 
                               <div class="row" style="align-items: center;">
                                  <button class="  mb-1 mr-1 btn " (click)="SelectRayon(arr[i][j])">
                                     <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
@@ -126,13 +133,42 @@
                                  </button>
                               </div>
                            </button>
+           
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               
+            </div> 
+           
+           
+           
+
+
+
+
+            <!-- <div class="row"  *ngFor=" let in of counter(x) ;let i = index" >
+               <div class="col-md-2" *ngFor=" let is of counter(y) ;let j = index" >
+                  <div class="card-body" *ngIf="arr[i][j] =='invalide' ">
+                     <div> 
+                           <img src="../../../../assets/icon/hachuré.png " width= "90px"  height="250px"  >
+                     </div>
+                  </div>
+                  <div class="card-body" *ngIf="arr[i][j]!= null">
+                     <div>
+                        <ul class="list-group">
+                           <button class="list-group-item-action list-group-item " style="width: 90px;
+                       height: 250px;">
+                              <br> <b>Rayon {{arr[i][j].libelle}} </b><br> 
+                              
+                           </button>
 
                         </ul>
                      </div>
                   </div>
                </div>
             </div>
-
+ -->
          </div>
       </form>
    </mat-step>
