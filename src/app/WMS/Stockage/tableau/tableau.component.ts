@@ -17,7 +17,7 @@ export class TableauComponent implements OnInit {
   ngOnInit(): void {
     this.arr=[]
 
-    this.service.getHalleById(1).subscribe(data => {
+    this.service.getHallById(1).subscribe(data => {
       this.rayons = data.rayons
       console.log(this.rayons)
       this.service.MaxOrdreX(1).subscribe(data => {

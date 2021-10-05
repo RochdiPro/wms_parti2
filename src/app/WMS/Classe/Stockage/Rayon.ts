@@ -10,5 +10,5 @@ export class Rayon {
     ordreX:any;
     ordreY:any;
     etages:any;
-    halle:any;
+    hall:any;
 }

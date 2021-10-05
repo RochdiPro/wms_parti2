@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Etage } from '../Classe/Stockage/Etage';
-import { Halle } from '../Classe/Stockage/Halle';
+import { Hall} from '../Classe/Stockage/Hall';
 import { Emplacement } from '../Classe/Stockage/Emplacement';
 import { Rayon } from '../Classe/Stockage/Rayon';
 import { ZoneInvalideHall } from '../Classe/Stockage/ZoneInvalideHall';
@@ -40,9 +40,9 @@ LibelleRayonExiste(local: any,lib: any): Observable<any>{
   );
  
 }
-//service verifer l'exsitance du libelle du rayon dans un local
-LibelleHalleExiste(local: any,lib: any): Observable<any>{
-  return this.httpClient.get<any>(wms+"WMS/LibelleHalleExiste",{params:{ local: local,lib:lib}}).pipe(
+//service verifer l'exsitance du libelle du hall dans un local
+LibelleHallExiste(local: any,lib: any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/LibelleHallExiste",{params:{ local: local,lib:lib}}).pipe(
     catchError(this.handleError)
   );
  
@@ -72,19 +72,18 @@ SouFamilleLogistiqueParFamille(famille:any): Observable<any> {
  );
 }
 
-//////CRUD rayon
-
+//////CRUD hall
 
 //service recuperer halle par id
-getHalleById(Id_Halle: any): Observable<any>{
-    return this.httpClient.get<Halle>(wms+"WMS/Halle",{params:{ Id_Halle: Id_Halle}}).pipe(
+getHallById(Id_Hall: any): Observable<any>{
+    return this.httpClient.get<Hall>(wms+"WMS/Hall",{params:{ Id_Hall: Id_Hall}}).pipe(
       catchError(this.handleError)
     );
 }
-//service ajouter halle
 
-ajoutHalle(halle:Halle): Observable<any> {  
-  return this.httpClient.post(wms+"WMS/Ajout_Halle",halle).pipe(
+//service ajouter hall
+ajoutHall(hall:Hall): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajout_Hall",hall).pipe(
     catchError(this.handleError)
  );
 }
@@ -95,17 +94,24 @@ ajoutZoneInvalide(zone:ZoneInvalideHall): Observable<any> {
  );
 }
 //service modifier halle
-editHalle(id: number, halle: Halle): Observable<Object>{
-  return this.httpClient.put(`${wms+"/WMS/Modifier_Halle"}/${id}`, halle);
+editHall(id: number, hall: Hall): Observable<Object>{
+  return this.httpClient.put(`${wms+"/WMS/Modifier_Hall"}/${id}`, hall);
 }
 
 //service supprimer  halle
-supprimerHalle(id: number): Observable<any> {  
-  return this.httpClient.delete(`${wms+"/WMS/Supprimer_Halle"}/${id}`);
+supprimerHall(id: number): Observable<any> {  
+  return this.httpClient.delete(`${wms+"/WMS/Supprimer_Hall"}/${id}`);
 }
 //service ZonneExiste
-ZonneExiste(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
-  return this.httpClient.get<ZoneInvalideHall>(wms+"WMS/ZonneExiste",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+ZoneExiste(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<ZoneInvalideHall>(wms+"WMS/ZoneExiste",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+    catchError(this.handleError)
+  );
+}
+
+//service recuperer zone by halle,x,y
+getZoneByHallX_Y(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<ZoneInvalideHall>(wms+"WMS/Zone",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
     catchError(this.handleError)
   );
 }
@@ -219,14 +225,14 @@ LastIDPos(): Observable<any> {
  
 
 //max ordre x rayon 
-MaxOrdreX(halle: any): Observable<any>{
-  return this.httpClient.get<Halle>(wms+"WMS/maxOrdreX",{params:{ halle: halle}}).pipe(
+MaxOrdreX(hall: any): Observable<any>{
+  return this.httpClient.get<Hall>(wms+"WMS/maxOrdreX",{params:{ halle: hall}}).pipe(
     catchError(this.handleError)
   );
 }
 //max ordre y rayon 
-MaxOrdreY(halle: any): Observable<any>{
-  return this.httpClient.get<Halle>(wms+"WMS/maxOrdreY",{params:{ halle: halle}}).pipe(
+MaxOrdreY(hall: any): Observable<any>{
+  return this.httpClient.get<Hall>(wms+"WMS/maxOrdreY",{params:{ halle: hall}}).pipe(
     catchError(this.handleError)
   );
 }

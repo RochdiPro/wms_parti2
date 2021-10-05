@@ -18,9 +18,9 @@
         </div>
         <mat-form-field appearance="fill">
             <mat-label>Sous Famille Logistique</mat-label>
-            <mat-select name="famille" [(ngModel)] = "etage.sousFamilleLogistique" id = "famille" >
+            <mat-select name="famille" [(ngModel)] = "etage.sousFamilleLogistique.libelle" id = "famille" >
                <mat-option value="option1"></mat-option>             
-               <mat-option *ngFor="let f of Sous_Famille"  [value]="f"  >{{f.libelle}}</mat-option>
+               <mat-option *ngFor="let f of Sous_Famille"  [value]="f.libelle"   >{{f.libelle}}</mat-option>
             </mat-select>
          </mat-form-field>
     

@@ -1,26 +1,26 @@
-<h1 mat-dialog-title>Modifier Hall {{halle.id}}</h1>
+<h1 mat-dialog-title>Modifier Hall {{hall.id}}</h1>
 
 <div mat-dialog-content>
     <form>
     
         <div class="form-group">
             <label>Libelle</label>
-            <input type="text" class ="form-control" id = "libelle"     [(ngModel)] = "halle.libelle"   name = "libelle">
+            <input type="text" class ="form-control" id = "libelle"     [(ngModel)] = "hall.libelle"   name = "libelle">
         </div>
  
         <div class="form-group">
             <label>Hauteur (CM)</label>
-            <input type="text" class ="form-control" id = "hauteur"     [(ngModel)] = "halle.hauteur"   name = "hauteur">
+            <input type="text" class ="form-control" id = "hauteur"     [(ngModel)] = "hall.hauteur"   name = "hauteur">
         </div>
         <div class="form-group">
             <label>Largeur (CM)</label>
-            <input type="text" class ="form-control" id = "largeur"     [(ngModel)] = "halle.largeur"   name = "largeur">
+            <input type="text" class ="form-control" id = "largeur"     [(ngModel)] = "hall.largeur"   name = "largeur">
         </div>
         <div class="form-group">
             <label>Zone Invalide</label>
             
 
-             <button class="btn" (click)="OpenZoneInvalide(halle,halle.id)">
+             <button class="btn" (click)="OpenZoneInvalide(hall,hall.id)">
                 <img src="../../../../assets/icon/invalide.png" width="20" height="20"></button>
                 <div class="row">
                     <div class="table-responsive">
@@ -33,9 +33,9 @@
                             </tr>
                            </thead>
                            <tbody>
-                            <tr  *ngFor = "let zone  of halle.zonne_invalide; let i=index">
+                            <tr  *ngFor = "let zone  of hall.zones_invalide; let i=index">
                                <td>{{zone.ordreX}}</td>
-                               <td> {{zone.ordreX}} </td>
+                               <td> {{zone.ordreY}} </td>
                                <td> {{zone.description}} </td>
 
                             </tr>

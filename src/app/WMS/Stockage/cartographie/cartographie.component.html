@@ -105,7 +105,7 @@
                   
                   <div class="card-body"   *ngIf="arr[i][j] =='invalide' ">
                      <div> 
-                          <button  class="  mb-1 mr-1 btn " (click)="SelectZonneInvalide(arr[i][j],i,j)"> 
+                          <button  class="  mb-1 mr-1 btn " (click)="SelectZoneInvalide(arr[i][j],i,j)"> 
                            <img src="../../../../assets/icon/hachuré.png " width= "90px"  height="300px"  >
                         
                             </button>
@@ -193,7 +193,7 @@
                      <div class="example-button-container"></div>
                   </div>
                   <ul class="list-group">
-                     <li class="list-group-item list-group-item" *ngFor="let etage of etages  | sort:{ property: 'ordreX', descending: false }"
+                     <li class="list-group-item list-group-item" *ngFor="let etage of etages  | sort:{ property: 'ordre', descending: false }"
                         style="background-color: #e4e7e5;">
                         <b>Etage {{etage.libelle}}</b>
                         {{etage.sousFamilleLogistique.libelle}}
@@ -289,14 +289,18 @@
 
       <div class="row">
 
-         <div class="col-md-3 mb-3">
+         <div class="col-md-2 mb-2">
             <h6><strong>Local:</strong></h6>
             {{libelleLocal}}
          </div>
-         <div class="col-md-3 mb-3">
+         <div class="col-md-2 mb-2">
+            <h6><strong>Hall:</strong></h6>
+            {{libelleHalle}}
+         </div>
+         <div class="col-md-2 mb-3">
             <h6><strong>Rayon:</strong></h6> {{libelleRayon}}
          </div>
-         <div class="col-md-3 mb-3">
+         <div class="col-md-2 mb-2">
             <h6><strong>Etage:</strong></h6> {{libelleEtage}}
          </div>
          <div class="col-md-3 mb-3">
@@ -309,11 +313,11 @@
 
 
       <div class="row">
-         <div class="col-md-6 mb-3">
+         <div class="col-md-7 mb-3">
             <div class="card-border mb-8 card card-body ">
                <h5 class="card-title">Code a bare</h5>
                <div fxLayout="column">
-                  <div class="col-md-4">
+                  <div class="col-md-5">
                      <div fxLayout="column">
                         <div class="row">
                            <mat-label>Format Code</mat-label>

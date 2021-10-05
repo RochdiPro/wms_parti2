@@ -14,8 +14,9 @@
                  Plein <div id="carre1"></div>
               </div>
            <h3>Local {{libelleLocal}}</h3>
-           <div class="row">
-              <div class="col-sm-3" *ngFor="let rayon of rayons;  let i = index ">
+           <div class="row" *ngFor="let hall of halles;  let i = index ">
+            {{hall.libelle}}
+              <div class="col-sm-3" *ngFor="let rayon of hall.rayons;  let i = index ">
                  <div class="card-body">
                     <div>
                        <ul class="list-group">

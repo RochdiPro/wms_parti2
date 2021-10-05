@@ -7,10 +7,11 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { NgxBarcodeComponent } from 'ngx-barcode';
+import { Local } from 'protractor/built/driverProviders';
 import Swal from 'sweetalert2';
 import { Emplacement } from '../../Classe/Stockage/Emplacement';
 import { Etage } from '../../Classe/Stockage/Etage';
-import { Halle } from '../../Classe/Stockage/Halle';
+import { Hall } from '../../Classe/Stockage/Hall';
 import { Rayon } from '../../Classe/Stockage/Rayon';
 import { ZoneInvalideHall } from '../../Classe/Stockage/ZoneInvalideHall';
 import { StockageService } from '../stockage.service';
@@ -92,19 +93,19 @@ export class CartographieComponent implements OnInit {
 
   x: number
   y: number
-  arr: any[][]=[];
+  arr: any[][] = [];
 
   constructor(public dialog: MatDialog, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient, private sanitizer: DomSanitizer) {
-    for (let i=0 ; i < 2; i++) {
+    for (let i = 0; i < 2; i++) {
       // Creates an empty line
       this.arr.push([]);
       // Adds cols to the empty line:
       this.arr[i].push(new Array(this.y));
-      for ( let j =0 ; j < 2; j++) {
-            this.arr[i][j] = "";
+      for (let j = 0; j < 2; j++) {
+        this.arr[i][j] = "";
       }
-   
-      }
+
+    }
   }
 
   ngOnInit() {
@@ -204,11 +205,11 @@ export class CartographieComponent implements OnInit {
   }
 
   //bouton edit hall
-  openDialogEditHalle(numero: any, halle: any) {
+  openDialogEditHalle(numero: any, hall: any) {
     //ouvrir la boite dialogue DialogEditRayon 
     const dialogRef = this.dialog.open(DialogEditHalle, {
       width: 'auto',
-      data: { idHalle: numero, halle: halle }
+      data: { idHall: numero, hall: hall }
     });
     dialogRef.afterClosed().subscribe(result => {
 
@@ -227,7 +228,7 @@ export class CartographieComponent implements OnInit {
     })
     swalWithBootstrapButtons.fire({
       title: 'Tu est sure?',
-      text: "Vous voulez vraimeent retirer cette rayon de local !",
+      text: "Vous voulez vraimeent retirer cette Hall de local !",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui, Supprimer!',
@@ -235,16 +236,16 @@ export class CartographieComponent implements OnInit {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.service.supprimerRayon(id).subscribe(data => {
+        this.service.supprimerHall(id).subscribe(data => {
           console.log(data);
           swalWithBootstrapButtons.fire(
             'Suppresion Effecté!',
-            'Rayon Supprimé Avec Sucées.',
+            'Hall Supprimé Avec Sucées.',
             'success'
           )
           this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
             this.localselect = data;
-            this.rayons = this.localselect.rayons
+            this.halles = this.localselect.halles
           }, error => console.log(error));
 
         })
@@ -268,7 +269,7 @@ export class CartographieComponent implements OnInit {
       data: { local: this.localselect, halle: this.halleselect }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.service.getHalleById(this.halleselect.id).subscribe(data => {
+      this.service.getHallById(this.halleselect.id).subscribe(data => {
         this.halleselect = data;
         this.libelleHalle = this.halleselect.libelle
         console.log("Local", this.localselect)
@@ -327,52 +328,57 @@ export class CartographieComponent implements OnInit {
     })
   }
 
-  generertableayrayon(halle:any) {
-    this.arr=[]
-    console.log("eeee",halle)
-        for (let i=0 ; i <this.x; i++) {
-          // Creates an empty line
-          this.arr.push([]);
-          // Adds cols to the empty line:
-          this.arr[i].push(new Array(this.y));
-          for ( let j =0 ; j < this.y; j++) {
-            this.service.OrdreRayonExiste(halle.id, i+1,j+1).subscribe(data => {
+  generertableayrayon(halle: any) {
+    this.arr = []
+    console.log("eeee", halle)
+    for (let i = 0; i < this.x; i++) {
+      // Creates an empty line
+      this.arr.push([]);
+      // Adds cols to the empty line:
+      this.arr[i].push(new Array(this.y));
+      for (let j = 0; j < this.y; j++) {
+        this.service.OrdreRayonExiste(halle.id, i + 1, j + 1).subscribe(data => {
+          console.log(" eee", data)
+          if (data != null) {
+            this.arr[i][j] = data;
+          }
+          else {
+            //ordre n'exsite pas
+            this.service.ZoneExiste(halle.id, i + 1, j + 1).subscribe(data => {
               console.log(" eee", data)
-              if (data != null) {
-                this.arr[i][j] = data;
+              if (data == true) {
+                this.arr[i][j] = "invalide";
               }
-              else
-               {
-                 //ordre n'exsite pas
-                this.service.ZonneExiste(halle.id, i+1,j+1).subscribe(data => {
-                  console.log(" eee", data)
-                  if (data ==true) {
-                    this.arr[i][j] = "invalide";
-                  } 
-                  else
-                   {
-                    this.arr[i][j] = null;
-                   }
-                } , error => console.log(error));
+              else {
+                this.arr[i][j] = null;
+              }
+            }, error => console.log(error));
 
 
 
-               }
-            } , error => console.log(error));
-        
           }
-       
-          }
-          setTimeout(() => {
-            console.log("array", this.arr);
-          }, 2000);
-        
-        }
-    
-        SelectZonneInvalide(zone:any,i:any,j:any){
-          console.log("zone",i," ",j)
+        }, error => console.log(error));
 
-        }
+      }
+
+    }
+    setTimeout(() => {
+      console.log("array", this.arr);
+    }, 2000);
+
+  }
+
+  SelectZoneInvalide(zone: any, i: any, j: any) {
+    console.log("zone", i + 1, " ", j + 1)
+
+    const dialogRef = this.dialog.open(DialogOpenZoneInvalideHalle, {
+      width: 'auto',
+      data: { hall:this.halleselect,zone: zone, x:i+1,y:j+1 }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+     
+    });
+  }
   //selectionner et accedé un etage
   SelectEtage(etage: any) {
     this.etageselect = etage
@@ -619,10 +625,10 @@ export class CartographieComponent implements OnInit {
   goForward() {
     this.myStepper.next();
   }
-//compteuur
+  //compteuur
   counter(i: number) {
     return new Array(i);
-}
+  }
 }
 
 ////////****************************************************************************************************************/////////
@@ -666,6 +672,7 @@ export class DialogOpenCartographie {
   styleUrls: ['./cartographie.component.scss']
 })
 export class DialogOpenCartographie2 {
+  halles: any = [];
   rayons: any = [];
   etages: any = [];
   positions: any = [];
@@ -675,9 +682,10 @@ export class DialogOpenCartographie2 {
   constructor(public dialogRef: MatDialogRef<DialogOpenCartographie2>,
     @Inject(MAT_DIALOG_DATA) public data: any, private service: StockageService, private http: HttpClient) {
     this.local = data.local
-    this.libelleLocal = data.local.libelle
-    this.rayons = data.local.rayons
-
+    console.log(this.local)
+    this.libelleLocal =  this.local.nom_Local
+    this.halles = data.local.halles
+console.log(this.halles)
   }
 
   selectPosition(position: any) {
@@ -699,19 +707,19 @@ export class DialogOpenCartographie2 {
 })
 export class DialogAjouterHalle {
   dataTab: any
-  halle: Halle = new Halle()
+  hall: Hall = new Hall()
   Famille_Logistique: any = [];
   local: any
   constructor(public dialogRef: MatDialogRef<DialogAjouterHalle>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-    this.halle.local = data.local;
+    this.hall.local = data.local;
     this.local = data.local;
   }
 
   //valider l'ajout d' halle
   onSubmit() {
-    console.log(this.halle)
-    this.service.LibelleHalleExiste(this.local.id_Local, this.halle.libelle).subscribe(data => {
+    console.log(this.hall)
+    this.service.LibelleHallExiste(this.local.id_Local, this.hall.libelle).subscribe(data => {
       if (data == true) {
         Swal.fire(
           'Erreur',
@@ -720,7 +728,7 @@ export class DialogAjouterHalle {
         )
       }
       if (data == false) {
-        this.service.ajoutHalle(this.halle).subscribe(data => {
+        this.service.ajoutHall(this.hall).subscribe(data => {
           console.log(data);
           Swal.fire(
             'Ajout Effecté',
@@ -751,26 +759,25 @@ export class DialogAjouterHalle {
 })
 export class DialogEditHalle {
   dataTab: any
-  halle: Halle
+  hall: Hall=new Hall()
   Famille_Logistique: any = [];
-  constructor(public dialog: MatDialog,public dialogRef: MatDialogRef<DialogEditHalle>,
+  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogEditHalle>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.dataTab = data
-    this.halle = data.halle
+    this.hall = data.hall
     this.service.ListeFamilleLogistique().subscribe((data: any) => {
       this.Famille_Logistique = data;
     });
   }
-  OpenZoneInvalide(halle:any,id:any)
-  {
+  OpenZoneInvalide(hall: any, id: any) {
     const dialogRef = this.dialog.open(DialogAddZoneInvalideHalle, {
       width: 'auto',
-      data: { idHalle: id, halle: halle }
+      data: { idHalle: id, hall: hall }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.service.getHalleById(halle.id).subscribe(data => {
-        this.halle = data;
-         
+      this.service.getHallById(hall.id).subscribe(data => {
+        this.hall = data;
+
       }, error => console.log(error));
     });
 
@@ -778,7 +785,7 @@ export class DialogEditHalle {
   }
   onSubmit() {
     console.log(this.dataTab.idRayon)
-    this.service.editHalle(this.dataTab.idHalle, this.halle).subscribe(data => {
+    this.service.editHall(this.dataTab.idHalle, this.hall).subscribe(data => {
       this.close();
     }
       , error => console.log(error));
@@ -808,7 +815,7 @@ export class DialogAjouterRayon {
     });
     console.log(data.local)
     this.rayon.local = data.local;
-    this.rayon.halle = data.halle;
+    this.rayon.hall = data.halle;
 
   }
 
@@ -867,7 +874,7 @@ export class DialogAjouterRayon {
                 'Rayon Ajouté Avec Sucées',
                 'success'
               )
-              
+          
               this.close()
             },
               error => console.log(error));
@@ -1163,21 +1170,21 @@ export class DialogEditEmplacement {
 })
 export class DialogAddZoneInvalideHalle {
   dataTab: any
-  halle: Halle = new Halle()
-  zone:ZoneInvalideHall=new ZoneInvalideHall()
-   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
+  hall: Hall = new Hall()
+  zone: ZoneInvalideHall = new ZoneInvalideHall()
+  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-    this.halle = data.halle;
-       this.zone.halle=this.halle
+    this.hall = data.hall;
+    this.zone.hall = this.hall
   }
 
   //valider l'ajout du rayon
   onSubmit() {
     console.log(this.zone)
-    this.service.ZonneExiste(this.halle.id, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
+    this.service.ZoneExiste(this.hall.id, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
       console.log(data)
-       if (data == true) {
-       
+      if (data == true) {
+
         Swal.fire(
           'Erreur',
           'Zone Deja existe',
@@ -1187,7 +1194,7 @@ export class DialogAddZoneInvalideHalle {
       if (data == false) {
 
         this.service.ajoutZoneInvalide(this.zone).subscribe(data => {
-          console.log("new zone ",data);
+          console.log("new zone ", data);
           Swal.fire(
             'Ajout Effecté',
             'Zone Ajouté Avec Sucées',
@@ -1199,6 +1206,39 @@ export class DialogAddZoneInvalideHalle {
       }
     },
       error => console.log(error));
+
+  }
+
+  //fermer dialogue
+  close() {
+    this.dialogRef.close();
+  }
+
+}
+
+/////**********************************************************************************************************************/////
+//dialog open zone
+@Component({
+  selector: 'open-zone_invalide.html',
+  templateUrl: 'dialogue_cartographie/open-zone_invalide.html',
+})
+export class DialogOpenZoneInvalideHalle {
+  dataTab: any
+  zone: ZoneInvalideHall = new ZoneInvalideHall()
+  hall:Hall=new Hall()
+  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
+    console.log(this.zone)
+    this.hall=data.hall
+    this.service.getZoneByHallX_Y(data.hall.id, data.x, data.y).subscribe(data => {
+       this.zone=data
+    },
+      error => console.log(error));
+
+  }
+
+  //valider l'ajout du rayon
+  onSubmit() {
 
   }
 

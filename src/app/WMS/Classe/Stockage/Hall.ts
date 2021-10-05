@@ -1,4 +1,5 @@
-export class Halle {
+export class Hall
+ {
 
     id:any
     libelle:any
@@ -8,6 +9,6 @@ export class Halle {
     hauteur:any;
     profondeur:any
     rayons:any
-    zonne_invalide:any
+    zones_invalide:any
 
 }

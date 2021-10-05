@@ -3,6 +3,6 @@ export class ZoneInvalideHall {
     id:any
      ordreX:any;
     ordreY:any;
-    halle:any;
+    hall:any;
     description:any
 }
