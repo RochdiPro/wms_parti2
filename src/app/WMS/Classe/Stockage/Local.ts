@@ -1,6 +1,6 @@
 export class Local {
  id:any;
- libelle:any
+ nom_Local:any
  surface:any
  tel:any
  adresse:any

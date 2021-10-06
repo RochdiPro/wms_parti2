@@ -9,19 +9,22 @@
             <div class="col-md-4 mb-3" *ngFor="let local of locals;  let i = index">
                <div class="card-body ">
                   <div class="main-card mb-3 card ">
-                     <div class="card-header ">Depot {{i+1}}: {{local.libelle}} </div>
+                     <div class="card-header ">Depot {{i+1}}: {{local.nom_Local}} </div>
                      <div class="card-body">
                         Responsable : {{local.responsable}}  <br>
                         Adresse : {{local.adresse}} <br>
                         Telephone :{{local.tel}} <br>
                         Surface : {{local.surface}}
                      </div>
-                     <div class="card-footer"><button class="btn btn-info" (click)="SelectLocal(local,local.id)">
+                     <div class="card-footer"><button class="btn btn-info" (click)="SelectLocal(local,local.id_Local)">
                            <img src="../../../../assets/icon/accede.png" width="20" height="20">
                            Acceder</button>
 
-                        <button class="btn btn-info" (click)="OpenCartographie(local,local.id)">
+                        <button class="btn btn-info" (click)="OpenCartographie(local,local.id_Local)">
                            <img src="../../../../assets/icon/1540089.png" width="20" height="20">Cartographie</button>
+                           
+                        <button class="btn btn-info" (click)="OpenEspaceTravail(local.id_Local)">
+                           <img src="../../../../assets/icon/modeliser.png" width="20" height="20">Modeliser</button>
                      </div>
 
                   </div>
@@ -140,35 +143,7 @@
                </div>
                
             </div> 
-           
-           
-           
-
-
-
-
-            <!-- <div class="row"  *ngFor=" let in of counter(x) ;let i = index" >
-               <div class="col-md-2" *ngFor=" let is of counter(y) ;let j = index" >
-                  <div class="card-body" *ngIf="arr[i][j] =='invalide' ">
-                     <div> 
-                           <img src="../../../../assets/icon/hachuré.png " width= "90px"  height="250px"  >
-                     </div>
-                  </div>
-                  <div class="card-body" *ngIf="arr[i][j]!= null">
-                     <div>
-                        <ul class="list-group">
-                           <button class="list-group-item-action list-group-item " style="width: 90px;
-                       height: 250px;">
-                              <br> <b>Rayon {{arr[i][j].libelle}} </b><br> 
-                              
-                           </button>
-
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-            </div>
- -->
+         
          </div>
       </form>
    </mat-step>

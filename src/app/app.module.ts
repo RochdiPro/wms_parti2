@@ -30,7 +30,10 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { FamilleLogistiqueComponent } from './WMS/Stockage/famille-logistique/famille-logistique.component';
 import { SortPipe } from './WMS/Stockage/cartographie/sort';
 import { TableauComponent } from './WMS/Stockage/tableau/tableau.component';
-
+import { EspaceTravailCartographieComponent } from './WMS/Stockage/cartographie/espace-travail-cartographie/espace-travail-cartographie.component';
+import { ColorPickerModule } from 'ngx-color-picker';
+import { FabricjsEditorModule } from 'src/projects/angular-editor-fabric-js/src/public-api';
+ 
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,6 +49,8 @@ import { TableauComponent } from './WMS/Stockage/tableau/tableau.component';
     DialogEditEmplacement,
     FamilleLogistiqueComponent,
     CartographieComponent,
+    EspaceTravailCartographieComponent,
+
     DialogOpenCartographie,
     DialogOpenCartographie2,
     DialogAjouterHalle,
@@ -82,7 +87,8 @@ import { TableauComponent } from './WMS/Stockage/tableau/tableau.component';
     FormsModule, ReactiveFormsModule,
     PortalModule,
     NgxBarcodeModule, QRCodeModule,
- 
+    ColorPickerModule,
+    FabricjsEditorModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
