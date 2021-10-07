@@ -1,0 +1,48 @@
+#carre1 {
+    height: 20px;
+    width: 20px;
+    background: red;
+    cursor: pointer;
+
+   }
+   #carre2 {
+    height: 20px;
+    width: 20px;
+    background: LightGreen;
+    cursor: pointer;
+
+   }
+   #depot
+   {
+    border: gainsboro;
+    border-style: solid;
+   }
+   #carre3 {
+    height: 20px;
+    width: 20px;
+    background: yellow;
+    cursor: pointer;
+
+   }
+   .un{
+    width: 20px;
+   }
+   .col-size {
+
+     border: gainsboro;
+    border-style: solid;
+
+  }
+ 
+  @media screen and (max-width: 640px) {
+    .bloc {
+      display:block;
+      clear:both;
+    }
+  }
+  @media screen and (min-width: 200px) and (max-width: 640px) {
+    .bloc {
+      display:block;
+      clear:both;
+    }
+  }  

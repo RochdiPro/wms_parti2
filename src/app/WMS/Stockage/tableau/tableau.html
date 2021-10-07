@@ -1,21 +1,73 @@
- <div class="row"  *ngFor=" let in of counter(x) ;let i = index">
-    <div class="col-md-2" *ngFor=" let is of counter(y) ;let j = index">
-       <div class="card-body"   *ngIf="arr[i][j]!= null" >
-          <div>
-             <ul class="list-group">
-                <button class="list-group-item-action list-group-item " style="width: 90px;
-            height: 400px;">
-                   <br> <b>Rayon {{arr[i][j].libelle}}</b><br> 
-                   <div class="row" style="align-items: center;">
-                     
-                   </div>
-                </button>
+<h1 mat-dialog-title>Cartographie</h1>
 
-             </ul>
-          </div>
-       </div>
-    </div>
-    
- </div> 
+<!--  les legends -->
+<div class="row">
 
+   <div id="depot" class="col col-size">
+      <div class="row">
+         <div class="un"></div>
+         Libre <div id="carre2"></div>
+         <div class="un"></div>
+         Encore Disponible <div id="carre3"></div>
+         <div class="un"></div>
+         Plein <div id="carre1"></div>
+      </div>
+      <!-- affichage halls -->
 
+      <!--   affichage rayon/etage/emplacment-->
+      <div>
+
+         <div class="mb-3 card text-white card-body" style="background-color: #ccd8ff ;">
+            <h5 class="text-white card-title">{{libelleLocal}} {{libelleHalle}}</h5>
+            <div class="row" *ngFor=" let in of counter(x) ;let i = index">
+               <div class="col-md-2" *ngFor=" let is of counter(y) ;let j = index">
+
+                  <div class="card-body" *ngIf="arr[i][j] =='invalide' ">
+                     <div>
+                        <br>
+                        <button class="  mb-1 mr-1 btn ">
+                           <img src="../../../../assets/icon/hachuré.png " width="90px" height="300px">
+
+                        </button>
+
+                     </div>
+                  </div>
+
+                  <div class="card-body" *ngIf="arr[i][j]!= null  &&  arr[i][j] != 'invalide' ">
+                     <div>
+                        <ul class="list-group">
+                           <b>Rayon {{arr[i][j].libelle}}</b>
+                           <button class="list-group-item-action list-group-item "
+                              style="width: 90px;   height: 300px;">
+                              <table>
+                                 <tr>
+                                    <td *ngFor="let etage of arr[i][j].etages;  let i = index"
+                                       style="background-color:  #EDEDED ;  border:1px dotted black; height: 280px;">
+                                       <b>{{etage.libelle}}</b>
+                                       <table>
+                                          <tr *ngFor="let emp of etage.emplacments;  let i = index">
+                                             <div
+                                                [ngStyle]="{'background':emp.etat === 'Libre' ? 'LightGreen' : emp.etat === 'Disponible'? '#fff44f': 'LightCoral' }">
+                                                {{emp.libelle}}<br>
+                                             </div>
+                                          </tr>
+                                       </table>
+                                    </td>
+                                 </tr>
+                              </table>
+                           </button>
+
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+
+         </div>
+
+      </div>
+
+   </div>
+</div>
+<!--  cartographie -->
