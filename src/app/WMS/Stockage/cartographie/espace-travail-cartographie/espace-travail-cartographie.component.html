@@ -4,17 +4,17 @@
             <div class="row">
                 <div class="col-xl-12 text-right">
                     <button data-toggle="tooltip" data-placement="bottom" title="Export to image" type="button" class="btn btn-primary" (click)="rasterize();">
-                        <i class="fa fa-download" aria-hidden="true"></i> Export to image</button>
+                        <i class="fa fa-download" aria-hidden="true"></i> Exporter image</button>
                     <button data-toggle="tooltip" data-placement="bottom" title="Export to SVG" type="button" class="btn btn-primary" (click)="rasterizeSVG();">
-                        <i class="fa fa-download" aria-hidden="true"></i> Export to SVG</button>
+                        <i class="fa fa-download" aria-hidden="true"></i> Exporter  SVG</button>
                     <button data-toggle="tooltip" data-placement="bottom" title="Save in localStorage" type="button" class="btn btn-primary"
                         (click)="saveCanvasToJSON();">
-                        <i class="fa fa-save" aria-hidden="true"></i> Save local</button>
+                        <i class="fa fa-save" aria-hidden="true"></i> Enregistrer local</button>
                     <button data-toggle="tooltip" data-placement="bottom" title="Load from localStorage" type="button" class="btn btn-primary"
                         (click)="loadCanvasFromJSON();">
-                        <i class="fa fa-save" aria-hidden="true"></i> Load local</button>
+                        <i class="fa fa-save" aria-hidden="true"></i> Enregistrer local</button>
                     <button data-toggle="tooltip" data-placement="bottom" title="Clean Canvas" type="button" class="btn btn-danger" (click)="confirmClear();">
-                        <i class="fa fa-ban" aria-hidden="true"></i> Clean</button>
+                        <i class="fa fa-ban" aria-hidden="true"></i> Annuler</button>
                 </div>
             </div>
         </div>
@@ -23,14 +23,14 @@
     <div class="row">
         <div class="col-xl-3">
             <div class="card">
-                <div class="card-header">Size</div>
+                <div class="card-header">Taille</div>
                 <div class="card-body">
                     <div class="form-group">
                         <div class="input-group">
                             <input type="text" class="form-control" [(ngModel)]="canvas.size.width" (keyup)="changeSize()">
                             <div class="input-group-append">
                                 <span class="input-group-text">
-                                    Width
+                                    Largeur
                                 </span>
                             </div>
                         </div>
@@ -40,16 +40,32 @@
                             <input type="text" class="form-control" [(ngModel)]="canvas.size.height" (keyup)="changeSize()">
                             <div class="input-group-append">
                                 <span class="input-group-text">
-                                    Height
+                                    Longeur
                                 </span>
                             </div>
                         </div>
                     </div>
+                    <div  *ngIf="!canvas.selected">
+                        <div class="custom-item" *ngIf="!canvas.props.canvasImage">
+                           <div class="custom-item-title">Arrière-plan Color</div>
+                           <div class="custom-item-body">
+                               <input type="text" class="form-control" [cpPosition]="'bottom'" [(colorPicker)]="canvas.props.canvasFill" [style.background]="canvas.props.canvasFill"
+                                   [value]="canvas.props.canvasFill" (colorPickerChange)="setCanvasFill()">
+                           </div>
+                       </div>
+                       <div class="custom-item">
+                           <div class="custom-item-title">Arrière-plan Image (url)</div>
+                           <div class="custom-item-body">
+                               <input type="text" class="form-control" placeholder="http://example.jpg" [(ngModel)]="canvas.props.canvasImage" (keyup)="setCanvasImage()">
+                           </div>
+                       </div>
+                   </div>
                 </div>
+                
             </div>
             <br/>
             <div class="card">
-                <div class="card-header">Add text</div>
+                <div class="card-header">Ajouter text</div>
                 <div class="card-body">
                     <div class="input-group">
                         <input type="text" class="form-control" [(ngModel)]="canvas.textString">
@@ -65,7 +81,7 @@
             </div>
             <br/>
             <div class="card">
-                <div class="card-header">Add images</div>
+                <div class="card-header">Ajouter images</div>
                 <div class="card-body max-height">
                     <img class="images-item" (click)="getImgPolaroid($event)" src=" ">
          
@@ -73,7 +89,7 @@
             </div>
             <br/>
             <div class="card">
-                <div class="card-header">Upload image</div>
+                <div class="card-header">Télécharger image</div>
                 <div class="card-body text-center">
                     <img id="testImage" *ngIf="canvas.url" class="images-item-upload" [src]="canvas.url" (click)="addImageOnCanvas(canvas.url);">
                     <input type="file" (change)="readUrl($event);">
@@ -82,18 +98,18 @@
                     <div class="btn-group btn-group-justified" role="group" aria-label="...">
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeWhite(canvas.url);">
-                                <i class="fa fa-times" aria-hidden="true"></i> Remove</button>
+                                <i class="fa fa-times" aria-hidden="true"></i> Supprimer</button>
                         </div>
                     </div>
                 </div>
             </div>
             <br/>
             <div class="card">
-                <div class="card-header">Add figure</div>
+                <div class="card-header">Ajouter figure</div>
                 <div class="card-body text-center max-height">
                     <div class="btn-group btn-group-vertical" role="group" aria-label="...">
                         <button type="button" class="btn btn-primary" (click)="addFigure('rectangle');">Rectangle</button>
-                        <button type="button" class="btn btn-primary" (click)="addFigure('square');">Square</button>
+                        <button type="button" class="btn btn-primary" (click)="addFigure('square');">Carré</button>
                         <button type="button" class="btn btn-primary" (click)="addFigure('triangle');">Triangle</button>
                         <button type="button" class="btn btn-primary" (click)="addFigure('circle');">Circle</button>
                     </div>
@@ -130,29 +146,13 @@
                         </button>
                     </div>
                 </div>
+              
             </div>
             <br/>
-            <div class="card" *ngIf="!canvas.selected">
-                <div class="card-header">Canvas</div>
-                <div class="card-body">
-                    <div class="custom-item" *ngIf="!canvas.props.canvasImage">
-                        <div class="custom-item-title">Background Color</div>
-                        <div class="custom-item-body">
-                            <input type="text" class="form-control" [cpPosition]="'bottom'" [(colorPicker)]="canvas.props.canvasFill" [style.background]="canvas.props.canvasFill"
-                                [value]="canvas.props.canvasFill" (colorPickerChange)="setCanvasFill()">
-                        </div>
-                    </div>
-                    <div class="custom-item">
-                        <div class="custom-item-title">Background Image (url)</div>
-                        <div class="custom-item-body">
-                            <input type="text" class="form-control" placeholder="http://example.jpg" [(ngModel)]="canvas.props.canvasImage" (keyup)="setCanvasImage()">
-                        </div>
-                    </div>
-                </div>
-            </div>
+         
             <br/>
             <div class="card">
-                <div class="card-header">Custom</div>
+                <div class="card-header">Personnaliser</div>
                 <div class="card-body">
                     <div class="custom-item" *ngIf="canvas.selected  && canvas.selected.type == 'group'">Group Selected</div>
                     <div class="custom-item" *ngIf="!canvas.selected">No items selected</div>
@@ -163,11 +163,11 @@
                         </div>
                     </div>
                     <div class="custom-item" *ngIf="canvas.selected && canvas.selected.type != 'group'">
-                        <div class="custom-item-title">Opacity</div>
+                        <div class="custom-item-title">Opacité</div>
                         <div class="custom-item-body">
                             <input type="range" [(ngModel)]="canvas.props.opacity" (change)="setOpacity()">{{canvas.props.opacity}}</div>
                     
-                            <div class="custom-item-title">Fill</div>
+                            <div class="custom-item-title">Couleur</div>
                             <div class="custom-item-body">
                                 <input type="text" class="form-control" [cpPosition]="'bottom'" [(colorPicker)]="canvas.props.fill" [style.background]="canvas.props.fill"
                                     [value]="canvas.props.fill" (colorPickerChange)="setFill()">
@@ -175,7 +175,7 @@
                         </div>
                   
                     <div class="custom-item" *ngIf="canvas.selected && canvas.textEditor">
-                        <div class="custom-item-title">Font family</div>
+                        <div class="custom-item-title">Police</div>
                         <div class="custom-item-body">
                             <select [(ngModel)]="canvas.props.fontFamily" class="form-control" (change)="setFontFamily()">
                                 <option value="arial">Arial</option>
@@ -199,7 +199,7 @@
                         </div>
                     </div>
                     <div class="custom-item" *ngIf="canvas.selected && canvas.textEditor">
-                        <div class="custom-item-title">Text Align</div>
+                        <div class="custom-item-title">Alignement</div>
                         <div class="custom-item-body text-center">
                             <div class="btn-group" role="group" aria-label="...">
                                 <button type="button" class="btn btn-primary" [ngClass]="{'active': canvas.props.textAlign == 'left' }" (click)="setTextAlign('left')">
@@ -243,17 +243,17 @@
                         </div>
                     </div>
                     <div class="custom-item" *ngIf="canvas.selected && canvas.textEditor">
-                        <div class="custom-item-title">Font Size</div>
+                        <div class="custom-item-title">Taille</div>
                         <div class="custom-item-body">
                             <input type="range" [(ngModel)]="canvas.props.fontSize" (change)="setFontSize()" step="1" min="1" max="120">{{canvas.props.fontSize}}</div>
                     </div>
                     <div class="custom-item" *ngIf="canvas.selected && canvas.textEditor">
-                        <div class="custom-item-title">Line Height</div>
+                        <div class="custom-item-title">Hauteur ligne</div>
                         <div class="custom-item-body">
                             <input type="range" [(ngModel)]="canvas.props.lineHeight" (change)="setLineHeight()" step="0.1" min="0" max="10">{{canvas.props.lineHeight}}</div>
                     </div>
                     <div class="custom-item" *ngIf="canvas.selected && canvas.textEditor">
-                        <div class="custom-item-title">Char Spacing</div>
+                        <div class="custom-item-title">Espacement</div>
                         <div class="custom-item-body">
                             <input type="range" [(ngModel)]="canvas.props.charSpacing" (change)="setCharSpacing()" step="10" min="-200" max="800">{{canvas.props.charSpacing}}</div>
                     </div>
@@ -267,7 +267,7 @@
             <div class="card">
                 <div class="card-header">
                     <button type="button" class="btn btn-primary btn-sm" (click)="rasterizeJSON()">
-                        <i class="fa fa-refresh" aria-hidden="true"></i> Render to json</button>
+                        <i class="fa fa-refresh" aria-hidden="true"></i> Convertir en json</button>
                 </div>
                 <div class="card-body">
                     <pre>{{canvas.json}}</pre>
