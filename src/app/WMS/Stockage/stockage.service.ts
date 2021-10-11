@@ -103,8 +103,8 @@ supprimerHall(id: number): Observable<any> {
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Hall"}/${id}`);
 }
 //service ZonneExiste
-ZoneExiste(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
-  return this.httpClient.get<ZoneInvalideHall>(wms+"WMS/ZoneExiste",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+ZoneInvalideExiste(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<ZoneInvalideHall>(wms+"WMS/ZoneInvalideExiste",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
     catchError(this.handleError)
   );
 }

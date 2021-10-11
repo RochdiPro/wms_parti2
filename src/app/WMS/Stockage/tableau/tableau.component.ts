@@ -63,7 +63,7 @@ generertableayrayon(halle: any) {
         }
         else {
           //ordre n'exsite pas
-          this.service.ZoneExiste(halle.id, i + 1, j + 1).subscribe(data => {
+          this.service.ZoneInvalideExiste(halle.id, i + 1, j + 1).subscribe(data => {
             console.log(" eee", data)
             if (data == true) {
               this.arr[i][j] = "invalide";

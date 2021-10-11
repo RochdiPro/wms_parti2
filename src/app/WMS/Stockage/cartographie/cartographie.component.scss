@@ -12,11 +12,6 @@
     cursor: pointer;
 
    }
-   #depot
-   {
-    border: gainsboro;
-    border-style: solid;
-   }
    #carre3 {
     height: 20px;
     width: 20px;
@@ -24,6 +19,36 @@
     cursor: pointer;
 
    }
+   #hachure {
+    height: 23px;
+    width: 23px;
+    background-image: url("../../../../assets/icon/hachur.png");
+    background-size: cover;
+    cursor: pointer;
+
+    
+   }
+   #vide {
+    height: 23px;
+    width: 23px;
+    background: #ccd8ff;
+     cursor: pointer;
+
+    }
+    #rayon {
+      height: 23px;
+      width: 23px;
+      background: #ffffff;
+       cursor: pointer;
+  
+      }
+    
+   #depot
+   {
+    border: gainsboro;
+    border-style: solid;
+   }
+  
    .un{
     width: 20px;
    }
@@ -46,3 +71,6 @@
       clear:both;
     }
   }  
+  .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: rgb(66, 134, 244);
+  }

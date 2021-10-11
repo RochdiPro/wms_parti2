@@ -102,7 +102,21 @@
             </div>
          </div>
          <div class="mb-3 card text-white card-body" style="background-color: #ccd8ff ;">
-            <h5 class="text-white card-title">{{libelleLocal}} {{libelleHalle}}</h5>
+            <div class="row">
+               <h5 class="text-white card-title">{{libelleLocal}} {{libelleHalle}}</h5>
+               <div class="col-md-7">
+
+               </div>
+               <div class="un"></div>
+               Reservé <div id="rayon"></div>
+               <div class="un"></div>
+               Libre <div id="vide"></div>
+               <div class="un"></div>
+               Invalide <div id="hachure"></div>
+      
+
+            </div>
+          
             <div class="row"  *ngFor=" let in of counter(x) ;let i = index">
                <div class="col-md-2" *ngFor=" let is of counter(y) ;let j = index">
                   
@@ -217,7 +231,22 @@
          <div class="col-md-12">
             <div class="main-card mb-12 card">
                <div class="card-body">
-                  <h5 class="card-title">Etage {{libelleEtage}} Rayon {{libelleRayon}} Local {{libelleLocal}}</h5>
+                  <div class="row">
+                     <h5 class="card-title">Etage {{libelleEtage}} Rayon {{libelleRayon}} Local {{libelleLocal}}</h5>
+                     <div class="col-md-5"> </div>      
+                     <div class="un"></div>
+                     Libre <div id="carre2"></div>
+                     <div class="un"></div>
+                     Encore Disponible <div id="carre3"></div>
+                     <div class="un"></div>
+                     Plein <div id="carre1"></div>
+                  </div>
+                  
+                  <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">
+                     <mat-tab label="Droite"> {{couloirDroite.libelle}} </mat-tab>
+                     <mat-tab label="Gauche"> {{couloirGauche.libelle}} </mat-tab>
+                    </mat-tab-group>
+
 
                   <ul class="list-group">
                      <li class="list-group-item-dark list-group-item">

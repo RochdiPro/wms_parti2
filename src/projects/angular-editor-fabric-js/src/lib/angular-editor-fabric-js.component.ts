@@ -246,7 +246,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
       this.canvas.renderAll();
     }
   }
-/// ici
+
   extend(obj:any, id:any) {
     obj.toObject = ((toObject) => {
       return function(this:any) {

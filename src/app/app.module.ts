@@ -33,7 +33,9 @@ import { TableauComponent } from './WMS/Stockage/tableau/tableau.component';
 import { EspaceTravailCartographieComponent } from './WMS/Stockage/cartographie/espace-travail-cartographie/espace-travail-cartographie.component';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { FabricjsEditorModule } from 'src/projects/angular-editor-fabric-js/src/public-api';
- 
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatRadioModule} from '@angular/material/radio';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,7 +66,7 @@ import { FabricjsEditorModule } from 'src/projects/angular-editor-fabric-js/src/
     DialogAddZoneInvalideHalle,
     DialogOpenZoneInvalideHalle,
     TableauComponent,
-  ],
+   ],
   exports: [
 
 
@@ -89,6 +91,9 @@ import { FabricjsEditorModule } from 'src/projects/angular-editor-fabric-js/src/
     NgxBarcodeModule, QRCodeModule,
     ColorPickerModule,
     FabricjsEditorModule,
+     MatTabsModule, 
+     MatRadioModule
+    //MatToolbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

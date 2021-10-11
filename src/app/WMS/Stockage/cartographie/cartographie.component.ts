@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, Pipe, PipeTransform, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
@@ -9,10 +9,12 @@ import { QRCodeComponent } from 'angularx-qrcode';
 import { NgxBarcodeComponent } from 'ngx-barcode';
 import { Local } from 'protractor/built/driverProviders';
 import Swal from 'sweetalert2';
+import { Couloir } from '../../Classe/Stockage/Couloir';
 import { Emplacement } from '../../Classe/Stockage/Emplacement';
 import { Etage } from '../../Classe/Stockage/Etage';
 import { Hall } from '../../Classe/Stockage/Hall';
 import { Rayon } from '../../Classe/Stockage/Rayon';
+ 
 import { ZoneInvalideHall } from '../../Classe/Stockage/ZoneInvalideHall';
 import { StockageService } from '../stockage.service';
 
@@ -83,6 +85,12 @@ export class CartographieComponent implements OnInit {
   rayonselect: any
   etageselect: any
   emplacmentselect: any
+
+
+//coloir selctionner
+couloirGauche:Couloir=new Couloir()
+couloirDroite:Couloir=new Couloir()
+
 
   //declaration du libelle d'objet(local/hall/rayon/etage/emplacement) selectinné
   libelleLocal: any;
@@ -169,11 +177,11 @@ export class CartographieComponent implements OnInit {
       }, error => console.log(error));
     });
   }
+
   //ouvrir l'espace de travail pour modiliser le plan du local
   OpenEspaceTravail(id: any) {
     console.log(id)
     this.router.navigate(['/Menu/WMS-Stockage/Cartographie/Espace-Travail',id]);
- 
   }
   //selectionner un halle 
   SelectHalle(halle: any) {
@@ -263,6 +271,8 @@ export class CartographieComponent implements OnInit {
     this.rayonselect = rayon
     this.libelleRayon = this.rayonselect.libelle
     this.etages = this.rayonselect.etages
+    this.couloirGauche=rayon.coloirGauche
+    this.couloirDroite=rayon.coloirDroite
     this.goForward();
   }
 
@@ -323,14 +333,25 @@ export class CartographieComponent implements OnInit {
             'Rayon Supprimé Avec Sucées.',
             'success'
           )
-          this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
-            this.localselect = data;
-            this.rayons = this.localselect.rayons
+          this.service.getHallById(this.halleselect.id).subscribe(data => {
+            this.halleselect = data;
+            this.rayons = this.halleselect.rayons
+            this.generertableayrayon(this.halleselect)
           }, error => console.log(error));
 
         })
       }
     })
+  }
+
+  @ViewChildren("allTabs") allTabs: QueryList<any>
+  
+  ngAfterViewInit() {
+    console.log('total tabs: ' + this.allTabs.first._tabs.length);
+  }
+
+  tabChanged(tabChangeEvent: number) {
+    console.log('tab selected: ' + tabChangeEvent);
   }
 
   //génerer la matrice du rayon pour un hall
@@ -350,7 +371,7 @@ export class CartographieComponent implements OnInit {
           }
           else {
             //ordre n'exsite pas
-            this.service.ZoneExiste(halle.id, i + 1, j + 1).subscribe(data => {
+            this.service.ZoneInvalideExiste(halle.id, i + 1, j + 1).subscribe(data => {
               console.log(" eee", data)
               if (data == true) {
                 this.arr[i][j] = "invalide";
@@ -637,9 +658,7 @@ export class CartographieComponent implements OnInit {
   }
 }
 
-////////****************************************************************************************************************/////////
-
-//dialog open cartographie 
+////////*******************************************dialog open cartographie **********************************************/////////
 @Component({
   selector: 'open-cartographie',
   templateUrl: 'dialogue_cartographie/open-cartographie.html',
@@ -670,8 +689,7 @@ export class DialogOpenCartographie {
   }
 
 }
-///////*********************************************************************************************************************/////
-//dialog open cartographie 
+///////******************************************dialog open cartographie*************************************************/////
 @Component({
   selector: 'open-cartographieV2',
   templateUrl: 'dialogue_cartographie/open-cartographieV2.html',
@@ -733,7 +751,7 @@ console.log(this.halles)
           }
           else {
             //ordre n'exsite pas
-            this.service.ZoneExiste(halle.id, i + 1, j + 1).subscribe(data => {
+            this.service.ZoneInvalideExiste(halle.id, i + 1, j + 1).subscribe(data => {
               console.log(" eee", data)
               if (data == true) {
                 this.arr[i][j] = "invalide";
@@ -771,9 +789,7 @@ console.log(this.halles)
   }
 
 }
-/////////////****************************************************************************************************/////////////
-
-//dialog ajouter un halle dans un local
+//////**********************************dialog ajouter un halle dans un local*************************************///////
 @Component({
   selector: 'ajouter-halle-dialog',
   templateUrl: 'dialogue_cartographie/ajouter-halle-dialog.html',
@@ -823,9 +839,7 @@ export class DialogAjouterHalle {
 
 }
 
-////**********************************************************************************************************************///////
-
-//dialog edit rayon
+////*************************************************dialog edit rayon*************************************************///////
 @Component({
   selector: 'edit-halle-dialog',
   templateUrl: 'dialogue_cartographie/edit-halle-dialog.html',
@@ -869,8 +883,7 @@ export class DialogEditHalle {
   }
 
 }
-/////**********************************************************************************************************************/////
-//dialog ajouter un rayon dans un local
+/////************************************dialog ajouter un rayon dans un local*****************************************/////
 @Component({
   selector: 'ajouter-rayon-dialog',
   templateUrl: 'dialogue_cartographie/ajouter-rayon-dialog.html',
@@ -931,46 +944,51 @@ export class DialogAjouterRayon {
                   data: { idRayon: data.id, rayon: data }
                 });
                 dialogRef.afterClosed().subscribe(result => {
-
                 });
-
               }
             })
-
           }
-          if (data == null) {
-
-            this.service.ajoutRayon(this.rayon).subscribe(data => {
-              console.log(data);
-              Swal.fire(
-                'Ajout Effecté',
-                'Rayon Ajouté Avec Sucées',
-                'success'
-              )
-          
-              this.close()
+          if (data == null) { 
+            this.service.ZoneInvalideExiste(this.rayon.hall.id, this.rayon.ordreX, this.rayon.ordreY).subscribe(data => {
+              console.log(data)
+              if (data == true) {
+                Swal.fire(
+                  'Erreur',
+                  'Cette zone est invalide',
+                  'error'
+                )
+              }
+              if (data == false) {
+                this.service.ajoutRayon(this.rayon).subscribe(data => {
+                  console.log(data);
+                  Swal.fire(
+                    'Ajout Effecté',
+                    'Rayon Ajouté Avec Sucées',
+                    'success'
+                  )   
+                  this.close()
+                },
+                  error => console.log(error));
+ 
+              }
             },
               error => console.log(error));
+
+
           }
         },
           error => console.log(error));
-
       }
     },
       error => console.log(error));
-
   }
-
   //fermer dialogue
   close() {
     this.dialogRef.close();
   }
-
 }
 
-////************************************************************************************************************************////
-
-//dialog edit rayon
+////*************************************************dialog edit rayon*********************************************////
 @Component({
   selector: 'edit-rayon-dialog',
   templateUrl: 'dialogue_cartographie/edit-rayon-dialog.html',
@@ -1010,11 +1028,7 @@ export class DialogEditRayon {
 
 }
 
-//////////***********************************************************************************************************////////////
-
-
-
-//dialog edit rayon
+//////////*****************************************dialog edit rayon***********************************************////////////
 @Component({
   selector: 'edit-ordre-rayon',
   templateUrl: 'dialogue_cartographie/edit-ordre-rayon.html',
@@ -1057,8 +1071,7 @@ export class DialogEditOrdreRayon {
 
 }
 
-//////******************************************************************************************************************////////
-//dialog add etage
+//////********************************************dialog add etage**********************************************////////
 @Component({
   selector: 'ajouter-etage-dialog',
   templateUrl: 'dialogue_cartographie/ajouter-etage-dialog.html',
@@ -1123,9 +1136,7 @@ export class DialogAjouterEtage {
 
 }
 
-///////////********************************************************************************************************/////////////
-
-//dialog edit etage
+///////////***************************************dialog edit etage******************************************/////////////
 @Component({
   selector: 'edit-Etage-dialog',
   templateUrl: 'dialogue_cartographie/edit-Etage-dialog.html',
@@ -1159,12 +1170,12 @@ export class DialogEditEtage {
 
 }
 
-///////////**************************************************************************************************//////////////////
-
-//dialog ajouter emplacment
+///////////************************************dialog ajouter emplacment************************************************////////
 @Component({
   selector: 'ajouter-emplacment-dialog',
   templateUrl: 'dialogue_cartographie/ajouter-emplacment-dialog.html',
+  styleUrls: ['./cartographie.component.scss'],
+
 })
 export class DialogAjouterEmplacment {
   dataTab: any
@@ -1205,8 +1216,8 @@ export class DialogAjouterEmplacment {
   }
 }
 
-/////********************************************************************************************************************//////
-//dialog modifier emplacment
+/////**************************************/dialog modifier emplacment****************************************************//////
+ 
 @Component({
   selector: 'edit-emplacement-dialog',
   templateUrl: 'dialogue_cartographie/edit-emplacement-dialog.html',
@@ -1235,8 +1246,8 @@ export class DialogEditEmplacement {
 /*********************************************************************************************************************** */
 
 
-/////**********************************************************************************************************************/////
-//dialog ajouter un rayon dans un local
+/////****************************************dialog ajouter un rayon dans un local*******************************************/////
+//
 @Component({
   selector: 'add-zone_invalide_halle',
   templateUrl: 'dialogue_cartographie/add-zone_invalide_halle.html',
@@ -1251,10 +1262,10 @@ export class DialogAddZoneInvalideHalle {
     this.zone.hall = this.hall
   }
 
-  //valider l'ajout du rayon
+  //valider l'ajout du zone invalide
   onSubmit() {
     console.log(this.zone)
-    this.service.ZoneExiste(this.hall.id, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
+    this.service.ZoneInvalideExiste(this.hall.id, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
       console.log(data)
       if (data == true) {
 
@@ -1289,8 +1300,8 @@ export class DialogAddZoneInvalideHalle {
 
 }
 
-/////**********************************************************************************************************************/////
-//dialog open zone
+/////**********************************************dialog open zone invalides************************************************/////
+ 
 @Component({
   selector: 'open-zone_invalide.html',
   templateUrl: 'dialogue_cartographie/open-zone_invalide.html',
