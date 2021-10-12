@@ -98,6 +98,7 @@ couloirDroite:Couloir=new Couloir()
   libelleHalle: any;
   libelleEtage: any;
   libelleEmplacement: any;
+  libelleCouloir:any
 
   x: number
   y: number
@@ -281,7 +282,7 @@ couloirDroite:Couloir=new Couloir()
     //ouvrir la boite dialogue DialogAjouterRayon 
     const dialogRef = this.dialog.open(DialogAjouterRayon, {
       width: 'auto',
-      data: { local: this.localselect, halle: this.halleselect }
+      data: { local: this.localselect, hall: this.halleselect }
     });
     dialogRef.afterClosed().subscribe(result => {
       this.service.getHallById(this.halleselect.id).subscribe(data => {
@@ -344,11 +345,7 @@ couloirDroite:Couloir=new Couloir()
     })
   }
 
-  @ViewChildren("allTabs") allTabs: QueryList<any>
-  
-  ngAfterViewInit() {
-    console.log('total tabs: ' + this.allTabs.first._tabs.length);
-  }
+ 
 
   tabChanged(tabChangeEvent: number) {
     console.log('tab selected: ' + tabChangeEvent);
@@ -481,10 +478,10 @@ couloirDroite:Couloir=new Couloir()
   //selcetionner emplacment/position
   selectEmplacment(emp: any) {
     this.emplacmentselect = emp
-    // = this.emplacmentselect
-    console.log(emp)
+     console.log(emp)
     this.libelleEmplacement = this.emplacmentselect.libelle
-    this.value = "L0" + this.localselect.id_Local + "H0" + this.halleselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id + "P0" + this.emplacmentselect.id
+    this.libelleCouloir=this.emplacmentselect.couloir.libelle
+    this.value = "L0" + this.localselect.id_Local + "H0" + this.halleselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id +"C"+this.libelleCouloir+ "P0" + this.emplacmentselect.id
     console.log("value ", this.value)
     this.goForward();
   }
@@ -509,6 +506,9 @@ couloirDroite:Couloir=new Couloir()
         localselect: this.localselect,
         rayonselect: this.rayonselect,
         halleselect: this.halleselect,
+        couloirDroite: this.couloirDroite,
+        couloirGauche:this.couloirGauche
+
       }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -892,6 +892,7 @@ export class DialogAjouterRayon {
   dataTab: any
   rayon: Rayon = new Rayon()
   Famille_Logistique: any = [];
+  couloirs:any=[]
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
 
@@ -901,8 +902,11 @@ export class DialogAjouterRayon {
     });
     console.log(data.local)
     this.rayon.local = data.local;
-    this.rayon.hall = data.halle;
+    this.rayon.hall = data.hall;
 
+    this.service.getCouloirParHall( data.hall.id).subscribe((data: any) => {
+      this.couloirs = data;
+    });
   }
 
   //valider l'ajout du rayon
@@ -1181,6 +1185,8 @@ export class DialogAjouterEmplacment {
   dataTab: any
   emplacement: Emplacement = new Emplacement()
   value: any
+  couloirDroite:any
+  couloirGauche:any
   emplacements: any = [];
   constructor(public dialogRef: MatDialogRef<DialogAjouterEmplacment>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
@@ -1188,13 +1194,15 @@ export class DialogAjouterEmplacment {
     this.emplacement.rayon = data.rayonselect
     this.emplacement.etage = data.etageselect
     this.emplacement.halle = data.halleselect
+    this.couloirGauche=data.couloirGauche
+    this.couloirDroite=data.couloirDroite
     console.log(this.emplacement)
   }
 
   onSubmit() {
     this.service.LastIDPos().subscribe(data => {
       this.emplacement.id = data;
-      this.value = "L0" + this.emplacement.local.id_Local + "H0" + this.emplacement.halle.id + "R" + this.emplacement.rayon.libelle + "E0" + this.emplacement.etage.id + "P0" + this.emplacement.id
+      this.value = "L0" + this.emplacement.local.id_Local + "H0" + this.emplacement.halle.id + "R" + this.emplacement.rayon.libelle + "E0" + this.emplacement.etage.id +"C"+this.emplacement.couloir.id + "P0" + this.emplacement.id
       console.log("value ", this.value)
       this.emplacement.reference = this.value
       console.log(this.emplacement)

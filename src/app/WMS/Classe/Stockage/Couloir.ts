@@ -5,5 +5,6 @@ export class Couloir {
     reference:any
     rayonDroite:any
     rayonGauche:any
+    emplacments:any
   }
   

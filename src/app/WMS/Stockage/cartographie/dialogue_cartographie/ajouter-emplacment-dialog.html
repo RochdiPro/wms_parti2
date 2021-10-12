@@ -9,11 +9,11 @@
         </div>
         <div class="form-group">
             <label>Hauteur (CM)</label>
-            <input type="text" class ="form-control" id = "hauteur"     [(ngModel)]="emplacement.hauteur"   name = "hauteur">
+            <input type="text" class ="form-control" id = "largeur"     [(ngModel)]="emplacement.largeur"   name = "largeur">
         </div>
-        <mat-radio-group aria-label="Select an option">
-            <mat-radio-button value="1">Option 1</mat-radio-button>
-            <mat-radio-button value="2">Option 2</mat-radio-button>
+        <mat-radio-group  id = "couloir" name = "couloir" [(ngModel)] = "emplacement.couloir" aria-label="Selectinner couloir">
+            <mat-radio-button color="primary" [value]="couloirGauche">Couloir Droite {{couloirGauche.libelle}}</mat-radio-button>
+            <mat-radio-button color="primary" [value]="couloirDroite"> Couloir Gauche{{couloirDroite.libelle}}</mat-radio-button>
           </mat-radio-group>
           
           

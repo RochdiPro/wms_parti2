@@ -10,5 +10,5 @@ export class Hall
     profondeur:any
     rayons:any
     zones_invalide:any
-
+    couloirs:any
 }

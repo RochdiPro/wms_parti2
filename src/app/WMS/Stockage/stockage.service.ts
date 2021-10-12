@@ -7,6 +7,7 @@ import { Hall} from '../Classe/Stockage/Hall';
 import { Emplacement } from '../Classe/Stockage/Emplacement';
 import { Rayon } from '../Classe/Stockage/Rayon';
 import { ZoneInvalideHall } from '../Classe/Stockage/ZoneInvalideHall';
+import { Couloir } from '../Classe/Stockage/Couloir';
 
 const infonet = '/ERP/';
 const wms = '/WMS/';
@@ -87,6 +88,7 @@ ajoutHall(hall:Hall): Observable<any> {
     catchError(this.handleError)
  );
 }
+
 //service ajouter zone invalide
 ajoutZoneInvalide(zone:ZoneInvalideHall): Observable<any> {  
   return this.httpClient.post(wms+"WMS/AddZone",zone).pipe(
@@ -201,19 +203,6 @@ supprimerEmplacment(id: number): Observable<any> {
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Emplacment"}/${id}`);
 }
 
-//afficher erreur
-private handleError(error:any) {
-  let errorMessage = '';
-  if (error.error instanceof ErrorEvent) {
-    // client-side error
-    errorMessage = `Error: ${error.error.message}`;
-  } else {
-    // server-side error
-    errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-  }
-  return throwError(errorMessage);
-}
-
 //recupere ID dernier position ajoutéé
 LastIDPos(): Observable<any> {  
   return this.httpClient.get(wms+"WMS/LastIDPos").pipe(
@@ -222,7 +211,21 @@ LastIDPos(): Observable<any> {
  );
 }
 
- 
+ //CRUD Couloir
+getCouloirParHall(hall: any): Observable<any> {  
+  return this.httpClient.get(wms+"WMS/CouloirParHall",{params:{ hall: hall}}).pipe(
+    catchError(this.handleError)
+
+ );
+}
+
+//service ajouter couloir
+ajoutCouloir(couloir:Couloir): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajout_Couloir",couloir).pipe(
+    catchError(this.handleError)
+ );
+}
+
 
 //max ordre x rayon 
 MaxOrdreX(hall: any): Observable<any>{
@@ -236,4 +239,26 @@ MaxOrdreY(hall: any): Observable<any>{
     catchError(this.handleError)
   );
 }
+
+
+
+
+
+
+
+
+
+//afficher Message erreur
+private handleError(error:any) {
+  let errorMessage = '';
+  if (error.error instanceof ErrorEvent) {
+    // client-side error
+    errorMessage = `Error: ${error.error.message}`;
+  } else {
+    // server-side error
+    errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+  }
+  return throwError(errorMessage);
+}
+
 }

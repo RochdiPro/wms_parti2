@@ -2,45 +2,93 @@
 
 <div mat-dialog-content>
     <form>
-    
+
         <div class="form-group">
-            <label>Libelle</label>
-            <input type="text" class ="form-control" id = "libelle"     [(ngModel)] = "rayon.libelle"   name = "libelle">
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Libelle</label>
+                    <input type="text" class="form-control" id="libelle" [(ngModel)]="rayon.libelle" name="libelle">
+                </div>
+                <div class="col-md-5">
+                    <label>Famille Logistique</label>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Famille Logistique</mat-label>
+                        <mat-select name="famille" [(ngModel)]="rayon.familleLogistique" id="famille">
+                            <mat-option value="option1"></mat-option>
+                            <mat-option *ngFor="let f of Famille_Logistique" [value]="f">{{f.libelle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
         </div>
-    
+
         <div class="form-group">
-            <label>Hauteur (CM)</label>
-            <input type="text" class ="form-control" id = "hauteur"     [(ngModel)] = "rayon.hauteur"   name = "hauteur">
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Largeur (CM)</label>
+                    <input type="number" class="form-control" id="largeur" [(ngModel)]="rayon.largeur" name="largeur">
+                </div>
+                <div class="col-md-5">
+                    <label>Hauteur (CM)</label>
+                    <input type="number" class="form-control" id="hauteur" [(ngModel)]="rayon.hauteur" name="hauteur">
+                </div>
+            </div>
         </div>
+
         <div class="form-group">
-            <label>Largeur (CM)</label>
-            <input type="text" class ="form-control" id = "largeur"     [(ngModel)] = "rayon.largeur"   name = "largeur">
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Profondeur (M²)</label>
+                    <input type="number" class="form-control" id="profondeur" [(ngModel)]="rayon.profondeur"
+                        name="profondeur">
+                </div>
+            </div>
         </div>
+        
         <div class="form-group">
-            <label>Profondeur (M²)</label>
-            <input type="text" class ="form-control" id = "profondeur"     [(ngModel)] = "rayon.profondeur"   name = "profondeur">
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Ordre X</label>
+                    <input type="number" class="form-control" id="ordreX" [(ngModel)]="rayon.ordreX" name="ordreX">
+                </div>
+                <div class="col-md-5">
+                    <label>Ordre Y</label>
+                    <input type="number" class="form-control" id="ordreY" [(ngModel)]="rayon.ordreY" name="ordreY">
+                </div>
+            </div>
         </div>
+
         <div class="form-group">
-            <label>Ordre X</label>
-            <input type="number" class ="form-control" id = "ordreX"     [(ngModel)] = "rayon.ordreX"   name = "ordreX">
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Coloir Gauche</label>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Coloir Gauche</mat-label>
+                        <mat-select name="couloirGauche" [(ngModel)]="rayon.coloirGauche" id="couloirGauche">
+                            <mat-option value="Ajouter un Couloir">Ajouter un Couloir</mat-option>
+                            <mat-option *ngFor="let c of couloirs" [value]="c">{{c.libelle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-5">
+                    <label>Coloir Droite</label>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Coloir Droite</mat-label>
+                        <mat-select name="couloirDroite" [(ngModel)]="rayon.coloirDroite" id="couloirDroite">
+                            <mat-option value="Ajouter un Couloir"></mat-option>
+                            <mat-option *ngFor="let c of couloirs" [value]="c">{{c.libelle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Ordre Y</label>
-            <input type="number" class ="form-control" id = "ordreY"     [(ngModel)] = "rayon.ordreY"   name = "ordreY">
-        </div>
-        <mat-form-field appearance="fill">
-            <mat-label>Famille Logistique</mat-label>
-            <mat-select name="famille" [(ngModel)] = "rayon.familleLogistique" id = "famille" >
-               <mat-option value="option1"></mat-option>             
-               <mat-option *ngFor="let f of Famille_Logistique"  [value]="f"  >{{f.libelle}}</mat-option>
-            </mat-select>
-         </mat-form-field>
-    
     </form>
 </div>
 
 <div mat-dialog-actions class="float-right">
-    <button class="mb-2 mr-2 btn btn-success"   (click) = "onSubmit()">Valider</button>
+    <button class="mb-2 mr-2 btn btn-success" (click)="onSubmit()">Valider</button>
     <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>
 
 </div>
