@@ -38,13 +38,13 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-5">
-                    <label>Profondeur (M²)</label>
+                    <label>Profondeur (CM)</label>
                     <input type="number" class="form-control" id="profondeur" [(ngModel)]="rayon.profondeur"
                         name="profondeur">
                 </div>
             </div>
         </div>
-        
+
         <div class="form-group">
             <div class="row">
                 <div class="col-md-5">
@@ -67,7 +67,7 @@
                         <mat-label>Coloir Gauche</mat-label>
                         <mat-select name="couloirGauche" [(ngModel)]="rayon.coloirGauche" id="couloirGauche">
                             <mat-option value="Ajouter un Couloir">Ajouter un Couloir</mat-option>
-                            <mat-option *ngFor="let c of couloirs" [value]="c">{{c.libelle}}</mat-option>
+                            <mat-option *ngFor="let c of couloirsGauche" [value]="c">{{c.libelle}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -78,10 +78,49 @@
                         <mat-label>Coloir Droite</mat-label>
                         <mat-select name="couloirDroite" [(ngModel)]="rayon.coloirDroite" id="couloirDroite">
                             <mat-option value="Ajouter un Couloir"></mat-option>
-                            <mat-option *ngFor="let c of couloirs" [value]="c">{{c.libelle}}</mat-option>
+                            <mat-option *ngFor="let c of couloirsDroite" [value]="c">{{c.libelle}}</mat-option>
                         </mat-select>
                     </mat-form-field>
+                    <button (click)="addColoirToggle()" mat-icon-button color="primary"
+                        aria-label="Example icon button with a home icon">
+                        <mat-icon>add</mat-icon>
+                    </button>
                 </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group" *ngIf="addColoirShow">
+            <div class="card-shadow-primary border mb-3 card card-body border-primary">
+                <div class="row">
+                    <div class="col-md-11">
+                        <h5 class="card-title">Ajouter Couloir
+                        </h5>
+
+                    </div>
+                    <button (click)="addColoirToggle()" mat-icon-button color="primary"
+                        aria-label="Example icon button with a home icon">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+
+
+
+
+                <div class="row">
+                    <div class="col-md-3">
+
+                        <label>Libelle</label>
+                      <input type="text" class="form-control" id="couloirlibelle" [(ngModel)]="couloir.libelle" name="couloirlibelle">
+                         
+                      
+                    </div>
+           
+                </div>
+                <button class="mb-2 mr-2 btn btn-success" (click)="ajouterCouloir()">Valider</button>
+
             </div>
         </div>
     </form>

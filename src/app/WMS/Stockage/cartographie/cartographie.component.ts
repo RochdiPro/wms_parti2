@@ -14,7 +14,7 @@ import { Emplacement } from '../../Classe/Stockage/Emplacement';
 import { Etage } from '../../Classe/Stockage/Etage';
 import { Hall } from '../../Classe/Stockage/Hall';
 import { Rayon } from '../../Classe/Stockage/Rayon';
- 
+
 import { ZoneInvalideHall } from '../../Classe/Stockage/ZoneInvalideHall';
 import { StockageService } from '../stockage.service';
 
@@ -87,9 +87,9 @@ export class CartographieComponent implements OnInit {
   emplacmentselect: any
 
 
-//coloir selctionner
-couloirGauche:Couloir=new Couloir()
-couloirDroite:Couloir=new Couloir()
+  //coloir selctionner
+  couloirGauche: Couloir = new Couloir()
+  couloirDroite: Couloir = new Couloir()
 
 
   //declaration du libelle d'objet(local/hall/rayon/etage/emplacement) selectinné
@@ -98,7 +98,7 @@ couloirDroite:Couloir=new Couloir()
   libelleHalle: any;
   libelleEtage: any;
   libelleEmplacement: any;
-  libelleCouloir:any
+  libelleCouloir: any
 
   x: number
   y: number
@@ -182,22 +182,14 @@ couloirDroite:Couloir=new Couloir()
   //ouvrir l'espace de travail pour modiliser le plan du local
   OpenEspaceTravail(id: any) {
     console.log(id)
-    this.router.navigate(['/Menu/WMS-Stockage/Cartographie/Espace-Travail',id]);
+    this.router.navigate(['/Menu/WMS-Stockage/Cartographie/Espace-Travail', id]);
   }
   //selectionner un halle 
   SelectHalle(halle: any) {
     this.halleselect = halle
     this.libelleHalle = this.halleselect.libelle
     this.rayons = this.halleselect.rayons
-    this.service.MaxOrdreX(this.halleselect.id).subscribe(data => {
-      this.x = data;
-      this.service.MaxOrdreY(this.halleselect.id).subscribe(data => {
-        this.y = data;
-        console.log("y", this.y)
-        console.log("x", this.x)
-        this.generertableayrayon(halle)
-      }, error => console.log(error));
-    }, error => console.log(error));
+    this.generertableayrayon(this.halleselect);
     this.goForward();
   }
 
@@ -272,8 +264,8 @@ couloirDroite:Couloir=new Couloir()
     this.rayonselect = rayon
     this.libelleRayon = this.rayonselect.libelle
     this.etages = this.rayonselect.etages
-    this.couloirGauche=rayon.coloirGauche
-    this.couloirDroite=rayon.coloirDroite
+    this.couloirGauche = rayon.coloirGauche
+    this.couloirDroite = rayon.coloirDroite
     this.goForward();
   }
 
@@ -287,8 +279,7 @@ couloirDroite:Couloir=new Couloir()
     dialogRef.afterClosed().subscribe(result => {
       this.service.getHallById(this.halleselect.id).subscribe(data => {
         this.halleselect = data;
-        this.libelleHalle = this.halleselect.libelle
-        console.log("Local", this.localselect)
+         console.log("Local", this.localselect)
         this.rayons = this.halleselect.rayons
         this.generertableayrayon(this.halleselect);
       }, error => console.log(error));
@@ -345,7 +336,7 @@ couloirDroite:Couloir=new Couloir()
     })
   }
 
- 
+
 
   tabChanged(tabChangeEvent: number) {
     console.log('tab selected: ' + tabChangeEvent);
@@ -354,6 +345,14 @@ couloirDroite:Couloir=new Couloir()
   //génerer la matrice du rayon pour un hall
   generertableayrayon(halle: any) {
     this.arr = []
+    this.service.MaxOrdreX(halle.id).subscribe(data => {
+      this.x = data;
+      this.service.MaxOrdreY(halle.id).subscribe(data => {
+        this.y = data;
+        console.log("y", this.y)
+        console.log("x", this.x)
+       }, error => console.log(error));
+    }, error => console.log(error));
     console.log("eeee", halle)
     for (let i = 0; i < this.x; i++) {
       // Creates an empty line
@@ -397,10 +396,10 @@ couloirDroite:Couloir=new Couloir()
 
     const dialogRef = this.dialog.open(DialogOpenZoneInvalideHalle, {
       width: 'auto',
-      data: { hall:this.halleselect,zone: zone, x:i+1,y:j+1 }
+      data: { hall: this.halleselect, zone: zone, x: i + 1, y: j + 1 }
     });
     dialogRef.afterClosed().subscribe(result => {
-     
+
     });
   }
   //selectionner et accedé un etage
@@ -478,10 +477,10 @@ couloirDroite:Couloir=new Couloir()
   //selcetionner emplacment/position
   selectEmplacment(emp: any) {
     this.emplacmentselect = emp
-     console.log(emp)
+    console.log(emp)
     this.libelleEmplacement = this.emplacmentselect.libelle
-    this.libelleCouloir=this.emplacmentselect.couloir.libelle
-    this.value = "L0" + this.localselect.id_Local + "H0" + this.halleselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id +"C"+this.libelleCouloir+ "P0" + this.emplacmentselect.id
+    this.libelleCouloir = this.emplacmentselect.couloir.libelle
+    this.value = "L0" + this.localselect.id_Local + "H0" + this.halleselect.id + "R" + this.rayonselect.libelle + "E0" + this.etageselect.id + "C" + this.libelleCouloir + "P0" + this.emplacmentselect.id
     console.log("value ", this.value)
     this.goForward();
   }
@@ -507,7 +506,7 @@ couloirDroite:Couloir=new Couloir()
         rayonselect: this.rayonselect,
         halleselect: this.halleselect,
         couloirDroite: this.couloirDroite,
-        couloirGauche:this.couloirGauche
+        couloirGauche: this.couloirGauche
 
       }
     });
@@ -701,28 +700,28 @@ export class DialogOpenCartographie2 {
   emplacmentselect: any
   libelleLocal: any
   local: any
-  rayonShow:boolean=false
-  hallShow:boolean=true
-x:any
-y:any
-libelleHalle:any
-hall:Hall=new Hall()
+  rayonShow: boolean = false
+  hallShow: boolean = true
+  x: any
+  y: any
+  libelleHalle: any
+  hall: Hall = new Hall()
   arr: any[][] = [];
   constructor(public dialogRef: MatDialogRef<DialogOpenCartographie2>,
     @Inject(MAT_DIALOG_DATA) public data: any, private service: StockageService, private http: HttpClient) {
     this.local = data.local
     console.log(this.local)
-    this.libelleLocal =  this.local.nom_Local
+    this.libelleLocal = this.local.nom_Local
     this.halles = data.local.halles
-    
-console.log(this.halles)
+
+    console.log(this.halles)
   }
-  SelectHall(hall:any){
-    this.rayonShow=true
-    this.hallShow=false
-    this.libelleHalle=hall.libelle
-    this.hall=hall
-    this.rayons=hall.rayons
+  SelectHall(hall: any) {
+    this.rayonShow = true
+    this.hallShow = false
+    this.libelleHalle = hall.libelle
+    this.hall = hall
+    this.rayons = hall.rayons
     this.service.MaxOrdreX(hall.id).subscribe(data => {
       this.x = data;
       this.service.MaxOrdreY(hall.id).subscribe(data => {
@@ -731,7 +730,7 @@ console.log(this.halles)
         console.log("x", this.x)
         this.generertableayrayon(hall)
       }, error => console.log(error));
-    }, error => console.log(error)); 
+    }, error => console.log(error));
   }
 
   //génerer la matrice du rayon pour un hall
@@ -846,7 +845,7 @@ export class DialogAjouterHalle {
 })
 export class DialogEditHalle {
   dataTab: any
-  hall: Hall=new Hall()
+  hall: Hall = new Hall()
   Famille_Logistique: any = [];
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogEditHalle>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
@@ -892,7 +891,14 @@ export class DialogAjouterRayon {
   dataTab: any
   rayon: Rayon = new Rayon()
   Famille_Logistique: any = [];
-  couloirs:any=[]
+  couloirs: any = []
+  couloirsGauche: any = []
+  couloirsDroite: any = []
+
+  addColoirShow: boolean = false
+  couloir: Couloir = new Couloir()
+  hall: any
+  local:any
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
 
@@ -903,15 +909,72 @@ export class DialogAjouterRayon {
     console.log(data.local)
     this.rayon.local = data.local;
     this.rayon.hall = data.hall;
+    this.hall = data.hall
+    this.local = data.local
+    this.actualiserListCouloirs()
+ 
+  
+  }
+  
+actualiserListCouloirs(){
+  this.service.getCouloirParHall(this.hall.id).subscribe((data: any) => {
+    this.couloirs = data;
+  });
+  this.service.CouloirRayonDroiteNull(this.hall.id).subscribe((data: any) => {
+    this.couloirsGauche = data;
+  });
+  this.service.CouloirRayonGaucheNull(this.hall.id).subscribe((data: any) => {
+    this.couloirsDroite = data;
+  });
+}
 
-    this.service.getCouloirParHall( data.hall.id).subscribe((data: any) => {
-      this.couloirs = data;
-    });
+  addColoirToggle() {
+    console.log(this.addColoirShow)
+    if (this.addColoirShow == true) {
+       this.addColoirShow = false
+     }
+    else  {
+      this.addColoirShow = true
+ 
+    }
+
   }
 
+  //valider l'ajout du couloir
+  ajouterCouloir() {
+    this.couloir.hall = this.hall
+    console.log(this.couloir)
+
+    this.service.libelleCouloirexiste(this.local.id_Local, this.couloir.libelle).subscribe(data => {
+      if (data == true) {
+        Swal.fire(
+          'Erreur',
+          'Couloir avec ce libelle deja existe',
+          'error'
+        )
+      }
+      if (data == false) {
+
+        this.service.ajoutCouloir(this.couloir).subscribe(data => {
+          console.log("couloir",data);
+          Swal.fire(
+            'Ajout Effecté',
+            'Couloir Ajouté Avec Sucées',
+            'success'
+          )
+          this.couloir.libelle = ''
+          this.actualiserListCouloirs() 
+
+
+        },
+          error => console.log(error));
+
+      }
+    },
+      error => console.log(error));
+  }
   //valider l'ajout du rayon
   onSubmit() {
-    console.log(this.rayon)
     this.service.LibelleRayonExiste(this.rayon.local.id_Local, this.rayon.libelle).subscribe(data => {
       if (data == true) {
         Swal.fire(
@@ -931,7 +994,6 @@ export class DialogAjouterRayon {
               },
               buttonsStyling: false
             })
-
             swalWithBootstrapButtons.fire({
               title: 'Rayon avec ce ordre déja existe ',
               text: "Vous voulez modifer l'odre cette rayon !",
@@ -952,7 +1014,7 @@ export class DialogAjouterRayon {
               }
             })
           }
-          if (data == null) { 
+          if (data == null) {
             this.service.ZoneInvalideExiste(this.rayon.hall.id, this.rayon.ordreX, this.rayon.ordreY).subscribe(data => {
               console.log(data)
               if (data == true) {
@@ -969,16 +1031,13 @@ export class DialogAjouterRayon {
                     'Ajout Effecté',
                     'Rayon Ajouté Avec Sucées',
                     'success'
-                  )   
+                  )
                   this.close()
                 },
                   error => console.log(error));
- 
               }
             },
               error => console.log(error));
-
-
           }
         },
           error => console.log(error));
@@ -1185,8 +1244,8 @@ export class DialogAjouterEmplacment {
   dataTab: any
   emplacement: Emplacement = new Emplacement()
   value: any
-  couloirDroite:any
-  couloirGauche:any
+  couloirDroite: any
+  couloirGauche: any
   emplacements: any = [];
   constructor(public dialogRef: MatDialogRef<DialogAjouterEmplacment>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
@@ -1194,15 +1253,15 @@ export class DialogAjouterEmplacment {
     this.emplacement.rayon = data.rayonselect
     this.emplacement.etage = data.etageselect
     this.emplacement.halle = data.halleselect
-    this.couloirGauche=data.couloirGauche
-    this.couloirDroite=data.couloirDroite
+    this.couloirGauche = data.couloirGauche
+    this.couloirDroite = data.couloirDroite
     console.log(this.emplacement)
   }
 
   onSubmit() {
     this.service.LastIDPos().subscribe(data => {
       this.emplacement.id = data;
-      this.value = "L0" + this.emplacement.local.id_Local + "H0" + this.emplacement.halle.id + "R" + this.emplacement.rayon.libelle + "E0" + this.emplacement.etage.id +"C"+this.emplacement.couloir.id + "P0" + this.emplacement.id
+      this.value = "L0" + this.emplacement.local.id_Local + "H0" + this.emplacement.halle.id + "R" + this.emplacement.rayon.libelle + "E0" + this.emplacement.etage.id + "C" + this.emplacement.couloir.id + "P0" + this.emplacement.id
       console.log("value ", this.value)
       this.emplacement.reference = this.value
       console.log(this.emplacement)
@@ -1225,7 +1284,7 @@ export class DialogAjouterEmplacment {
 }
 
 /////**************************************/dialog modifier emplacment****************************************************//////
- 
+
 @Component({
   selector: 'edit-emplacement-dialog',
   templateUrl: 'dialogue_cartographie/edit-emplacement-dialog.html',
@@ -1309,7 +1368,7 @@ export class DialogAddZoneInvalideHalle {
 }
 
 /////**********************************************dialog open zone invalides************************************************/////
- 
+
 @Component({
   selector: 'open-zone_invalide.html',
   templateUrl: 'dialogue_cartographie/open-zone_invalide.html',
@@ -1317,13 +1376,13 @@ export class DialogAddZoneInvalideHalle {
 export class DialogOpenZoneInvalideHalle {
   dataTab: any
   zone: ZoneInvalideHall = new ZoneInvalideHall()
-  hall:Hall=new Hall()
+  hall: Hall = new Hall()
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     console.log(this.zone)
-    this.hall=data.hall
+    this.hall = data.hall
     this.service.getZoneByHallX_Y(data.hall.id, data.x, data.y).subscribe(data => {
-       this.zone=data
+      this.zone = data
     },
       error => console.log(error));
 

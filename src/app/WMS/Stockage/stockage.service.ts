@@ -41,6 +41,8 @@ LibelleRayonExiste(local: any,lib: any): Observable<any>{
   );
  
 }
+
+
 //service verifer l'exsitance du libelle du hall dans un local
 LibelleHallExiste(local: any,lib: any): Observable<any>{
   return this.httpClient.get<any>(wms+"WMS/LibelleHallExiste",{params:{ local: local,lib:lib}}).pipe(
@@ -212,13 +214,33 @@ LastIDPos(): Observable<any> {
 }
 
  //CRUD Couloir
+
+ //recuperer couloirs par hall
 getCouloirParHall(hall: any): Observable<any> {  
   return this.httpClient.get(wms+"WMS/CouloirParHall",{params:{ hall: hall}}).pipe(
     catchError(this.handleError)
 
  );
 }
+editCouloir(id: number, couloir: Couloir): Observable<Object>{
+  return this.httpClient.put(`${wms+"/WMS/Modifier_Couloir"}/${id}`, couloir);
+}
 
+ //recuperer couloirs par hall qui ont un rayon gauche null
+CouloirRayonGaucheNull(hall: any): Observable<any> {  
+  return this.httpClient.get(wms+"WMS/CouloirRayonGaucheNull",{params:{ hall: hall}}).pipe(
+    catchError(this.handleError)
+
+ );
+}
+
+ //recuperer couloirs par hall qui ont un rayon droite null
+CouloirRayonDroiteNull(hall: any): Observable<any> {  
+  return this.httpClient.get(wms+"WMS/CouloirRayonDroiteNull",{params:{ hall: hall}}).pipe(
+    catchError(this.handleError)
+
+ );
+}
 //service ajouter couloir
 ajoutCouloir(couloir:Couloir): Observable<any> {  
   return this.httpClient.post(wms+"WMS/Ajout_Couloir",couloir).pipe(
@@ -226,6 +248,12 @@ ajoutCouloir(couloir:Couloir): Observable<any> {
  );
 }
 
+//service verifer l'exsitance du libelle du coloir dans un local
+libelleCouloirexiste(local: any,lib: any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/libelleCouloirexiste",{params:{ local: local,lib:lib}}).pipe(
+    catchError(this.handleError)
+  );
+}
 
 //max ordre x rayon 
 MaxOrdreX(hall: any): Observable<any>{
