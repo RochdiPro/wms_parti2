@@ -279,7 +279,6 @@ export class CartographieComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.service.getHallById(this.halleselect.id).subscribe(data => {
         this.halleselect = data;
-         console.log("Local", this.localselect)
         this.rayons = this.halleselect.rayons
         this.generertableayrayon(this.halleselect);
       }, error => console.log(error));
@@ -294,8 +293,13 @@ export class CartographieComponent implements OnInit {
       data: { idRayon: numero, rayon: rayon }
     });
     dialogRef.afterClosed().subscribe(result => {
-
+      this.service.getHallById(this.halleselect.id).subscribe(data => {
+        this.halleselect = data;
+        this.rayons = this.halleselect.rayons
+        this.generertableayrayon(this.halleselect);
+      }, error => console.log(error));
     });
+
 
   }
   //supprimer un rayon
@@ -337,7 +341,6 @@ export class CartographieComponent implements OnInit {
   }
 
 
-
   tabChanged(tabChangeEvent: number) {
     console.log('tab selected: ' + tabChangeEvent);
   }
@@ -351,15 +354,15 @@ export class CartographieComponent implements OnInit {
         this.y = data;
         console.log("y", this.y)
         console.log("x", this.x)
-       }, error => console.log(error));
+      }, error => console.log(error));
     }, error => console.log(error));
     console.log("eeee", halle)
-    for (let i = 0; i < this.x; i++) {
+    for (let i = 0; i < this.y; i++) {
       // Creates an empty line
       this.arr.push([]);
       // Adds cols to the empty line:
       this.arr[i].push(new Array(this.y));
-      for (let j = 0; j < this.y; j++) {
+      for (let j = 0; j < this.x; j++) {
         this.service.OrdreRayonExiste(halle.id, i + 1, j + 1).subscribe(data => {
           console.log(" eee", data)
           if (data != null) {
@@ -376,14 +379,9 @@ export class CartographieComponent implements OnInit {
                 this.arr[i][j] = null;
               }
             }, error => console.log(error));
-
-
-
           }
         }, error => console.log(error));
-
       }
-
     }
     setTimeout(() => {
       console.log("array", this.arr);
@@ -894,11 +892,13 @@ export class DialogAjouterRayon {
   couloirs: any = []
   couloirsGauche: any = []
   couloirsDroite: any = []
+  couloirGauche: Couloir = new Couloir()
+  couloirDroite: Couloir = new Couloir()
 
   addColoirShow: boolean = false
   couloir: Couloir = new Couloir()
   hall: any
-  local:any
+  local: any
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
 
@@ -912,30 +912,30 @@ export class DialogAjouterRayon {
     this.hall = data.hall
     this.local = data.local
     this.actualiserListCouloirs()
- 
-  
+
+
   }
-  
-actualiserListCouloirs(){
-  this.service.getCouloirParHall(this.hall.id).subscribe((data: any) => {
-    this.couloirs = data;
-  });
-  this.service.CouloirRayonDroiteNull(this.hall.id).subscribe((data: any) => {
-    this.couloirsGauche = data;
-  });
-  this.service.CouloirRayonGaucheNull(this.hall.id).subscribe((data: any) => {
-    this.couloirsDroite = data;
-  });
-}
+
+  actualiserListCouloirs() {
+    this.service.getCouloirParHall(this.hall.id).subscribe((data: any) => {
+      this.couloirs = data;
+    });
+    this.service.CouloirRayonDroiteNull(this.hall.id).subscribe((data: any) => {
+      this.couloirsGauche = data;
+    });
+    this.service.CouloirRayonGaucheNull(this.hall.id).subscribe((data: any) => {
+      this.couloirsDroite = data;
+    });
+  }
 
   addColoirToggle() {
     console.log(this.addColoirShow)
     if (this.addColoirShow == true) {
-       this.addColoirShow = false
-     }
-    else  {
+      this.addColoirShow = false
+    }
+    else {
       this.addColoirShow = true
- 
+
     }
 
   }
@@ -956,14 +956,14 @@ actualiserListCouloirs(){
       if (data == false) {
 
         this.service.ajoutCouloir(this.couloir).subscribe(data => {
-          console.log("couloir",data);
+          console.log("couloir", data);
           Swal.fire(
             'Ajout Effecté',
             'Couloir Ajouté Avec Sucées',
             'success'
           )
           this.couloir.libelle = ''
-          this.actualiserListCouloirs() 
+          this.actualiserListCouloirs()
 
 
         },
@@ -1033,6 +1033,20 @@ actualiserListCouloirs(){
                     'success'
                   )
                   this.close()
+                  this.couloirDroite = this.rayon.coloirDroite
+                  this.couloirGauche = this.rayon.coloirGauche
+                  this.couloirGauche.rayonDroite = this.rayon
+                  this.couloirDroite.rayonGauche = this.rayon
+                  console.log(this.couloirGauche, this.couloirsDroite)
+                  this.service.editCouloir(this.couloirDroite.id, this.couloirDroite).subscribe(data => {
+                    console.log("couloir droite", data)
+                  }
+                    , error => console.log(error));
+                  this.service.editCouloir(this.couloirGauche.id, this.couloirGauche).subscribe(data => {
+                    console.log("couloir gauche", data)
+                  }
+                    , error => console.log(error));
+
                 },
                   error => console.log(error));
               }
