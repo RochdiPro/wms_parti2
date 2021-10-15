@@ -6,8 +6,8 @@ import { Etage } from '../Classe/Stockage/Etage';
 import { Hall} from '../Classe/Stockage/Hall';
 import { Emplacement } from '../Classe/Stockage/Emplacement';
 import { Rayon } from '../Classe/Stockage/Rayon';
-import { ZoneInvalideHall } from '../Classe/Stockage/ZoneInvalideHall';
-import { Couloir } from '../Classe/Stockage/Couloir';
+ import { Couloir } from '../Classe/Stockage/Couloir';
+import { Zone } from '../Classe/Stockage/Zone';
 
 const infonet = '/ERP/';
 const wms = '/WMS/';
@@ -92,7 +92,7 @@ ajoutHall(hall:Hall): Observable<any> {
 }
 
 //service ajouter zone invalide
-ajoutZoneInvalide(zone:ZoneInvalideHall): Observable<any> {  
+ajoutZoneInvalide(zone:Zone): Observable<any> {  
   return this.httpClient.post(wms+"WMS/AddZone",zone).pipe(
     catchError(this.handleError)
  );
@@ -108,14 +108,21 @@ supprimerHall(id: number): Observable<any> {
 }
 //service ZonneExiste
 ZoneInvalideExiste(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
-  return this.httpClient.get<ZoneInvalideHall>(wms+"WMS/ZoneInvalideExiste",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+  return this.httpClient.get<Zone>(wms+"WMS/ZoneInvalideExiste",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
     catchError(this.handleError)
   );
 }
 
 //service recuperer zone by halle,x,y
-getZoneByHallX_Y(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
-  return this.httpClient.get<ZoneInvalideHall>(wms+"WMS/Zone",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+getZoneInvalideByHallX_Y(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<Zone>(wms+"WMS/ZoneInvalide",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+    catchError(this.handleError)
+  );
+}
+
+//service ZonneExiste
+ZoneInvalideParHall(hall: any): Observable<any>{
+  return this.httpClient.get<Zone>(wms+"WMS/ZoneInvalideParHall",{params:{ hall: hall}}).pipe(
     catchError(this.handleError)
   );
 }
@@ -144,8 +151,8 @@ supprimerRayon(id: number): Observable<any> {
 }
 
 //service verifer l'exsitance d'ordre du rayon dans un local
-OrdreRayonExiste(halle: any,ordre_x: any,ordre_y:any): Observable<any>{
-  return this.httpClient.get<any>(wms+"WMS/OrdreRayonExiste",{params:{ halle: halle,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+OrdreRayonExiste(hall: any,ordre_x: any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/OrdreRayonExiste",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
     catchError(this.handleError)
   );
 }

@@ -14,8 +14,8 @@ import { Emplacement } from '../../Classe/Stockage/Emplacement';
 import { Etage } from '../../Classe/Stockage/Etage';
 import { Hall } from '../../Classe/Stockage/Hall';
 import { Rayon } from '../../Classe/Stockage/Rayon';
+import { Zone } from '../../Classe/Stockage/Zone';
 
-import { ZoneInvalideHall } from '../../Classe/Stockage/ZoneInvalideHall';
 import { StockageService } from '../stockage.service';
 
 @Component({
@@ -641,12 +641,14 @@ export class CartographieComponent implements OnInit {
   }
 
   //aller à la step precedente 
-  goBack() {
+  goBack()
+  {
     this.myStepper.previous();
   }
 
   //aller à la step suivante 
-  goForward() {
+  goForward() 
+  {
     this.myStepper.next();
   }
   //compteuur
@@ -757,14 +759,9 @@ export class DialogOpenCartographie2 {
                 this.arr[i][j] = null;
               }
             }, error => console.log(error));
-
-
-
           }
         }, error => console.log(error));
-
       }
-
     }
     setTimeout(() => {
       console.log("array", this.arr);
@@ -809,7 +806,7 @@ export class DialogAjouterHalle {
       if (data == true) {
         Swal.fire(
           'Erreur',
-          'Halle avec ce libelle deja existe',
+          'Hall avec ce libelle deja existe',
           'error'
         )
       }
@@ -833,7 +830,6 @@ export class DialogAjouterHalle {
   close() {
     this.dialogRef.close();
   }
-
 }
 
 ////*************************************************dialog edit rayon*************************************************///////
@@ -845,12 +841,17 @@ export class DialogEditHalle {
   dataTab: any
   hall: Hall = new Hall()
   Famille_Logistique: any = [];
+  zones_invalide: any = []
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogEditHalle>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.dataTab = data
     this.hall = data.hall
     this.service.ListeFamilleLogistique().subscribe((data: any) => {
       this.Famille_Logistique = data;
+    });
+
+    this.service.ZoneInvalideParHall(this.hall.id).subscribe((data: any) => {
+      this.zones_invalide = data;
     });
   }
   OpenZoneInvalide(hall: any, id: any) {
@@ -984,7 +985,7 @@ export class DialogAjouterRayon {
         )
       }
       if (data == false) {
-        this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.rayon.ordreX, this.rayon.ordreY).subscribe(data => {
+        this.service.OrdreRayonExiste(this.rayon.local.id_Local, 1, 2).subscribe(data => {
           console.log("odre eee", data)
           if (data != null) {
             const swalWithBootstrapButtons = Swal.mixin({
@@ -1015,7 +1016,7 @@ export class DialogAjouterRayon {
             })
           }
           if (data == null) {
-            this.service.ZoneInvalideExiste(this.rayon.hall.id, this.rayon.ordreX, this.rayon.ordreY).subscribe(data => {
+            this.service.ZoneInvalideExiste(this.rayon.hall.id, 1, 2).subscribe(data => {
               console.log(data)
               if (data == true) {
                 Swal.fire(
@@ -1121,23 +1122,23 @@ export class DialogEditOrdreRayon {
   }
   onSubmit() {
     console.log(this.dataTab.idRayon)
-    this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.rayon.ordreX, this.rayon.ordreY).subscribe(data => {
-      console.log("odre eee", data)
-      if (data != null) {
-        Swal.fire(
-          'Erreur',
-          'Rayon ' + data.id + ' à deja cette ordre!',
-          'error'
-        )
-      }
-      if (data == null) {
-        this.service.editRayon(this.dataTab.idRayon, this.rayon).subscribe(data => {
-          this.close();
-        }
-          , error => console.log(error));
-      }
-    },
-      error => console.log(error));
+    /*     this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.rayon.ordreX, this.rayon.ordreY).subscribe(data => {
+          console.log("odre eee", data)
+          if (data != null) {
+            Swal.fire(
+              'Erreur',
+              'Rayon ' + data.id + ' à deja cette ordre!',
+              'error'
+            )
+          }
+          if (data == null) {
+            this.service.editRayon(this.dataTab.idRayon, this.rayon).subscribe(data => {
+              this.close();
+            }
+              , error => console.log(error));
+          }
+        },
+          error => console.log(error)); */
   }
 
 
@@ -1336,11 +1337,12 @@ export class DialogEditEmplacement {
 export class DialogAddZoneInvalideHalle {
   dataTab: any
   hall: Hall = new Hall()
-  zone: ZoneInvalideHall = new ZoneInvalideHall()
+  zone: Zone = new Zone()
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.hall = data.hall;
     this.zone.hall = this.hall
+    this.zone.etat = 'Invalide'
   }
 
   //valider l'ajout du zone invalide
@@ -1349,7 +1351,6 @@ export class DialogAddZoneInvalideHalle {
     this.service.ZoneInvalideExiste(this.hall.id, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
       console.log(data)
       if (data == true) {
-
         Swal.fire(
           'Erreur',
           'Zone Deja existe',
@@ -1357,7 +1358,6 @@ export class DialogAddZoneInvalideHalle {
         )
       }
       if (data == false) {
-
         this.service.ajoutZoneInvalide(this.zone).subscribe(data => {
           console.log("new zone ", data);
           Swal.fire(
@@ -1389,13 +1389,13 @@ export class DialogAddZoneInvalideHalle {
 })
 export class DialogOpenZoneInvalideHalle {
   dataTab: any
-  zone: ZoneInvalideHall = new ZoneInvalideHall()
+  zone: Zone = new Zone()
   hall: Hall = new Hall()
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     console.log(this.zone)
     this.hall = data.hall
-    this.service.getZoneByHallX_Y(data.hall.id, data.x, data.y).subscribe(data => {
+    this.service.getZoneInvalideByHallX_Y(data.hall.id, data.x, data.y).subscribe(data => {
       this.zone = data
     },
       error => console.log(error));

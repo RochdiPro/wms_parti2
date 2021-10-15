@@ -7,10 +7,9 @@ export class Rayon {
     largeur: any;
     hauteur: any;
     profondeur: any;
-    ordreX: any;
-    ordreY: any;
     etages: any;
     hall: any;
     coloirGauche: any;
     coloirDroite: any;
+    zones:any
 }

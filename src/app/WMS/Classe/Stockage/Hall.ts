@@ -9,6 +9,6 @@ export class Hall
     hauteur:any;
     profondeur:any
     rayons:any
-    zones_invalide:any
+    zones:any
     couloirs:any
 }
