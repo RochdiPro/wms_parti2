@@ -126,6 +126,38 @@ ZoneInvalideParHall(hall: any): Observable<any>{
     catchError(this.handleError)
   );
 }
+//service ZonneExiste
+ZoneReserveParHall(hall: any): Observable<any>{
+  return this.httpClient.get<Zone>(wms+"WMS/getZoneReserveParHall",{params:{ hall: hall}}).pipe(
+    catchError(this.handleError)
+  );
+}
+//service Zonne invalide
+ZoneInvalideParLocal(local: any): Observable<any>{
+  return this.httpClient.get(wms+"WMS/ZoneInvalideByLocal",{params:{ local: local}}).pipe(
+    catchError(this.handleError)
+  );
+}
+//service Zonne invalide
+ZoneReserveParLocal(local: any): Observable<any>{
+  return this.httpClient.get<Zone[]>(wms+"WMS/ZoneReserveParLocal",{params:{ local: local}}).pipe(
+    catchError(this.handleError)
+  );
+}
+//service Zonne invalide
+getAllZoneReserve(): Observable<any>{
+  return this.httpClient.get<Zone[]>(wms+"WMS/TousZoneReserve").pipe(
+    catchError(this.handleError)
+  );
+}
+
+
+//service ZonneExiste
+ZoneReserveParClient(client: any): Observable<any>{
+  return this.httpClient.get<Zone>(wms+"WMS/ZoneReserveParClient",{params:{ client: client}}).pipe(
+    catchError(this.handleError)
+  );
+}
 ///////CRUD rayon
 
 

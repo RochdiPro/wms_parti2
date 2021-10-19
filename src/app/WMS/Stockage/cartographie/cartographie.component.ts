@@ -160,7 +160,20 @@ export class CartographieComponent implements OnInit {
     this.halles = this.localselect.halles
     this.goForward();
   }
+  OpenDialogZoneReserver() {
 
+    const dialogRef = this.dialog.open(DialogOpenAllZoneReserve, {
+      width: '1200px',
+      data: { local: this.localselect }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.service.getLocalById(this.localselect.id).subscribe(data => {
+        this.localselect = data;
+        this.rayons = this.localselect.rayons
+      }, error => console.log(error));
+    });
+
+  }
   //ouvrir la boite dialogue DialogOpenCartographie 
   OpenCartographie(local: any, id: any) {
     console.log("Local selctionner", local)
@@ -187,12 +200,21 @@ export class CartographieComponent implements OnInit {
   //selectionner un halle 
   SelectHalle(halle: any) {
     this.halleselect = halle
+    this.generertableayrayon(this.halleselect);
     this.libelleHalle = this.halleselect.libelle
     this.rayons = this.halleselect.rayons
-    this.generertableayrayon(this.halleselect);
+
     this.goForward();
   }
 
+  //bouton plus
+  openDialogInformationLocal(local: any) {
+    //ouvrir la boite dialogue DialogInfoLocal
+    const dialogRef = this.dialog.open(DialogInfoLocal, {
+      width: 'auto',
+      data: { local: local }
+    });
+  }
   //bouton ajout hall
   openDialogAjouterHalle() {
     //ouvrir la boite dialogue DialogAjouterHalle
@@ -264,8 +286,10 @@ export class CartographieComponent implements OnInit {
     this.rayonselect = rayon
     this.libelleRayon = this.rayonselect.libelle
     this.etages = this.rayonselect.etages
-    this.couloirGauche = rayon.coloirGauche
-    this.couloirDroite = rayon.coloirDroite
+    if (rayon.coloirGauche != null)
+      this.couloirGauche = rayon.coloirGauche
+    if (rayon.couloirDroite != null)
+      this.couloirDroite = rayon.coloirDroite
     this.goForward();
   }
 
@@ -357,12 +381,12 @@ export class CartographieComponent implements OnInit {
       }, error => console.log(error));
     }, error => console.log(error));
     console.log("eeee", halle)
-    for (let i = 0; i < this.y; i++) {
+    for (let i = 0; i < this.x; i++) {
       // Creates an empty line
       this.arr.push([]);
       // Adds cols to the empty line:
       this.arr[i].push(new Array(this.y));
-      for (let j = 0; j < this.x; j++) {
+      for (let j = 0; j < this.y; j++) {
         this.service.OrdreRayonExiste(halle.id, i + 1, j + 1).subscribe(data => {
           console.log(" eee", data)
           if (data != null) {
@@ -371,7 +395,7 @@ export class CartographieComponent implements OnInit {
           else {
             //ordre n'exsite pas
             this.service.ZoneInvalideExiste(halle.id, i + 1, j + 1).subscribe(data => {
-              console.log(" eee", data)
+              console.log(" invalide", data)
               if (data == true) {
                 this.arr[i][j] = "invalide";
               }
@@ -379,9 +403,14 @@ export class CartographieComponent implements OnInit {
                 this.arr[i][j] = null;
               }
             }, error => console.log(error));
+
+
+
           }
         }, error => console.log(error));
+
       }
+
     }
     setTimeout(() => {
       console.log("array", this.arr);
@@ -641,14 +670,12 @@ export class CartographieComponent implements OnInit {
   }
 
   //aller à la step precedente 
-  goBack()
-  {
+  goBack() {
     this.myStepper.previous();
   }
 
   //aller à la step suivante 
-  goForward() 
-  {
+  goForward() {
     this.myStepper.next();
   }
   //compteuur
@@ -842,6 +869,7 @@ export class DialogEditHalle {
   hall: Hall = new Hall()
   Famille_Logistique: any = [];
   zones_invalide: any = []
+  zones_reserver:any=[]
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogEditHalle>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.dataTab = data
@@ -853,7 +881,13 @@ export class DialogEditHalle {
     this.service.ZoneInvalideParHall(this.hall.id).subscribe((data: any) => {
       this.zones_invalide = data;
     });
+    this.service.ZoneReserveParHall(this.hall.id).subscribe((data: any) => {
+      this.zones_reserver = data;
+    });
   }
+
+  
+
   OpenZoneInvalide(hall: any, id: any) {
     const dialogRef = this.dialog.open(DialogAddZoneInvalideHalle, {
       width: 'auto',
@@ -865,9 +899,8 @@ export class DialogEditHalle {
 
       }, error => console.log(error));
     });
-
-
   }
+  
   onSubmit() {
     console.log(this.dataTab.idRayon)
     this.service.editHall(this.dataTab.idHalle, this.hall).subscribe(data => {
@@ -1405,6 +1438,180 @@ export class DialogOpenZoneInvalideHalle {
   //valider l'ajout du rayon
   onSubmit() {
 
+  }
+
+  //fermer dialogue
+  close() {
+    this.dialogRef.close();
+  }
+
+}
+/////////////////////////*****************************open-Info-Local*******************************************//////////////////////// */
+@Component({
+  selector: 'open-Info-Local.html',
+  templateUrl: 'dialogue_cartographie/open-Info-Local.html',
+})
+export class DialogInfoLocal {
+  dataTab: any
+  zones_invalide: any = []
+  zones_reserver: any = []
+
+  local: any
+  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAjouterRayon>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
+    this.local = data.local
+    console.log(this.local)
+    this.generer()
+  }
+  generer() {
+    this.service.ZoneInvalideParLocal(this.local.id_Local).subscribe(data => {
+      console.log(data)
+      this.zones_invalide = data
+    },
+      error => console.log(error));
+    this.service.ZoneReserveParLocal(this.local.id_Local).subscribe(data => {
+      this.zones_reserver = data
+    },
+      error => console.log(error));
+  }
+  openDialogReservation(local:any){
+
+    const dialogRef = this.dialog.open(DialogZoneResever, {
+      width: 'auto',
+      data: { local: local }
+    });
+  }
+  //fermer dialogue
+  close() {
+    this.dialogRef.close();
+  }}
+
+//////////////////////////////////////////////////////**********************************////////////////////////////// */
+
+@Component({
+  selector: 'open-client-reserve.html',
+  templateUrl: 'dialogue_cartographie/open-client-reserve.html',
+})
+export class DialogZoneResever {
+  dataTab: any
+   zones_reserver: Zone[]
+   local: any
+   filters = {
+    keyword: ''
+  }
+  selectedOption: any;
+  selected = '';
+
+  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogZoneResever>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
+    this.local = data.local
+    console.log(this.local)
+    this.generer()
+  }
+  generer() {
+  
+    this.service.ZoneReserveParLocal(this.local.id_Local).subscribe(data => {
+      this.zones_reserver = data
+    },
+      error => console.log(error));
+  }
+  filterByHall(zones_reserver: Zone[]) {
+    return zones_reserver.filter((b) => {
+       return b.hall.libelle.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
+    })
+  }
+  filterByClient(zones_reserver: Zone[]) {
+    return zones_reserver.filter((b) => {
+       return b.client.nom.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
+    })
+  }
+
+  ListZoneFilter(){
+    console.log(this.selectedOption)
+    
+    if(this.selectedOption=="client")
+    this.service.ZoneReserveParLocal(this.local.id_Local).subscribe(
+      data => this.zones_reserver = this.filterByClient(data)
+    )
+    else if(this.selectedOption=="hall")
+
+    this.service.ZoneReserveParLocal(this.local.id_Local).subscribe(
+      data => this.zones_reserver = this.filterByHall(data)
+    )
+      
+  }
+
+  //fermer dialogue
+  close() {
+    this.dialogRef.close();
+  }
+
+}
+
+
+
+//////////////////////////////////////////////////////**********************************////////////////////////////// */
+
+@Component({
+  selector: 'open-zone-reserver.html',
+  templateUrl: 'dialogue_cartographie/open-zone-reserver.html',
+})
+export class DialogOpenAllZoneReserve {
+  dataTab: any
+   zones_reserver: Zone[]
+   local: any
+   filters = {
+    keyword: ''
+  }
+  selectedOption: any;
+  selected = '';
+
+  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogOpenAllZoneReserve>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
+      this.generer() 
+    }
+  generer() {
+  
+    this.service.getAllZoneReserve().subscribe(data => {
+      this.zones_reserver = data
+      console.log(data)
+    },
+      error => console.log(error));
+  }
+  filterByHall(zones_reserver: Zone[]) {
+    return zones_reserver.filter((b) => {
+       return b.hall.libelle.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
+    })
+  }
+  filterByClient(zones_reserver: Zone[]) {
+    return zones_reserver.filter((b) => {
+       return b.client.nom.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
+    })
+  }
+  filterByLocal(zones_reserver: Zone[]) {
+    return zones_reserver.filter((b) => {
+       return b.hall.local.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
+    })
+  }
+  ListZoneFilter(){
+    console.log(this.filters.keyword)
+    console.log(this.selectedOption)
+    
+    if(this.selectedOption=="client")
+    this.service.getAllZoneReserve().subscribe(
+      data => this.zones_reserver = this.filterByClient(data)
+    )
+    else if(this.selectedOption=="hall")
+
+    this.service.getAllZoneReserve().subscribe(
+      data => this.zones_reserver = this.filterByHall(data)
+    )
+    else if(this.selectedOption=="local")
+
+    this.service.getAllZoneReserve().subscribe(
+      data => this.zones_reserver = this.filterByLocal(data)
+    )
+      
   }
 
   //fermer dialogue

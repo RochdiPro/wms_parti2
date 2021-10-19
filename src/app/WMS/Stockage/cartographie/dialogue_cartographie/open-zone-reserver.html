@@ -1,0 +1,75 @@
+<h1 mat-dialog-title> Les Zone Louer</h1>
+
+<div mat-dialog-content>
+    <div class="row">
+        <div class="col-md-3 mb-3">
+
+            <mat-form-field appearance="fill">
+                <mat-label>Choisir Type Filter</mat-label>
+                <mat-select [(ngModel)]="selectedOption" name="select" [(value)]="selected">
+                    <mat-option value="client">Client</mat-option>
+                    <mat-option value="hall">Hall</mat-option>
+                    <mat-option value="local">Local</mat-option>
+
+                </mat-select>
+
+            </mat-form-field>
+        </div>
+        <div class="col-md-3 mb-3">
+
+            <mat-form-field class="example-form-field" appearance="fill">
+                <mat-label>Clearable input</mat-label>
+                <input matInput [(ngModel)]="filters.keyword" name="keyword" (input)="ListZoneFilter()" type="text"
+                    class="search-input" placeholder="Type to search">
+
+                <button *ngIf="filters.keyword" matSuffix mat-icon-button aria-label="Clear"
+                    (click)="filters.keyword=''">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label><strong>Reserve:</strong> </label>
+
+        <div class="row">
+            <div class="table-responsive">
+                <table class="mb-0 table">
+                    <thead>
+                        <tr>
+                            <th>Local</th>
+                            <th>Hall</th>
+                            <th>X</th>
+                            <th>Y</th>
+                            <th>Description</th>
+                            <th>Client</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let zone  of zones_reserver; let i=index">
+                            <td> {{zone.hall.local.nom_Local}} </td>
+                            <td> {{zone.hall.libelle}} </td>
+                            <td>{{zone.ordreX}}</td>
+                            <td> {{zone.ordreY}} </td>
+                            <td> {{zone.description}} </td>
+                            <td> {{zone.client.nom}} </td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div mat-dialog-actions class="float-right">
+    <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>
+
+</div>

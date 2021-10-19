@@ -8,4 +8,5 @@ export class Zone {
     hall: any
     description: any
     etat: any
+    client:any
 }

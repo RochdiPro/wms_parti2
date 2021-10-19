@@ -6,15 +6,21 @@
       <form [formGroup]="localFormGroup">
          <ng-template matStepLabel>Local</ng-template>
          <div class="row">
+             <div class="col-md-6 offset-md-9">
+               <button class="btn" (click)="OpenDialogZoneReserver()">Reserve</button> </div>
+
+             </div>
+         <div class="row">
             <div class="col-md-4 mb-3" *ngFor="let local of locals;  let i = index">
                <div class="card-body ">
                   <div class="main-card mb-3 card ">
                      <div class="card-header ">Depot {{i+1}}: {{local.nom_Local}} </div>
                      <div class="card-body">
-                        Responsable : {{local.responsable}}  <br>
+                        Responsable : {{local.responsable}} <br>
                         Adresse : {{local.adresse}} <br>
                         Telephone :{{local.tel}} <br>
                         Surface : {{local.surface}}
+                   <div (click)="openDialogInformationLocal(local)">Plus</div>     
                      </div>
                      <div class="card-footer"><button class="btn btn-info" (click)="SelectLocal(local,local.id_Local)">
                            <img src="../../../../assets/icon/accede.png" width="20" height="20">
@@ -22,7 +28,7 @@
 
                         <button class="btn btn-info" (click)="OpenCartographie(local,local.id_Local)">
                            <img src="../../../../assets/icon/1540089.png" width="20" height="20">Plan</button>
-                           
+
                         <button class="btn btn-info" (click)="OpenEspaceTravail(local.id_Local)">
                            <img src="../../../../assets/icon/modeliser.png" width="20" height="20">Modeliser</button>
                      </div>
@@ -33,55 +39,56 @@
          </div>
       </form>
    </mat-step>
-  <!--*************stteper hall-->
-  <mat-step [stepControl]="halleFormGroup">
-   <form [formGroup]="halleFormGroup">
-      <ng-template matStepLabel>Hall</ng-template>
-      <div class="row">
-         <div class="col-md-9 mb-3">
-         </div>
-         <div class="col-md-3 mb-3">
-            <div class="example-button-container">
-               <button  (click)="openDialogAjouterHalle()" mat-mini-fab color="primary"
-                  aria-label="Example icon button with a plus icon">
-                  <mat-icon>add</mat-icon>
-               </button>
-            </div>
-
-         </div>
-      </div>
-      <div class="mb-3 card text-white card-body" style="background-color: #ccd8ff      ;">
-         <h5 class="text-white card-title">{{libelleLocal}}</h5>
+   <!--*************stteper hall-->
+   <mat-step [stepControl]="halleFormGroup">
+      <form [formGroup]="halleFormGroup">
+         <ng-template matStepLabel>Hall</ng-template>
          <div class="row">
-            <div   *ngFor="let hall of halles;  let i = index ">
-               <div class="card-body">
-                  <div>
-                     <ul class="list-group">
-                        <button  [ngStyle]="{ 'height.cm':hall.hauteur, 'width.cm':hall.largeur  }" class="list-group-item-action list-group-item " >
-                           <br> <b>Hall {{hall.libelle}}</b><br>
-                           <div class="row" style="align-items: center;">
-                              <button class="  mb-1 mr-1 btn " (click)="SelectHalle(hall)">
-                                 <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
-                              </button>
-                              <button class=" mb-1 mr-1 btn " (click)="openDialogEditHalle(hall.id,hall)">
-                                 <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
-                              </button>
-                              <button class="  mb-1 mr-1 btn " (click)="supprimerHalle(hall.id)">
-                                 <img src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
-                                    width="20" height="20">
-                              </button>
-                           </div>
-                        </button>
+            <div class="col-md-9 mb-3">
+            </div>
+            <div class="col-md-3 mb-3">
+               <div class="example-button-container">
+                  <button (click)="openDialogAjouterHalle()" mat-mini-fab color="primary"
+                     aria-label="Example icon button with a plus icon">
+                     <mat-icon>add</mat-icon>
+                  </button>
+               </div>
 
-                     </ul>
+            </div>
+         </div>
+         <div class="mb-3 card text-white card-body" style="background-color: #ccd8ff      ;">
+            <h5 class="text-white card-title">{{libelleLocal}}</h5>
+            <div class="row">
+               <div *ngFor="let hall of halles;  let i = index ">
+                  <div class="card-body">
+                     <div>
+                        <ul class="list-group">
+                           <button [ngStyle]="{ 'height.cm':hall.hauteur, 'width.cm':hall.largeur  }"
+                              class="list-group-item-action list-group-item ">
+                              <br> <b>Hall {{hall.libelle}}</b><br>
+                              <div class="row" style="align-items: center;">
+                                 <button class="  mb-1 mr-1 btn " (click)="SelectHalle(hall)">
+                                    <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
+                                 </button>
+                                 <button class=" mb-1 mr-1 btn " (click)="openDialogEditHalle(hall.id,hall)">
+                                    <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
+                                 </button>
+                                 <button class="  mb-1 mr-1 btn " (click)="supprimerHalle(hall.id)">
+                                    <img src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
+                                       width="20" height="20">
+                                 </button>
+                              </div>
+                           </button>
+
+                        </ul>
+                     </div>
                   </div>
                </div>
             </div>
-         </div>
 
-      </div>
-   </form>
-</mat-step>
+         </div>
+      </form>
+   </mat-step>
 
    <!--*************stteper rayon-->
    <mat-step [stepControl]="rayonFormGroup">
@@ -97,14 +104,12 @@
                      <mat-icon>add</mat-icon>
                   </button>
                </div>
-
             </div>
          </div>
          <div class="mb-3 card text-white card-body" style="background-color: #ccd8ff ;">
             <div class="row">
                <h5 class="text-white card-title">{{libelleLocal}} {{libelleHalle}}</h5>
                <div class="col-md-7">
-
                </div>
                <div class="un"></div>
                Rayon <div id="rayon"></div>
@@ -112,30 +117,24 @@
                Libre <div id="vide"></div>
                <div class="un"></div>
                Invalide <div id="hachure"></div>
-      
-
             </div>
-          
-            <div class="row"  *ngFor=" let in of counter(x) ;let i = index">
-               <div  *ngFor=" let is of counter(y) ;let j = index">
-                  
-                  <div class="card-body"   *ngIf="arr[i][j] =='invalide' ">
-                     <div> 
-                          <button   [ngStyle]="{ 'height.cm':arr[i][j].hauteur, 'width.cm':arr[i][j].largeur  }" class="  mb-1 mr-1 btn " (click)="SelectZoneInvalide(arr[i][j],i,j)"> 
-                           <img src="../../../../assets/icon/hachuré.png " width= "90px"  height="300px"  >
-                        
-                            </button>
-                          
+
+            <div class="row" *ngFor=" let in of counter(x) ;let i = index">
+               <div *ngFor=" let is of counter(y) ;let j = index">
+
+                  <div class="card-body" *ngIf="arr[i][j] =='invalide' ">
+                     <div>
+                        <button class="  mb-1 mr-1 btn " (click)="SelectZoneInvalide(arr[i][j],i,j)">
+                           <img src="../../../../assets/icon/hachuré.png " width="90px" height="300px">
+                        </button>
                      </div>
                   </div>
-
-                  <div class="card-body"   *ngIf="arr[i][j]!= null  &&  arr[i][j] != 'invalide' " >
-                     
+                  <div class="card-body" *ngIf="arr[i][j]!= null  &&  arr[i][j] != 'invalide' ">
                      <div>
                         <ul class="list-group">
-                           <button [ngStyle]="{ 'height.cm':arr[i][j].hauteur, 'width.cm':arr[i][j].largeur  }"  class="list-group-item-action list-group-item " style="width: 90px;
+                           <button class="list-group-item-action list-group-item " style="width: 90px;
                        height: 300px;">
-                              <br> <b>Rayon {{arr[i][j].libelle}}</b><br> 
+                              <br> <b>Rayon {{arr[i][j].libelle}}</b><br>
                               <div class="row" style="align-items: center;">
                                  <button class="  mb-1 mr-1 btn " (click)="SelectRayon(arr[i][j])">
                                     <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
@@ -149,14 +148,14 @@
                                  </button>
                               </div>
                            </button>
-           
+
                         </ul>
                      </div>
                   </div>
                </div>
-               
-            </div> 
-         
+
+            </div>
+
          </div>
       </form>
    </mat-step>
@@ -181,7 +180,8 @@
                      <div class="example-button-container"></div>
                   </div>
                   <ul class="list-group">
-                     <li class="list-group-item list-group-item" *ngFor="let etage of etages  | sort:{ property: 'ordre', descending: false }"
+                     <li class="list-group-item list-group-item"
+                        *ngFor="let etage of etages  | sort:{ property: 'ordre', descending: false }"
                         style="background-color: #e4e7e5;">
                         <b>Etage {{etage.libelle}}</b>
                         {{etage.sousFamilleLogistique.libelle}}
@@ -232,7 +232,7 @@
                <div class="card-body">
                   <div class="row">
                      <h5 class="card-title">Etage {{libelleEtage}} Rayon {{libelleRayon}} Local {{libelleLocal}}</h5>
-                     <div class="col-md-5"> </div>      
+                     <div class="col-md-5"> </div>
                      <div class="un"></div>
                      Libre <div id="carre2"></div>
                      <div class="un"></div>
@@ -240,34 +240,36 @@
                      <div class="un"></div>
                      Plein <div id="carre1"></div>
                   </div>
-                  
-                  <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">
-                     <mat-tab label="Gauche"> {{couloirGauche.libelle}}
+
+                  <mat-tab-group mat-stretch-tabs  >
+                     <mat-tab label="Gauche">
                         <ul class="list-group">
                            <li class="list-group-item-dark list-group-item">
                               <div class="row">
-                                 <div   *ngFor="let emp of couloirGauche.emplacments;  let i = index">
+                                 <div *ngFor="let emp of couloirGauche.emplacments;  let i = index">
                                     <div class="card-body">
                                        <div>
                                           <ul class="list-group">
                                              <div class="row">
-                                                <button
-                                                [ngStyle]="{'width.cm':emp.largeur,'height.cm':emp.hauteur  }"
-                                                class="list-group-item-action list-group-item"
+                                                <button [ngStyle]="{'width.cm':emp.largeur,'height.cm':emp.hauteur  }"
+                                                   class="list-group-item-action list-group-item"
                                                    [ngStyle]="{'background':emp.etat === 'Libre' ? 'LightGreen' : emp.etat === 'Disponible'? '#fff44f': 'LightCoral'}">
                                                    {{emp.libelle}} <br>
                                                    <button class="  mb-2 mr-2 btn " (click)="selectEmplacment(emp)">
                                                       <img src="../../../../assets/icon/Zoom-In-icon.png" width="20"
                                                          height="20">
                                                    </button>
-                                                   <button class="  mb-2 mr-2 btn " (click)="openDialoEditEmplacment(emp)">
-                                                      <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
+                                                   <button class="  mb-2 mr-2 btn "
+                                                      (click)="openDialoEditEmplacment(emp)">
+                                                      <img src="../../../../assets/icon/edit-icon.png" width="20"
+                                                         height="20">
                                                    </button>
-                                                   <button class="  mb-2 mr-2 btn" (click)="supprimerEmplacment(emp.id)">
+                                                   <button class="  mb-2 mr-2 btn"
+                                                      (click)="supprimerEmplacment(emp.id)">
                                                       <img
                                                          src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
                                                          width="20" height="20">
-                                                   </button> 
+                                                   </button>
                                                 </button>
                                              </div>
                                           </ul>
@@ -276,35 +278,38 @@
                                  </div>
                               </div>
                            </li>
-                        </ul>   
-                     
-                     
+                        </ul>
+
+
                      </mat-tab>
-                     <mat-tab label="Droite"> {{couloirDroite.libelle}}
+                     <mat-tab label="Droite">
                         <ul class="list-group">
                            <li class="list-group-item-dark list-group-item">
                               <div class="row">
-                                 <div  *ngFor="let emp of couloirDroite.emplacments;  let i = index">
+                                 <div *ngFor="let emp of couloirDroite.emplacments;  let i = index">
                                     <div class="card-body">
                                        <div>
                                           <ul class="list-group">
                                              <div class="row">
-                                                <button      [ngStyle]="{'width.cm':emp.largeur,'height.cm':emp.hauteur  }"
-                                                class="list-group-item-action list-group-item"
+                                                <button [ngStyle]="{'width.cm':emp.largeur,'height.cm':emp.hauteur  }"
+                                                   class="list-group-item-action list-group-item"
                                                    [ngStyle]="{'background':emp.etat === 'Libre' ? 'LightGreen' : emp.etat === 'Disponible'? '#fff44f': 'LightCoral'}">
                                                    {{emp.libelle}} <br>
                                                    <button class="  mb-2 mr-2 btn " (click)="selectEmplacment(emp)">
                                                       <img src="../../../../assets/icon/Zoom-In-icon.png" width="20"
                                                          height="20">
                                                    </button>
-                                                   <button class="  mb-2 mr-2 btn " (click)="openDialoEditEmplacment(emp)">
-                                                      <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
+                                                   <button class="  mb-2 mr-2 btn "
+                                                      (click)="openDialoEditEmplacment(emp)">
+                                                      <img src="../../../../assets/icon/edit-icon.png" width="20"
+                                                         height="20">
                                                    </button>
-                                                   <button class="  mb-2 mr-2 btn" (click)="supprimerEmplacment(emp.id)">
+                                                   <button class="  mb-2 mr-2 btn"
+                                                      (click)="supprimerEmplacment(emp.id)">
                                                       <img
                                                          src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
                                                          width="20" height="20">
-                                                   </button> 
+                                                   </button>
                                                 </button>
                                              </div>
                                           </ul>
@@ -313,14 +318,14 @@
                                  </div>
                               </div>
                            </li>
-                        </ul>   
-                     
-                     
+                        </ul>
+
+
                      </mat-tab>
-                    </mat-tab-group>
+                  </mat-tab-group>
 
 
-                
+
                </div>
             </div>
          </div>
@@ -390,7 +395,7 @@
                         [bc-margin-left]="marginLeft" [bc-margin-right]="marginRight">
                      </ngx-barcode>
                   </div>
-                  <div fxLayoutAlign="space-around center" >
+                  <div fxLayoutAlign="space-around center">
                      <button class="pe-7s-download btn btn-primary" (click)="saveBRAsImage()">Imprimer Code a Barre
                      </button>
                   </div>
