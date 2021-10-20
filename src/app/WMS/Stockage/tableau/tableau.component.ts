@@ -73,13 +73,10 @@ export class TableauComponent implements OnInit {
               }
             }, error => console.log(error));
 
-
-
           }
         }, error => console.log(error));
 
       }
-
     }
     setTimeout(() => {
       console.log("array", this.arr);

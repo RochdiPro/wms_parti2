@@ -97,6 +97,17 @@ ajoutZoneInvalide(zone:Zone): Observable<any> {
     catchError(this.handleError)
  );
 }
+editZone(id: number, zone: Zone): Observable<Object>{
+  return this.httpClient.put(`${wms+"/WMS/Modifier_zone"}/${id}`, zone);
+}
+
+
+//service ajouter zone invalide
+ajoutZone(zone:Zone): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajouter_Zone",zone).pipe(
+    catchError(this.handleError)
+ );
+}
 //service modifier halle
 editHall(id: number, hall: Hall): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_Hall"}/${id}`, hall);

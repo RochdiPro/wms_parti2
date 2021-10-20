@@ -6,6 +6,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { QRCodeComponent } from 'angularx-qrcode';
+import { Console } from 'console';
 import { NgxBarcodeComponent } from 'ngx-barcode';
 import { Local } from 'protractor/built/driverProviders';
 import Swal from 'sweetalert2';
@@ -61,6 +62,7 @@ export class CartographieComponent implements OnInit {
   marginBottom = 10;
   marginLeft = 10;
   marginRight = 10;
+  showTableau = false;
   get values(): string[] {
     return this.value.split('\n');
   }
@@ -105,16 +107,7 @@ export class CartographieComponent implements OnInit {
   arr: any[][] = [];
 
   constructor(public dialog: MatDialog, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient, private sanitizer: DomSanitizer) {
-    for (let i = 0; i < 2; i++) {
-      // Creates an empty line
-      this.arr.push([]);
-      // Adds cols to the empty line:
-      this.arr[i].push(new Array(this.y));
-      for (let j = 0; j < 2; j++) {
-        this.arr[i][j] = "";
-      }
 
-    }
   }
 
   ngOnInit() {
@@ -167,7 +160,7 @@ export class CartographieComponent implements OnInit {
       data: { local: this.localselect }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.service.getLocalById(this.localselect.id).subscribe(data => {
+      this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
         this.localselect = data;
         this.rayons = this.localselect.rayons
       }, error => console.log(error));
@@ -200,7 +193,7 @@ export class CartographieComponent implements OnInit {
   //selectionner un halle 
   SelectHalle(halle: any) {
     this.halleselect = halle
-    this.generertableayrayon(this.halleselect);
+    this.generertableayrayon(halle);
     this.libelleHalle = this.halleselect.libelle
     this.rayons = this.halleselect.rayons
 
@@ -286,10 +279,12 @@ export class CartographieComponent implements OnInit {
     this.rayonselect = rayon
     this.libelleRayon = this.rayonselect.libelle
     this.etages = this.rayonselect.etages
-    if (rayon.coloirGauche != null)
-      this.couloirGauche = rayon.coloirGauche
-    if (rayon.couloirDroite != null)
-      this.couloirDroite = rayon.coloirDroite
+    if (rayon.coloirGauche != null) { this.couloirGauche = rayon.coloirGauche }
+
+    if (rayon.coloirDroite != null) { this.couloirDroite = rayon.coloirDroite }
+    console.log(rayon)
+    console.log(this.couloirGauche)
+    console.log(this.couloirDroite)
     this.goForward();
   }
 
@@ -370,16 +365,14 @@ export class CartographieComponent implements OnInit {
   }
 
   //génerer la matrice du rayon pour un hall
-  generertableayrayon(halle: any) {
+  async generertableayrayon(halle: any) {
+    var data: any
+    var verif: any
     this.arr = []
-    this.service.MaxOrdreX(halle.id).subscribe(data => {
-      this.x = data;
-      this.service.MaxOrdreY(halle.id).subscribe(data => {
-        this.y = data;
-        console.log("y", this.y)
-        console.log("x", this.x)
-      }, error => console.log(error));
-    }, error => console.log(error));
+    this.x = await this.service.MaxOrdreX(halle.id).toPromise();
+    this.y = await this.service.MaxOrdreY(halle.id).toPromise();
+    console.log("y", this.y)
+    console.log("x", this.x)
     console.log("eeee", halle)
     for (let i = 0; i < this.x; i++) {
       // Creates an empty line
@@ -387,35 +380,25 @@ export class CartographieComponent implements OnInit {
       // Adds cols to the empty line:
       this.arr[i].push(new Array(this.y));
       for (let j = 0; j < this.y; j++) {
-        this.service.OrdreRayonExiste(halle.id, i + 1, j + 1).subscribe(data => {
-          console.log(" eee", data)
-          if (data != null) {
-            this.arr[i][j] = data;
+        data = await this.service.OrdreRayonExiste(halle.id, i + 1, j + 1).toPromise()
+        if (data != null) {
+          this.arr[i][j] = data;
+        }
+        else {
+          //ordre n'exsite pas
+          verif = await this.service.ZoneInvalideExiste(halle.id, i + 1, j + 1).toPromise()
+          console.log(" invalide", verif)
+          if (verif == true) {
+            this.arr[i][j] = "invalide";
           }
           else {
-            //ordre n'exsite pas
-            this.service.ZoneInvalideExiste(halle.id, i + 1, j + 1).subscribe(data => {
-              console.log(" invalide", data)
-              if (data == true) {
-                this.arr[i][j] = "invalide";
-              }
-              else {
-                this.arr[i][j] = null;
-              }
-            }, error => console.log(error));
-
-
-
+            this.arr[i][j] = null;
           }
-        }, error => console.log(error));
-
+        }
       }
-
     }
-    setTimeout(() => {
-      console.log("array", this.arr);
-    }, 2000);
-
+    console.log("matrice", this.arr)
+    this.showTableau = true;
   }
 
   SelectZoneInvalide(zone: any, i: any, j: any) {
@@ -869,7 +852,7 @@ export class DialogEditHalle {
   hall: Hall = new Hall()
   Famille_Logistique: any = [];
   zones_invalide: any = []
-  zones_reserver:any=[]
+  zones_reserver: any = []
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogEditHalle>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.dataTab = data
@@ -886,7 +869,7 @@ export class DialogEditHalle {
     });
   }
 
-  
+
 
   OpenZoneInvalide(hall: any, id: any) {
     const dialogRef = this.dialog.open(DialogAddZoneInvalideHalle, {
@@ -900,7 +883,7 @@ export class DialogEditHalle {
       }, error => console.log(error));
     });
   }
-  
+
   onSubmit() {
     console.log(this.dataTab.idRayon)
     this.service.editHall(this.dataTab.idHalle, this.hall).subscribe(data => {
@@ -928,7 +911,8 @@ export class DialogAjouterRayon {
   couloirsDroite: any = []
   couloirGauche: Couloir = new Couloir()
   couloirDroite: Couloir = new Couloir()
-
+  zones: any = []
+  zone: Zone = new Zone()
   addColoirShow: boolean = false
   couloir: Couloir = new Couloir()
   hall: any
@@ -946,6 +930,55 @@ export class DialogAjouterRayon {
     this.hall = data.hall
     this.local = data.local
     this.actualiserListCouloirs()
+
+
+  }
+  addZone() {
+    console.log("add zone")
+
+    this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
+      console.log("odre eee", data)
+      if (data != null) {
+        Swal.fire(
+          'Erreur',
+          'Rayon avec ce ordre déja existe',
+          'error'
+        )
+      }
+      if (data == null) {
+        this.service.ZoneInvalideExiste(this.rayon.hall.id, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
+          console.log(data)
+          if (data == true) {
+            Swal.fire(
+              'Erreur',
+              'Cette zone est invalide',
+              'error'
+            )
+          }
+          if (data == false) {
+            this.zone.etat = "Disponible"
+            this.zones.push(this.zone)
+            this.service.ajoutZone(this.zone).subscribe(data => {
+              console.log(data);
+              console.log("zones", this.zones)
+              this.rayon.zones = this.zones
+              console.log(this.rayon)
+
+              Swal.fire(
+                'Erreur',
+                'Cette zone ajouté',
+                'success'
+              )
+            },
+              error => console.log(error));
+
+
+          }
+        },
+          error => console.log(error));
+      }
+    },
+      error => console.log(error));
 
 
   }
@@ -1018,77 +1051,44 @@ export class DialogAjouterRayon {
         )
       }
       if (data == false) {
-        this.service.OrdreRayonExiste(this.rayon.local.id_Local, 1, 2).subscribe(data => {
-          console.log("odre eee", data)
-          if (data != null) {
-            const swalWithBootstrapButtons = Swal.mixin({
-              customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
-              },
-              buttonsStyling: false
-            })
-            swalWithBootstrapButtons.fire({
-              title: 'Rayon avec ce ordre déja existe ',
-              text: "Vous voulez modifer l'odre cette rayon !",
-              icon: 'error',
-              showCancelButton: true,
-              confirmButtonText: 'Oui',
-              cancelButtonText: 'Non, Annuler',
-              reverseButtons: true
-            }).then((result) => {
-              if (result.isConfirmed) {
-                //modifer ordre rayon
-                const dialogRef = this.dialog.open(DialogEditOrdreRayon, {
-                  width: 'auto',
-                  data: { idRayon: data.id, rayon: data }
-                });
-                dialogRef.afterClosed().subscribe(result => {
-                });
-              }
-            })
+        for (var i = 0; i < this.zones.length; i++) {
+          console.log("zone[i]",this.zones[i])
+          this.zones[i].rayon = this.rayon
+          
+          this.service.editZone(this.zones[i].id, this.zones[i]).subscribe(data => {
+            console.log("zone modif",data)
           }
-          if (data == null) {
-            this.service.ZoneInvalideExiste(this.rayon.hall.id, 1, 2).subscribe(data => {
-              console.log(data)
-              if (data == true) {
-                Swal.fire(
-                  'Erreur',
-                  'Cette zone est invalide',
-                  'error'
-                )
-              }
-              if (data == false) {
-                this.service.ajoutRayon(this.rayon).subscribe(data => {
-                  console.log(data);
-                  Swal.fire(
-                    'Ajout Effecté',
-                    'Rayon Ajouté Avec Sucées',
-                    'success'
-                  )
-                  this.close()
-                  this.couloirDroite = this.rayon.coloirDroite
-                  this.couloirGauche = this.rayon.coloirGauche
-                  this.couloirGauche.rayonDroite = this.rayon
-                  this.couloirDroite.rayonGauche = this.rayon
-                  console.log(this.couloirGauche, this.couloirsDroite)
-                  this.service.editCouloir(this.couloirDroite.id, this.couloirDroite).subscribe(data => {
-                    console.log("couloir droite", data)
-                  }
-                    , error => console.log(error));
-                  this.service.editCouloir(this.couloirGauche.id, this.couloirGauche).subscribe(data => {
-                    console.log("couloir gauche", data)
-                  }
-                    , error => console.log(error));
+            , error => console.log(error));
 
-                },
-                  error => console.log(error));
-              }
-            },
-              error => console.log(error));
-          }
-        },
-          error => console.log(error));
+          
+
+          this.service.ajoutRayon(this.rayon).subscribe(data => {
+            console.log(data);
+            Swal.fire(
+              'Ajout Effecté',
+              'Rayon Ajouté Avec Sucées',
+              'success'
+            )
+            this.close()
+            this.couloirDroite = this.rayon.coloirDroite
+            this.couloirGauche = this.rayon.coloirGauche
+            this.couloirGauche.rayonDroite = this.rayon
+            this.couloirDroite.rayonGauche = this.rayon
+            console.log(this.couloirGauche, this.couloirsDroite)
+            this.service.editCouloir(this.couloirDroite.id, this.couloirDroite).subscribe(data => {
+              console.log("couloir droite", data)
+            }
+              , error => console.log(error));
+            this.service.editCouloir(this.couloirGauche.id, this.couloirGauche).subscribe(data => {
+              console.log("couloir gauche", data)
+            }
+              , error => console.log(error));
+
+          },
+            error => console.log(error));
+
+
+        }
       }
     },
       error => console.log(error));
@@ -1432,7 +1432,6 @@ export class DialogOpenZoneInvalideHalle {
       this.zone = data
     },
       error => console.log(error));
-
   }
 
   //valider l'ajout du rayon
@@ -1463,6 +1462,7 @@ export class DialogInfoLocal {
     console.log(this.local)
     this.generer()
   }
+  //generer la liste de zine reservée par local
   generer() {
     this.service.ZoneInvalideParLocal(this.local.id_Local).subscribe(data => {
       console.log(data)
@@ -1474,8 +1474,7 @@ export class DialogInfoLocal {
     },
       error => console.log(error));
   }
-  openDialogReservation(local:any){
-
+  openDialogReservation(local: any) {
     const dialogRef = this.dialog.open(DialogZoneResever, {
       width: 'auto',
       data: { local: local }
@@ -1484,9 +1483,10 @@ export class DialogInfoLocal {
   //fermer dialogue
   close() {
     this.dialogRef.close();
-  }}
+  }
+}
 
-//////////////////////////////////////////////////////**********************************////////////////////////////// */
+/////////////////////////////////////////////*************DialogZoneResever*********************///////////////////////////////
 
 @Component({
   selector: 'open-client-reserve.html',
@@ -1494,9 +1494,9 @@ export class DialogInfoLocal {
 })
 export class DialogZoneResever {
   dataTab: any
-   zones_reserver: Zone[]
-   local: any
-   filters = {
+  zones_reserver: Zone[]
+  local: any
+  filters = {
     keyword: ''
   }
   selectedOption: any;
@@ -1508,37 +1508,37 @@ export class DialogZoneResever {
     console.log(this.local)
     this.generer()
   }
+  //generer la liste de zine reservée par local
   generer() {
-  
     this.service.ZoneReserveParLocal(this.local.id_Local).subscribe(data => {
       this.zones_reserver = data
     },
       error => console.log(error));
   }
+  //filtre par hall
   filterByHall(zones_reserver: Zone[]) {
     return zones_reserver.filter((b) => {
-       return b.hall.libelle.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
+      return b.hall.libelle.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
     })
   }
+  //filtre par client
   filterByClient(zones_reserver: Zone[]) {
     return zones_reserver.filter((b) => {
-       return b.client.nom.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
+      return b.client.nom.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
     })
   }
 
-  ListZoneFilter(){
+  //filtrer la liste de zone 
+  ListZoneFilter() {
     console.log(this.selectedOption)
-    
-    if(this.selectedOption=="client")
-    this.service.ZoneReserveParLocal(this.local.id_Local).subscribe(
-      data => this.zones_reserver = this.filterByClient(data)
-    )
-    else if(this.selectedOption=="hall")
-
-    this.service.ZoneReserveParLocal(this.local.id_Local).subscribe(
-      data => this.zones_reserver = this.filterByHall(data)
-    )
-      
+    if (this.selectedOption == "client")
+      this.service.ZoneReserveParLocal(this.local.id_Local).subscribe(
+        data => this.zones_reserver = this.filterByClient(data)
+      )
+    else if (this.selectedOption == "hall")
+      this.service.ZoneReserveParLocal(this.local.id_Local).subscribe(
+        data => this.zones_reserver = this.filterByHall(data)
+      )
   }
 
   //fermer dialogue
@@ -1550,17 +1550,17 @@ export class DialogZoneResever {
 
 
 
-//////////////////////////////////////////////////////**********************************////////////////////////////// */
+///////////////////////////////////////////*************DialogOpenAllZoneReserve*********************////////////////////////////// */
 
 @Component({
-  selector: 'open-zone-reserver.html',
-  templateUrl: 'dialogue_cartographie/open-zone-reserver.html',
+  selector: 'open-zone-louee.html',
+  templateUrl: 'dialogue_cartographie/open-zone-louee.html',
 })
 export class DialogOpenAllZoneReserve {
   dataTab: any
-   zones_reserver: Zone[]
-   local: any
-   filters = {
+  zones_reserver: Zone[]
+  local: any
+  filters = {
     keyword: ''
   }
   selectedOption: any;
@@ -1568,50 +1568,55 @@ export class DialogOpenAllZoneReserve {
 
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogOpenAllZoneReserve>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-      this.generer() 
-    }
+    this.generer()
+  }
+
+  //recuperer la liste des zone reservé
   generer() {
-  
     this.service.getAllZoneReserve().subscribe(data => {
       this.zones_reserver = data
       console.log(data)
     },
       error => console.log(error));
   }
+  //filtre des zone par hall
   filterByHall(zones_reserver: Zone[]) {
     return zones_reserver.filter((b) => {
-       return b.hall.libelle.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
+      return b.hall.libelle.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
     })
   }
+  //filtre des zone par client
   filterByClient(zones_reserver: Zone[]) {
     return zones_reserver.filter((b) => {
-       return b.client.nom.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
+      return b.client.nom.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
     })
   }
+  //filtre des zone par local
   filterByLocal(zones_reserver: Zone[]) {
     return zones_reserver.filter((b) => {
-       return b.hall.local.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
+      return b.hall.local.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
     })
   }
-  ListZoneFilter(){
+  //filtrer la liste de zone 
+  ListZoneFilter() {
     console.log(this.filters.keyword)
     console.log(this.selectedOption)
-    
-    if(this.selectedOption=="client")
-    this.service.getAllZoneReserve().subscribe(
-      data => this.zones_reserver = this.filterByClient(data)
-    )
-    else if(this.selectedOption=="hall")
 
-    this.service.getAllZoneReserve().subscribe(
-      data => this.zones_reserver = this.filterByHall(data)
-    )
-    else if(this.selectedOption=="local")
+    if (this.selectedOption == "client")
+      this.service.getAllZoneReserve().subscribe(
+        data => this.zones_reserver = this.filterByClient(data)
+      )
+    else if (this.selectedOption == "hall")
 
-    this.service.getAllZoneReserve().subscribe(
-      data => this.zones_reserver = this.filterByLocal(data)
-    )
-      
+      this.service.getAllZoneReserve().subscribe(
+        data => this.zones_reserver = this.filterByHall(data)
+      )
+    else if (this.selectedOption == "local")
+
+      this.service.getAllZoneReserve().subscribe(
+        data => this.zones_reserver = this.filterByLocal(data)
+      )
+
   }
 
   //fermer dialogue
