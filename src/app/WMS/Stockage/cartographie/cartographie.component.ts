@@ -111,7 +111,6 @@ export class CartographieComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.ListLocals();
 
     this.localFormGroup = this._formBuilder.group({
@@ -153,6 +152,9 @@ export class CartographieComponent implements OnInit {
     this.halles = this.localselect.halles
     this.goForward();
   }
+
+  /*ouvrir boite DialogOpenAllZoneReserve 
+  pour consulter tous les zones reservé pour touts les local*/
   OpenDialogZoneReserver() {
 
     const dialogRef = this.dialog.open(DialogOpenAllZoneReserve, {
@@ -160,10 +162,7 @@ export class CartographieComponent implements OnInit {
       data: { local: this.localselect }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
-        this.localselect = data;
-        this.rayons = this.localselect.rayons
-      }, error => console.log(error));
+   
     });
 
   }
@@ -190,17 +189,17 @@ export class CartographieComponent implements OnInit {
     console.log(id)
     this.router.navigate(['/Menu/WMS-Stockage/Cartographie/Espace-Travail', id]);
   }
-  //selectionner un halle 
+
+  //selectionner un halle et passer a la sttep du rayons
   SelectHalle(halle: any) {
     this.halleselect = halle
     this.generertableayrayon(halle);
     this.libelleHalle = this.halleselect.libelle
     this.rayons = this.halleselect.rayons
-
     this.goForward();
   }
 
-  //bouton plus
+  //bouton plus pour plus d'inormation sur le local selectionné
   openDialogInformationLocal(local: any) {
     //ouvrir la boite dialogue DialogInfoLocal
     const dialogRef = this.dialog.open(DialogInfoLocal, {
@@ -208,6 +207,7 @@ export class CartographieComponent implements OnInit {
       data: { local: local }
     });
   }
+
   //bouton ajout hall
   openDialogAjouterHalle() {
     //ouvrir la boite dialogue DialogAjouterHalle
@@ -233,7 +233,6 @@ export class CartographieComponent implements OnInit {
       data: { idHall: numero, hall: hall }
     });
     dialogRef.afterClosed().subscribe(result => {
-
     });
 
   }
@@ -280,7 +279,6 @@ export class CartographieComponent implements OnInit {
     this.libelleRayon = this.rayonselect.libelle
     this.etages = this.rayonselect.etages
     if (rayon.coloirGauche != null) { this.couloirGauche = rayon.coloirGauche }
-
     if (rayon.coloirDroite != null) { this.couloirDroite = rayon.coloirDroite }
     console.log(rayon)
     console.log(this.couloirGauche)
@@ -358,11 +356,7 @@ export class CartographieComponent implements OnInit {
       }
     })
   }
-
-
-  tabChanged(tabChangeEvent: number) {
-    console.log('tab selected: ' + tabChangeEvent);
-  }
+ 
 
   //génerer la matrice du rayon pour un hall
   async generertableayrayon(halle: any) {
@@ -389,10 +383,14 @@ export class CartographieComponent implements OnInit {
           verif = await this.service.ZoneInvalideExiste(halle.id, i + 1, j + 1).toPromise()
           console.log(" invalide", verif)
           if (verif == true) {
-            this.arr[i][j] = "invalide";
+            this.arr[i][j] = {};
+            this.arr[i][j].id = -1;
+            this.arr[i][j].etat = "invalide";
           }
           else {
-            this.arr[i][j] = null;
+            this.arr[i][j] = {};
+            this.arr[i][j].id = 0;
+
           }
         }
       }
@@ -522,9 +520,15 @@ export class CartographieComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log("id etage seelect", this.etageselect.id)
-      this.service.getEtageById(this.etageselect.id).subscribe(data => {
+     /*  this.service.getEtageById(this.etageselect.id).subscribe(data => {
         this.etageselect = data;
         this.emplacements = this.etageselect.emplacments
+      }, error => console.log(error)); */
+      this.service.getRayonById(this.rayonselect.id).subscribe(data => {
+        this.rayonselect = data;
+        console.log("rayon",this.rayonselect)
+        this.couloirDroite = this.rayonselect.coloirDroite
+        this.couloirGauche = this.rayonselect.coloirGauche
       }, error => console.log(error));
     });
   }
@@ -935,7 +939,7 @@ export class DialogAjouterRayon {
   }
   addZone() {
     console.log("add zone")
-
+ 
     this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
       console.log("odre eee", data)
       if (data != null) {
@@ -957,18 +961,21 @@ export class DialogAjouterRayon {
           }
           if (data == false) {
             this.zone.etat = "Disponible"
-            this.zones.push(this.zone)
+            this.zone.hall=this.hall
             this.service.ajoutZone(this.zone).subscribe(data => {
               console.log(data);
-              console.log("zones", this.zones)
-              this.rayon.zones = this.zones
+              /* console.log("zones", this.zones)
+              this.rayon.zones = this.zones */
               console.log(this.rayon)
+              this.zones.push(data)
 
               Swal.fire(
                 'Erreur',
                 'Cette zone ajouté',
                 'success'
               )
+              this.zone=new Zone()
+
             },
               error => console.log(error));
 
@@ -982,7 +989,7 @@ export class DialogAjouterRayon {
 
 
   }
-
+//recuperer la liste des couloirs
   actualiserListCouloirs() {
     this.service.getCouloirParHall(this.hall.id).subscribe((data: any) => {
       this.couloirs = data;
@@ -994,7 +1001,7 @@ export class DialogAjouterRayon {
       this.couloirsDroite = data;
     });
   }
-
+//affiher formulaire ajout couloir
   addColoirToggle() {
     console.log(this.addColoirShow)
     if (this.addColoirShow == true) {
@@ -1051,15 +1058,7 @@ export class DialogAjouterRayon {
         )
       }
       if (data == false) {
-        for (var i = 0; i < this.zones.length; i++) {
-          console.log("zone[i]",this.zones[i])
-          this.zones[i].rayon = this.rayon
-          
-          this.service.editZone(this.zones[i].id, this.zones[i]).subscribe(data => {
-            console.log("zone modif",data)
-          }
-            , error => console.log(error));
-
+    
           
 
           this.service.ajoutRayon(this.rayon).subscribe(data => {
@@ -1083,12 +1082,19 @@ export class DialogAjouterRayon {
               console.log("couloir gauche", data)
             }
               , error => console.log(error));
-
+              for (var i = 0; i < this.zones.length; i++) {
+                console.log("zone[i]",this.zones[i])
+                this.zones[i].rayon = this.rayon
+                this.service.editZone(this.zones[i].id, this.zones[i]).subscribe(data => {
+                  console.log("zone modif",data)
+                }
+                  , error => console.log(error));
+      
+              }
           },
             error => console.log(error));
-
-
-        }
+         
+        
       }
     },
       error => console.log(error));

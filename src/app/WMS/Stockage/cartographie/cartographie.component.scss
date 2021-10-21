@@ -83,3 +83,12 @@
   .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
       background-color:rgb(255, 37, 37,.26);
   }
+
+  .coloir{
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+    transform: rotate(
+-180deg);
+  }
+
+  

@@ -79,8 +79,7 @@ Zones:
                     <mat-form-field appearance="fill">
                         <mat-label>Coloir Droite</mat-label>
                         <mat-select name="couloirDroite" [(ngModel)]="rayon.coloirDroite" id="couloirDroite">
-                            <mat-option value="Ajouter un Couloir"></mat-option>
-                            <mat-option *ngFor="let c of couloirsDroite" [value]="c">{{c.libelle}}</mat-option>
+                             <mat-option *ngFor="let c of couloirsDroite" [value]="c">{{c.libelle}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <button (click)="addColoirToggle()" mat-icon-button color="primary"
