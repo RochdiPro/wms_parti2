@@ -385,11 +385,13 @@ export class CartographieComponent implements OnInit {
           if (verif == true) {
             this.arr[i][j] = {};
             this.arr[i][j].id = -1;
-            this.arr[i][j].etat = "invalide";
+            this.arr[i][j].etat = "Invalide";
           }
           else {
             this.arr[i][j] = {};
             this.arr[i][j].id = 0;
+            this.arr[i][j].etat = "Vide";
+
 
           }
         }
