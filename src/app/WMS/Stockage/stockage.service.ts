@@ -113,6 +113,7 @@ editHall(id: number, hall: Hall): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_Hall"}/${id}`, hall);
 }
 
+
 //service supprimer  halle
 supprimerHall(id: number): Observable<any> {  
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Hall"}/${id}`);
@@ -169,6 +170,8 @@ ZoneReserveParClient(client: any): Observable<any>{
     catchError(this.handleError)
   );
 }
+
+
 ///////CRUD rayon
 
 
@@ -199,6 +202,15 @@ OrdreRayonExiste(hall: any,ordre_x: any,ordre_y:any): Observable<any>{
     catchError(this.handleError)
   );
 }
+
+//service modifier le rayon d'une zone
+editRayonZone(zone_id: any, rayon_id: any): Observable<Object>{
+   return this.httpClient.get<any>(wms+"WMS/Zone_Rayon",{params:{ zone_id: zone_id,rayon_id:rayon_id}}).pipe(
+    catchError(this.handleError)
+  );
+
+}
+
 //service verifer l'exsitance d'ordre d'etage dans un rayon
 OrdreEtageExiste(rayon: any,ordre:any): Observable<any>{
   return this.httpClient.get<any>(wms+"WMS/OrdreEtageExiste",{params:{ rayon: rayon,ordre:ordre}}).pipe(

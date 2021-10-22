@@ -391,8 +391,6 @@ export class CartographieComponent implements OnInit {
             this.arr[i][j] = {};
             this.arr[i][j].id = 0;
             this.arr[i][j].etat = "Vide";
-
-
           }
         }
       }
@@ -977,6 +975,7 @@ export class DialogAjouterRayon {
                 'success'
               )
               this.zone=new Zone()
+              this.rayon.espace=this.zones.length
 
             },
               error => console.log(error));
@@ -1065,13 +1064,14 @@ export class DialogAjouterRayon {
 
           this.service.ajoutRayon(this.rayon).subscribe(data => {
             console.log(data);
+            this.rayon=data
             Swal.fire(
               'Ajout Effecté',
               'Rayon Ajouté Avec Sucées',
               'success'
             )
-            this.close()
-            this.couloirDroite = this.rayon.coloirDroite
+             this.close()
+           /*  this.couloirDroite = this.rayon.coloirDroite
             this.couloirGauche = this.rayon.coloirGauche
             this.couloirGauche.rayonDroite = this.rayon
             this.couloirDroite.rayonGauche = this.rayon
@@ -1083,26 +1083,26 @@ export class DialogAjouterRayon {
             this.service.editCouloir(this.couloirGauche.id, this.couloirGauche).subscribe(data => {
               console.log("couloir gauche", data)
             }
-              , error => console.log(error));
-              for (var i = 0; i < this.zones.length; i++) {
-                console.log("zone[i]",this.zones[i])
-                this.zones[i].rayon = this.rayon
-                this.service.editZone(this.zones[i].id, this.zones[i]).subscribe(data => {
-                  console.log("zone modif",data)
-                }
-                  , error => console.log(error));
-      
-              }
+              , error => console.log(error)); */
+          
           },
-            error => console.log(error));
-         
-        
+            error => console.log(error));    
       }
     },
       error => console.log(error));
+  
   }
   //fermer dialogue
   close() {
+    console.log(this.rayon)
+    for (var i = 0; i < this.zones.length; i++) {
+       console.log("zone[i]",this.zones[i])
+      this.service.editRayonZone(this.zones[i].id, this.rayon.id).subscribe(data => {
+        console.log("zone modif",data)
+      }
+        , error => console.log(error));
+
+    }
     this.dialogRef.close();
   }
 }

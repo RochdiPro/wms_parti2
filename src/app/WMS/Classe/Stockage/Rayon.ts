@@ -12,4 +12,5 @@ export class Rayon {
     coloirGauche: any;
     coloirDroite: any;
     zones:any
+    espace:any
 }
