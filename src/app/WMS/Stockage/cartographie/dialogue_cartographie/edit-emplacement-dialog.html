@@ -2,27 +2,120 @@
 
 <div mat-dialog-content>
     <form>
-    
+
         <div class="form-group">
-            <label>Libelle</label>
-            <input type="text" class ="form-control" id = "libelle"     [(ngModel)] = "emplacement.libelle"   name = "libelle">
+            <div class="row">
+                <div class="col-md-7">
+
+                    <label>Libelle</label>
+                    <input type="text" class="form-control" id="libelle" [(ngModel)]="emplacement.libelle"
+                        name="libelle">
+                </div>
+            </div>
+
         </div>
- 
+
         <div class="form-group">
-            <label>Hauteur (CM)</label>
-            <input type="number" class ="form-control" id = "hauteur"     [(ngModel)] = "emplacement.hauteur"   name = "hauteur">
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Hauteur (CM)</label>
+                    <input type="number" class="form-control" id="hauteur" [(ngModel)]="emplacement.hauteur"
+                        name="hauteur">
+                </div>
+                <div class="col-md-5">
+                    <label>Largeur (CM)</label>
+                    <input type="number" class="form-control" id="largeur" [(ngModel)]="emplacement.largeur"
+                        name="largeur">
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Largeur (CM)</label>
-            <input type="number" class ="form-control" id = "largeur"     [(ngModel)] = "emplacement.largeur"   name = "largeur">
+
+        <div class="form-group" *ngIf="clientLouer">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5">
+
+                        <label>Client</label>
+                        <input type="text" class="form-control" id="empclient" [(ngModel)]="emplacement.client.nom"
+                            name="empclient">
+                    </div>
+                  
+                </div>
+                <div class="row">
+
+                <div class="col-md-5">
+                    <button class="mb-2 mr-2 btn"   (click)="AnnulerLocation()">
+                        <img src="../../../../../assets/icon/annuler.png" width="20" height="20"> Annuler</button>
+    
+                </div>
+            </div>
+
+                 
+            </div>
+
         </div>
-    
-    
+
+        <div class="form-group" *ngIf="!clientLouer">
+            <div class="form-group" *ngIf="showbtn">
+
+            <button class="mb-2 mr-2 btn btn-success"   (click)="Louer()">Louer emplacment</button>
+        </div>
+
+        </div>
+
+        <div class="form-group" *ngIf="louer">
+            <div class="card-shadow-primary border mb-3 card card-body border-primary">
+
+
+            <div class="row">
+                <div class="col-md-5">
+                    <mat-slide-toggle name="nouveauClt" [(ngModel)]="nouveauClt" color="primary"
+                        (change)="changedToggle()">Nouveau Client</mat-slide-toggle>
+                </div>
+            </div>
+
+            <div class="form-group" *ngIf="nouveauClt">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label>Client</label>
+                            <input type="text" class="form-control" id="client" [(ngModel)]="client.nom" name="client">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" *ngIf="!nouveauClt">
+                <div class="row">
+                    <div class="col-md-5">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Client</mat-label>
+                            <mat-select name="client" [(ngModel)]="client" id="client">
+                                <mat-option value="option1"></mat-option>
+                                <mat-option *ngFor="let client of clients" [value]="client">{{client.nom}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <button class="mb-2 mr-2 btn btn-success" (click)="ValiderLouer()">Valider Louer</button>
+            </div>
+        </div>
+
+
+          
+
+        </div>
+
+
     </form>
 </div>
 
 <div mat-dialog-actions class="float-right">
-    <button class="mb-2 mr-2 btn btn-success"   (click) = "onSubmit()">Valider</button>
+    <button class="mb-2 mr-2 btn btn-success" (click)="onSubmit()">Valider</button>
     <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>
 
 </div>

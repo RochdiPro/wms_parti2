@@ -15,4 +15,5 @@ export class Emplacement {
   reference:any
   halle:any
   couloir:any
+  client:any
 }

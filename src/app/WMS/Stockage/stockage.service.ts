@@ -8,6 +8,7 @@ import { Emplacement } from '../Classe/Stockage/Emplacement';
 import { Rayon } from '../Classe/Stockage/Rayon';
  import { Couloir } from '../Classe/Stockage/Couloir';
 import { Zone } from '../Classe/Stockage/Zone';
+import { Client } from '../Classe/Stockage/Client';
 
 const infonet = '/ERP/';
 const wms = '/WMS/';
@@ -26,6 +27,15 @@ Locals(): Observable<any> {
 
  );
 }
+//service  ajouter local
+AjoutLocal(): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/Creer_Local",).pipe(
+    catchError(this.handleError)
+  );
+ 
+}
+
+
 //service  récupérer local by id
 getLocalById(Id_Local: any): Observable<any>{
   return this.httpClient.get<any>(wms+"WMS/Local",{params:{ Id_Local: Id_Local}}).pipe(
@@ -113,7 +123,12 @@ editHall(id: number, hall: Hall): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_Hall"}/${id}`, hall);
 }
 
-
+LouerEmplacment( client: Client,id: any): Observable<Object>{
+  return this.httpClient.put(wms+"/WMS/Louer_Emplacment",client,{params:{ id : id}} );
+}
+AnnulerLocation(id: any): Observable<Object>{
+  return this.httpClient.put(wms+"/WMS/Annuler_Location",{params:{ id : id}} );
+}
 //service supprimer  halle
 supprimerHall(id: number): Observable<any> {  
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Hall"}/${id}`);
@@ -124,7 +139,11 @@ ZoneInvalideExiste(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
     catchError(this.handleError)
   );
 }
-
+listeClient(): Observable<any>{
+  return this.httpClient.get<Client>(wms+"WMS/Tout_Clients").pipe(
+    catchError(this.handleError)
+  );
+}
 //service recuperer zone by halle,x,y
 getZoneInvalideByHallX_Y(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
   return this.httpClient.get<Zone>(wms+"WMS/ZoneInvalide",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
@@ -139,8 +158,8 @@ ZoneInvalideParHall(hall: any): Observable<any>{
   );
 }
 //service ZonneExiste
-ZoneReserveParHall(hall: any): Observable<any>{
-  return this.httpClient.get<Zone>(wms+"WMS/getZoneReserveParHall",{params:{ hall: hall}}).pipe(
+getEmplacmentReserveParHall(hall: any): Observable<any>{
+  return this.httpClient.get<Emplacement>(wms+"WMS/getEmplacmentReserveParHall",{params:{ hall: hall}}).pipe(
     catchError(this.handleError)
   );
 }
@@ -151,22 +170,22 @@ ZoneInvalideParLocal(local: any): Observable<any>{
   );
 }
 //service Zonne invalide
-ZoneReserveParLocal(local: any): Observable<any>{
-  return this.httpClient.get<Zone[]>(wms+"WMS/ZoneReserveParLocal",{params:{ local: local}}).pipe(
+EmplacmentsReserveParLocal(local: any): Observable<any>{
+  return this.httpClient.get<Emplacement[]>(wms+"WMS/EmplacmentsReserveParLocal",{params:{ local: local}}).pipe(
     catchError(this.handleError)
   );
 }
 //service Zonne invalide
-getAllZoneReserve(): Observable<any>{
-  return this.httpClient.get<Zone[]>(wms+"WMS/TousZoneReserve").pipe(
+getAllEmplacmentReserve(): Observable<any>{
+  return this.httpClient.get<Emplacement[]>(wms+"WMS/TousEmplacmentReserve").pipe(
     catchError(this.handleError)
   );
 }
 
 
 //service ZonneExiste
-ZoneReserveParClient(client: any): Observable<any>{
-  return this.httpClient.get<Zone>(wms+"WMS/ZoneReserveParClient",{params:{ client: client}}).pipe(
+EmplacmentsReserveParClient(client: any): Observable<any>{
+  return this.httpClient.get<Emplacement>(wms+"WMS/EmplacmentsReserveParClient",{params:{ client: client}}).pipe(
     catchError(this.handleError)
   );
 }

@@ -9,7 +9,9 @@
             <div class="col-md-6 offset-md-9">
                <button class="btn" (click)="OpenDialogZoneReserver()">Reserve</button>
             </div>
-
+            <div class="col-md-6 offset-md-9">
+               <button class="btn" (click)="OpenDialogAddLocal()">Ajouter Local</button>
+            </div>
          </div>
          <div class="row">
             <div class="col-md-4 mb-3" *ngFor="let local of locals;  let i = index">
@@ -286,6 +288,8 @@
                      Encore Disponible <div id="carre3"></div>
                      <div class="un"></div>
                      Plein <div id="carre1"></div>
+                     Louée <div id="reserve"></div>
+
                   </div>
 
                   <ul class="list-group">
@@ -300,7 +304,7 @@
                                     <ul class="list-group">
                                        <div class="row">
                                           <button [ngStyle]="{ }" class="list-group-item-action list-group-item"
-                                             [ngStyle]="{'background':emp.etat === 'Libre' ? 'LightGreen' : emp.etat === 'Disponible'? '#fff44f': 'LightCoral','width.cm':emp.largeur }">
+                                             [ngStyle]="{'background':emp.etat === 'Libre' ? 'LightGreen' : emp.etat === 'Disponible'? '#fff44f': emp.etat === 'Reservé'? 'blue' : 'LightCoral','width.cm':emp.largeur }">
                                              {{emp.libelle}} <br>
                                              <button class="  mb-2 mr-2 btn " (click)="selectEmplacment(emp)">
                                                 <img src="../../../../assets/icon/Zoom-In-icon.png" width="20"
@@ -334,9 +338,8 @@
                                  <div>
                                     <ul class="list-group">
                                        <div class="row">
-                                          <button class="list-group-item-action list-group-item"
-                                             [ngStyle]="{'background':emp.etat === 'Libre' ? 'LightGreen' : emp.etat === 'Disponible'? '#fff44f': 'LightCoral','width.cm':emp.largeur}">
-                                             {{emp.libelle}} <br>
+  <button [ngStyle]="{ }" class="list-group-item-action list-group-item"
+                                             [ngStyle]="{'background':emp.etat === 'Libre' ? 'LightGreen' : emp.etat === 'Disponible'? '#fff44f': emp.etat === 'Reservé'? 'blue' : 'LightCoral','width.cm':emp.largeur }">                                             {{emp.libelle}} <br>
                                              <button class="  mb-2 mr-2 btn " (click)="selectEmplacment(emp)">
                                                 <img src="../../../../assets/icon/Zoom-In-icon.png" width="20"
                                                    height="20">

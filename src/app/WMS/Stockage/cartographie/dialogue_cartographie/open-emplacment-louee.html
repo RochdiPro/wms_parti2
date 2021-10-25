@@ -42,21 +42,17 @@
                         <tr>
                             <th>Local</th>
                             <th>Hall</th>
-                            <th>X</th>
-                            <th>Y</th>
-                            <th>Description</th>
-                            <th>Client</th>
+                            <th>Reference</th>
+                             <th>Client</th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let zone  of zones_reserver; let i=index">
-                            <td> {{zone.hall.local.nom_Local}} </td>
-                            <td> {{zone.hall.libelle}} </td>
-                            <td>{{zone.ordreX}}</td>
-                            <td> {{zone.ordreY}} </td>
-                            <td> {{zone.description}} </td>
-                            <td> {{zone.client.nom}} </td>
+                        <tr *ngFor="let emp  of emp_reserver; let i=index">
+                            <td> {{emp.halle.local.nom_Local}} </td>
+                            <td> {{emp.halle.libelle}} </td>
+                             <td> {{emp.reference}} </td>
+                            <td> {{emp.client.nom}} </td>
 
                         </tr>
 
