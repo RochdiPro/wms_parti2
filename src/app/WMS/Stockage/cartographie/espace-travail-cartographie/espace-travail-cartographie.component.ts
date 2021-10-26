@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
- import { Local } from 'src/app/WMS/Classe/Stockage/Local';
+ import { Fiche_Local } from 'src/app/WMS/Classe/Stockage/Fiche_Local';
 import { FabricjsEditorComponent } from 'src/projects/angular-editor-fabric-js/src/public-api';
 import { StockageService } from '../../stockage.service';
 
@@ -11,7 +11,7 @@ import { StockageService } from '../../stockage.service';
 })
 export class EspaceTravailCartographieComponent implements OnInit {
 idLocal:any
- local: Local = new Local()
+ local: Fiche_Local = new Fiche_Local()
 @ViewChild('canvas', {static: false}) canvas: FabricjsEditorComponent;
 title = 'angular-editor-fabric-js';
 

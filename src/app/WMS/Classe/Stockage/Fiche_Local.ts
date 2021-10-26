@@ -1,9 +1,9 @@
-export class Local {
+export class Fiche_Local {
     id: any;
-    nom_Local: any
+    Nom_Local: any
     surface: any
     tel: any
-    adresse: any
+    Adresse: any
     responsable: any
     halles: any;
     Categorie_Local: any
@@ -11,7 +11,6 @@ export class Local {
     Largeur  : any   
     Profondeur: any
     Hauteur: any
-    Adresse: any
     Responsable: any
     Tel: any
     Fax: any

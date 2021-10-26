@@ -9,6 +9,7 @@ import { Rayon } from '../Classe/Stockage/Rayon';
  import { Couloir } from '../Classe/Stockage/Couloir';
 import { Zone } from '../Classe/Stockage/Zone';
 import { Client } from '../Classe/Stockage/Client';
+import { Fiche_Local } from '../Classe/Stockage/Fiche_Local';
 
 const infonet = '/ERP/';
 const wms = '/WMS/';
@@ -28,11 +29,10 @@ Locals(): Observable<any> {
  );
 }
 //service  ajouter local
-AjoutLocal(): Observable<any>{
-  return this.httpClient.get<any>(wms+"WMS/Creer_Local",).pipe(
-    catchError(this.handleError)
-  );
- 
+AjoutLocal(form:any): Observable<any>{
+  
+  return this.httpClient.post(wms+"/WMS/Creer_Local", form);
+
 }
 
 
@@ -93,7 +93,12 @@ getHallById(Id_Hall: any): Observable<any>{
       catchError(this.handleError)
     );
 }
-
+//service ajouter hall
+Ajout_local(local:Fiche_Local): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajout_local",local).pipe(
+    catchError(this.handleError)
+ );
+}
 //service ajouter hall
 ajoutHall(hall:Hall): Observable<any> {  
   return this.httpClient.post(wms+"WMS/Ajout_Hall",hall).pipe(
@@ -126,8 +131,10 @@ editHall(id: number, hall: Hall): Observable<Object>{
 LouerEmplacment( client: Client,id: any): Observable<Object>{
   return this.httpClient.put(wms+"/WMS/Louer_Emplacment",client,{params:{ id : id}} );
 }
-AnnulerLocation(id: any): Observable<Object>{
-  return this.httpClient.put(wms+"/WMS/Annuler_Location",{params:{ id : id}} );
+AnnulerLocation(id: number): Observable<Object>{
+  return this.httpClient.put(wms+"WMS/Annuler_Location",{params:{id}}).pipe(
+      catchError(this.handleError)
+      );
 }
 //service supprimer  halle
 supprimerHall(id: number): Observable<any> {  
