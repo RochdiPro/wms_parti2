@@ -1,27 +1,24 @@
 export class Fiche_Local {
     id: any;
-    Nom_Local: any
+    nom_Local: any
     surface: any
     tel: any
-    Adresse: any
+    adresse: any
     responsable: any
     halles: any;
-    Categorie_Local: any
-     Description_Local: any
-    Largeur  : any   
-    Profondeur: any
-    Hauteur: any
-    Responsable: any
-    Tel: any
-    Fax: any
-    Email: any
-    Nature_Contrat: any
-    Date_Debut: any
-    Date_Fin: any
-    Frais: any
-    Nature_Frais: any
-    Latitude: any
-    Longitude: any
-    Surface: any
-
+    categorie_Local: any
+    description_Local: any
+    largeur  : any   
+    profondeur: any
+    hauteur: any
+     fax: any
+    email: any
+    nature_Contrat: any
+    date_Debut: any
+    date_Fin: any
+    frais: any
+    nature_Frais: any
+    latitude: any
+    longitude: any
+ 
 }

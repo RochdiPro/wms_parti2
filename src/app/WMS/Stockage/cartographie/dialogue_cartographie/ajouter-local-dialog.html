@@ -2,119 +2,141 @@
 
 <div mat-dialog-content>
     <form>
+        <div class="card-shadow-primary border mb-3 card card-body border-primary">
+            <h5 class="card-title">Infrmations Génerales</h5>
 
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-5">
-                    <label>Nom Local</label>
-                    <input type="text" class="form-control" id="Nom_Local" [(ngModel)]="local.Nom_Local"
-                        name="Nom_Local">
-                </div>
-                <div class="col-md-5">
-                    <label>Categorie Local</label>
-                    <input type="text" class="form-control" id="Categorie_Local" [(ngModel)]="local.Categorie_Local"
-                        name="Categorie_Local">
-                </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Nom Local</label>
+                        <input type="text" class="form-control" id="Nom_Local" [(ngModel)]="local.nom_Local"
+                            name="Nom_Local">
+                    </div>
+                    <div class="col-md-4">
+                        <label>Categorie Local</label>
+                        <input type="text" class="form-control" id="Categorie_Local" [(ngModel)]="local.categorie_Local"
+                            name="Categorie_Local">
+                    </div>
 
-                <div class="col-md-5">
-                    <label>Description Local</label>
-                    <input type="text" class="form-control" id="Description_Local" [(ngModel)]="local.Description_Local"
-                        name="Description_Local">
-                </div>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-5">
-                    <label>Profondeur</label>
-                    <input type="number" class="form-control" id="Profondeur" [(ngModel)]="local.Profondeur"
-                        name="Profondeur">
-                </div>
-                <div class="col-md-5">
-                    <label>Largeur</label>
-                    <input type="number" class="form-control" id="Largeur" [(ngModel)]="local.Largeur" name="Largeur">
-                </div>
-                <div class="col-md-5">
-                    <label>Profondeur</label>
-                    <input type="number" class="form-control" id="Hauteur" [(ngModel)]="local.Hauteur" name="Hauteur">
                 </div>
             </div>
 
-        </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Adresse</label>
+                        <input type="text" class="form-control" id="Adresse" [(ngModel)]="local.adresse" name="Adresse">
+                    </div>
 
-
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-5">
-                    <label>Adresse</label>
-                    <input type="text" class="form-control" id="Adresse" [(ngModel)]="local.Adresse" name="Adresse">
-                </div>
-
-                <div class="col-md-5">
-                    <label>Responsable</label>
-                    <input type="text" class="form-control" id="Responsable" [(ngModel)]="local.Responsable"
-                        name="Responsable">
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-5">
-                    <label>Tel</label>
-                    <input type="number" class="form-control" id="Tel" [(ngModel)]="local.Tel" name="Tel">
-                </div>
-
-                <div class="col-md-5">
-                    <label>Fax</label>
-                    <input type="number" class="form-control" id="Fax" [(ngModel)]="local.Fax" name="Fax">
-                </div>
-
-
-                <div class="col-md-5">
-                    <label>Email</label>
-                    <input type="text" class="form-control" id="Email" [(ngModel)]="local.Email" name="Email">
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-5">
-                    <label>Nature Contrat</label>
-                    <input type="text" class="form-control" id="Nature_Contrat" [(ngModel)]="local.Nature_Contrat"
-                        name="Nature_Contrat">
-                </div>
-                <div class="col-md-5">
-                    <label>Frais</label>
-                    <input type="number" class="form-control" id="Frais" [(ngModel)]="local.Frais" name="Frais">
-                </div>
-                <div class="col-md-5">
-                    <label>Nature Frais</label>
-                    <input type="number" class="form-control" id="Nature_Frais" [(ngModel)]="local.Nature_Frais"
-                        name="Nature_Frais">
+                    <div class="col-md-4">
+                        <label>Responsable</label>
+                        <input type="text" class="form-control" id="Responsable" [(ngModel)]="local.responsable"
+                            name="Responsable">
+                    </div>
                 </div>
             </div>
 
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Tel</label>
+                        <input type="number" class="form-control" id="Tel" [(ngModel)]="local.tel" name="Tel">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label>Fax</label>
+                        <input type="number" class="form-control" id="Fax" [(ngModel)]="local.fax" name="Fax">
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label>Email</label>
+                        <input type="text" class="form-control" id="Email" [(ngModel)]="local.email" name="Email">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-shadow-primary border mb-3 card card-body border-primary">
+            <h5 class="card-title">Autres</h5>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Nature Contrat</label>
+                        <input type="text" class="form-control" id="Nature_Contrat" [(ngModel)]="local.nature_Contrat"
+                            name="Nature_Contrat">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Frais</label>
+                        <input type="number" class="form-control" id="Frais" [(ngModel)]="local.frais" name="Frais">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Nature Frais</label>
+                        <input type="number" class="form-control" id="Nature_Frais" [(ngModel)]="local.nature_Frais"
+                            name="Nature_Frais">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-10">
+                        <label>Description Local</label>
+                        <input type="textarea" class="form-control" id="Description_Local"
+                            [(ngModel)]="local.description_Local" name="Description_Local">
+                    </div>
+
+                </div>
+
+            </div>
         </div>
 
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-5">
-                    <label>Latitude</label>
-                    <input type="number" class="form-control" id="Latitude" [(ngModel)]="local.Latitude"
-                        name="Latitude">
-                </div>
-                <div class="col-md-5">
-                    <label>Longitude</label>
-                    <input type="number" class="form-control" id="Longitude" [(ngModel)]="local.Longitude"
-                        name="Longitude">
-                </div>
-                <div class="col-md-5">
-                    <label>Surface</label>
-                    <input type="number" class="form-control" id="Surface" [(ngModel)]="local.Surface" name="Surface">
+
+        <div class="card-shadow-primary border mb-3 card card-body border-primary">
+            <h5 class="card-title">Dimensions</h5>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Profondeur</label>
+                        <input type="number" class="form-control" id="Profondeur" [(ngModel)]="local.profondeur"
+                            name="Profondeur">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Largeur</label>
+                        <input type="number" class="form-control" id="Largeur" [(ngModel)]="local.largeur"
+                            name="Largeur">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Profondeur</label>
+                        <input type="number" class="form-control" id="Hauteur" [(ngModel)]="local.hauteur"
+                            name="Hauteur">
+                    </div>
                 </div>
 
+            </div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Latitude</label>
+                        <input type="number" class="form-control" id="Latitude" [(ngModel)]="local.latitude"
+                            name="Latitude">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Longitude</label>
+                        <input type="number" class="form-control" id="Longitude" [(ngModel)]="local.longitude"
+                            name="Longitude">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Surface</label>
+                        <input type="number" class="form-control" id="Surface" [(ngModel)]="local.surface"
+                            name="Surface">
+                    </div>
+
+                </div>
             </div>
         </div>
 
