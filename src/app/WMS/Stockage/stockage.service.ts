@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -99,6 +99,13 @@ Ajout_local(local:Fiche_Local): Observable<any> {
     catchError(this.handleError)
  );
 }
+
+//service ajouter nouveau Client
+Ajout_Client(client:Client): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajout_Client",client).pipe(
+    catchError(this.handleError)
+ );
+}
 //service ajouter hall
 ajoutHall(hall:Hall): Observable<any> {  
   return this.httpClient.post(wms+"WMS/Ajout_Hall",hall).pipe(
@@ -131,11 +138,26 @@ editHall(id: number, hall: Hall): Observable<Object>{
 LouerEmplacment( client: Client,id: any): Observable<Object>{
   return this.httpClient.put(wms+"/WMS/Louer_Emplacment",client,{params:{ id : id}} );
 }
-AnnulerLocation(id: number): Observable<Object>{
-  return this.httpClient.put(wms+"WMS/Annuler_Location",{params:{id}}).pipe(
-      catchError(this.handleError)
-      );
+
+ annulerLocationEm00000p(id: any): Observable<Object>{
+  return this.httpClient.put(wms+"/WMS/Louer_Emplacment",{params:{ id : id}} );
 }
+
+annulerLocationEmp(id: any): Observable<any>{
+  return this.httpClient.get<Emplacement>(wms+"WMS/annuler_Location_Emplacement",{params:{ id:id}}).pipe(
+    catchError(this.handleError)
+  );
+ 
+}
+//service récupérer la liste des famille
+getEmplacementParEtageCouloir(id_couloir:any,id_etage:any): Observable<any> {  
+  return this.httpClient.get(wms+"WMS/Emplacement_Par_Etage_Couloir",{params:{ id_couloir:id_couloir,id_etage:id_etage}}).pipe(
+    catchError(this.handleError)
+
+ );
+}
+
+
 //service supprimer  halle
 supprimerHall(id: number): Observable<any> {  
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Hall"}/${id}`);
@@ -312,6 +334,15 @@ getCouloirParHall(hall: any): Observable<any> {
 }
 editCouloir(id: number, couloir: Couloir): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_Couloir"}/${id}`, couloir);
+}
+ 
+//service modifier le rayon d'une zone
+editCouloirRayon(couloirgauche_id: any,couloirdroite_id:any, rayon_id: any): Observable<Object>{
+  return this.httpClient.get<any>(wms+"WMS/Couloir_Rayon",
+  {params:{ couloirgauche_id: couloirgauche_id,couloirdroite_id:couloirdroite_id,rayon_id:rayon_id}}).pipe(
+   catchError(this.handleError)
+ );
+
 }
 
  //recuperer couloirs par hall qui ont un rayon gauche null

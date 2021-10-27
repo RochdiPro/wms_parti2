@@ -6,7 +6,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { QRCodeComponent } from 'angularx-qrcode';
- import { NgxBarcodeComponent } from 'ngx-barcode';
+import { NgxBarcodeComponent } from 'ngx-barcode';
 import { Fiche_Local } from '../../Classe/Stockage/Fiche_Local';
 import Swal from 'sweetalert2';
 import { Client } from '../../Classe/Stockage/Client';
@@ -80,7 +80,8 @@ export class CartographieComponent implements OnInit {
   rayons: any = [];
   etages: any = [];
   emplacements: any = [];
-
+  emplacementCouloir1: any = [];
+  emplacementCouloir2: any = [];
   //declaration objet(local/hall/rayon/etage/emplacement) selectionné
   localselect: any;
   halleselect: any;
@@ -427,8 +428,16 @@ export class CartographieComponent implements OnInit {
     console.log(etage)
     this.libelleEtage = this.etageselect.libelle
     this.emplacements = this.etageselect.emplacments
+    this.service.getEmplacementParEtageCouloir(this.couloirGauche.id, this.etageselect.id).subscribe(data => {
+      this.emplacementCouloir1 = data;
+    }, error => console.log(error));
+    this.service.getEmplacementParEtageCouloir(this.couloirDroite.id, this.etageselect.id).subscribe(data => {
+      this.emplacementCouloir2 = data;
+    }, error => console.log(error));
     this.goForward();
   }
+
+  genererEmplacementParCouloir() { }
 
   //ouvrir la boite dialogue DialogAjouterEtage
   openDialogAjoutEtage() {
@@ -511,7 +520,12 @@ export class CartographieComponent implements OnInit {
       data: { emplacement: emp }
     });
     dialogRef.afterClosed().subscribe(result => {
-
+      this.service.getEmplacementParEtageCouloir(this.couloirGauche.id, this.etageselect.id).subscribe(data => {
+        this.emplacementCouloir1 = data;
+      }, error => console.log(error));
+      this.service.getEmplacementParEtageCouloir(this.couloirDroite.id, this.etageselect.id).subscribe(data => {
+        this.emplacementCouloir2 = data;
+      }, error => console.log(error));
 
     });
 
@@ -821,7 +835,7 @@ export class DialogOpenCartographie2 {
 })
 export class DialogAddLocal {
   dataTab: any
-  local: Fiche_Local=new Fiche_Local()
+  local: Fiche_Local = new Fiche_Local()
 
   constructor(public dialogRef: MatDialogRef<DialogAddLocal>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
@@ -829,29 +843,29 @@ export class DialogAddLocal {
 
   //valider l'ajout d' halle
   onSubmit() {
-   /*  var formData: any = new FormData();
-    var datestr = (new Date(formData)).toUTCString();
-    formData.append('Nom_Local', this.local.Nom_Local);
-    formData.append('Categorie_Local', this.local.Categorie_Local);
-    formData.append('Description_Local', this.local.Description_Local);
-    formData.append('Largeur',  this.local.Largeur);
-    formData.append('Hauteur', this.local.Hauteur);
-    formData.append('Profondeur', this.local.Profondeur);
-    formData.append('Adresse', this.local.Adresse);
-    formData.append('Tel', this.local.Tel);
-    formData.append('Fax', this.local.Fax);
-    formData.append('Responsable',  this.local.Responsable);
-     formData.append('Email',  this.local.Email);
-    formData.append('Nature_Contrat',  this.local.Nature_Contrat);
-    formData.append('Date_Fin', datestr);
-    formData.append('Date_Debut', datestr);
-    formData.append('Frais',  this.local.Frais);
-    formData.append('Nature_Frais', this.local.Nature_Frais);
-    formData.append('Latitude',  this.local.Latitude);
-    formData.append('Longitude',  this.local.Longitude);
-    formData.append('Surface',  this.local.Surface);
-    formData.append('Detail_Type', ""); */
-     this.service.Ajout_local(this.local).subscribe(data => {
+    /*  var formData: any = new FormData();
+     var datestr = (new Date(formData)).toUTCString();
+     formData.append('Nom_Local', this.local.Nom_Local);
+     formData.append('Categorie_Local', this.local.Categorie_Local);
+     formData.append('Description_Local', this.local.Description_Local);
+     formData.append('Largeur',  this.local.Largeur);
+     formData.append('Hauteur', this.local.Hauteur);
+     formData.append('Profondeur', this.local.Profondeur);
+     formData.append('Adresse', this.local.Adresse);
+     formData.append('Tel', this.local.Tel);
+     formData.append('Fax', this.local.Fax);
+     formData.append('Responsable',  this.local.Responsable);
+      formData.append('Email',  this.local.Email);
+     formData.append('Nature_Contrat',  this.local.Nature_Contrat);
+     formData.append('Date_Fin', datestr);
+     formData.append('Date_Debut', datestr);
+     formData.append('Frais',  this.local.Frais);
+     formData.append('Nature_Frais', this.local.Nature_Frais);
+     formData.append('Latitude',  this.local.Latitude);
+     formData.append('Longitude',  this.local.Longitude);
+     formData.append('Surface',  this.local.Surface);
+     formData.append('Detail_Type', ""); */
+    this.service.Ajout_local(this.local).subscribe(data => {
       console.log(data);
       Swal.fire(
         'Ajout Effecté',
@@ -1084,16 +1098,13 @@ export class DialogAjouterRayon {
     }
     else {
       this.addColoirShow = true
-
     }
-
   }
 
   //valider l'ajout du couloir
   ajouterCouloir() {
     this.couloir.hall = this.hall
     console.log(this.couloir)
-
     this.service.libelleCouloirexiste(this.local.id_Local, this.couloir.libelle).subscribe(data => {
       if (data == true) {
         Swal.fire(
@@ -1137,21 +1148,18 @@ export class DialogAjouterRayon {
 
 
         this.service.ajoutRayon(this.rayon).subscribe(data => {
-          console.log(data);
+          console.log("rayon",data);
           this.rayon = data
-          /*    this.couloirDroite = this.rayon.coloirDroite
+              this.couloirDroite = this.rayon.coloirDroite
              this.couloirGauche = this.rayon.coloirGauche
              this.couloirGauche.rayonDroite = this.rayon
              this.couloirDroite.rayonGauche = this.rayon
-             console.log(this.couloirGauche, this.couloirsDroite)
-             this.service.editCouloir(this.couloirDroite.id, this.couloirDroite).subscribe(data => {
-               console.log("couloir droite", data)
+         //  console.log(this.couloirGauche, this.couloirsDroite)
+             this.service.editCouloirRayon(this.couloirGauche.id, this.couloirDroite.id,this.rayon.id).subscribe(data => {
+               console.log("rayon", data)
              }
                , error => console.log(error));
-             this.service.editCouloir(this.couloirGauche.id, this.couloirGauche).subscribe(data => {
-               console.log("couloir gauche", data)
-             }
-               , error => console.log(error));  */
+           
           Swal.fire(
             'Ajout Effecté',
             'Rayon Ajouté Avec Sucées',
@@ -1422,7 +1430,7 @@ export class DialogAjouterEmplacment {
 })
 export class DialogEditEmplacement {
   dataTab: any
-  emplacement: any
+  emplacement: Emplacement = new Emplacement()
   clientLouer = false
   client: Client = new Client()
   louer = false
@@ -1461,14 +1469,44 @@ export class DialogEditEmplacement {
 
   ValiderLouer() {
     console.log(this.client)
-    this.louer = false
-    this.clientLouer = true
-    this.service.LouerEmplacment(this.client, this.emplacement.id).subscribe(data => {
-      console.log("location",data)
+    if (!this.nouveauClt) {
+      this.service.LouerEmplacment(this.client, this.emplacement.id).subscribe(data => {
+         console.log("location", data)
+        this.service.GetEmplacmentById(this.emplacement.id).subscribe(data => {
+          this.emplacement = data
+          this.louer = false
+          this.clientLouer = true
+
+        }
+          , error => console.log(error));
+      }
+        , error => console.log(error));
     }
-      , error => console.log(error));
+    else if (this.nouveauClt == true) {
+      this.service.Ajout_Client(this.client).subscribe(data => {
+        console.log("nouveau clt", data)
+        this.service.LouerEmplacment(this.client, this.emplacement.id).subscribe(data => {
+          console.log("location", data)
+          this.service.GetEmplacmentById(this.emplacement.id).subscribe(data => {
+            this.emplacement = data
+            this.louer = false
+            this.clientLouer = true
+
+          }
+            , error => console.log(error));
+        }
+          , error => console.log(error));
+
+      }
+        , error => console.log(error));
+
+    }
+
+
   }
-  AnnulerLocation(){
+
+
+  AnnulerLocation() {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -1476,7 +1514,7 @@ export class DialogEditEmplacement {
       },
       buttonsStyling: false
     })
-    
+
     swalWithBootstrapButtons.fire({
       title: 'Vous etes sur?',
       text: "Vous voulez librer cette emlacement et annuler la location",
@@ -1488,16 +1526,20 @@ export class DialogEditEmplacement {
     }).then((result) => {
       if (result.isConfirmed) {
         console.log(this.emplacement.id)
-        this.service.AnnulerLocation(this.emplacement.id).subscribe(data => {
-          console.log("location",data)
+        this.service.annulerLocationEmp(this.emplacement.id).subscribe(data => {
+          this.emplacement = data
+          this.clientLouer = false
+          this.showbtn=true
+          swalWithBootstrapButtons.fire(
+            'Location Annuler!',
+            'La Location De Cette Emplacement Est Annuler.',
+            'success'
+          )
         }
           , error => console.log(error));
-    
-        swalWithBootstrapButtons.fire(
-          'Location Annuler!',
-          'La Location De Cette Emplacement Est Annuler.',
-          'success'
-        )
+
+
+
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
@@ -1511,7 +1553,6 @@ export class DialogEditEmplacement {
     })
 
 
-  
   }
 
   changedToggle() {

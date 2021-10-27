@@ -129,23 +129,27 @@
                   <div *ngFor=" let is of counter(y) ;let j = index">
 
                      <div class="card-body" *ngIf="arr[i][j].etat =='Invalide' ">
-                        <div>
-                           <button [ngStyle]="{ 'height.cm':arr[i][j].hauteur, 'width.cm':arr[i][j].largeur  }"
-                              class="  mb-1 mr-1 btn " (click)="SelectZoneInvalide(arr[i][j],i,j)">
+                        <ul class="list-group">
+                           <div  
+                           
+                                (click)="SelectZoneInvalide(arr[i][j],i,j)">
                               <img src="../../../../assets/icon/hachuré.png " width="90px" height="300px">
 
-                           </button>
-
                         </div>
+
+                        </ul>
                      </div>
 
                      <div class="card-body"*ngIf="arr[i][j].etat == 'Vide' ">
-                        <div>
-                               <div  width="90px" height="300px"  style="background-color: #ccd8ff ;"  >
-                               </div>
- 
-                        </div>
-                     </div>
+                            <ul class="list-group">
+                              <div  >
+                                 <img src="../../../../assets/icon/vide.png " width="90px" height="300px">
+   
+                           </div>
+   
+                           </ul>
+                           
+                      </div>
 
                      <div *ngIf=" arr[i][j].id != 0 &&  arr[i][j].etat != 'Invalide' ">
                         <div class="card-body" *ngIf="arr[i][j].espace==1">
@@ -174,7 +178,7 @@
                      <div *ngIf="arr[i][j].id != 0  &&  arr[i][j].etat != 'invalide' && j<y ">
                         <div class="card-body" *ngIf="arr[i][j].espace==2  && arr[i][j].id == arr[i][j+1].id ">
                            <ul class="list-group">
-                              <button class="list-group-item-action list-group-item " style="width: 180px;
+                              <button class="list-group-item-action list-group-item " style="width: 220px;
                        height: 300px;">
                                  <br> <b>Rayon {{arr[i][j].libelle}}</b><br>
                                  <div class="row" style="align-items: center;">
@@ -281,7 +285,7 @@
                <div class="card-body">
                   <div class="row">
                      <h5 class="card-title">Etage {{libelleEtage}} Rayon {{libelleRayon}} Local {{libelleLocal}}</h5>
-                     <div class="col-md-5"> </div>
+                     <div class="col-md-6"> </div>
                      <div class="un"></div>
                      Libre <div id="carre2"></div>
                      <div class="un"></div>
@@ -297,8 +301,8 @@
 
                      <li class="list-group-item-dark list-group-item">
                         <div class="row">
-                           <div class="coloir">Couloir Gauche</div>
-                           <div *ngFor="let emp of couloirGauche.emplacments;  let i = index">
+                           <div class="coloir">Couloir {{couloirGauche.libelle}}</div>
+                           <div *ngFor="let emp of emplacementCouloir1;  let i = index">
                               <div class="card-body">
                                  <div>
                                     <ul class="list-group">
@@ -331,9 +335,9 @@
                   <ul class="list-group">
                      <li class="list-group-item-dark list-group-item">
                         <div class="row">
-                           <div class="coloir">Couloir Droite</div>
+                           <div class="coloir">Couloir {{couloirDroite.libelle}}</div>
 
-                           <div *ngFor="let emp of couloirDroite.emplacments;  let i = index">
+                           <div *ngFor="let emp of emplacementCouloir2;  let i = index">
                               <div class="card-body">
                                  <div>
                                     <ul class="list-group">
