@@ -20,13 +20,13 @@ const routes: Routes =
     {
       path: 'Menu', component: MenuComponent, children: [
         {
-          path: 'child', component: ChildComponent, children: [
+            path: 'child', component: ChildComponent, children: [
             { path: 'Sub_child', component: SubChildComponent },
           ]
         },
 
         //       wms routing 
-        { path: 'WMS', component: MenuWmsComponent },
+        { path: 'WMS', component: MenuWmsComponent ,loadChildren:()=>import('./WMS/wms.module').then(m=>m.WmsModule)},
 
         {
           path: 'WMS-Stockage', component: EditStockageComponent, children: [
