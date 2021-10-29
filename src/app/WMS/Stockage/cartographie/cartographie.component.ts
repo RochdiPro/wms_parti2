@@ -17,7 +17,7 @@ import { Hall } from '../../Classe/Stockage/Hall';
 import { Rayon } from '../../Classe/Stockage/Rayon';
 import { Zone } from '../../Classe/Stockage/Zone';
 
-import { StockageService } from '../stockage.service';
+import { StockageService } from '../services/stockage.service';
 
 @Component({
   selector: 'app-cartographie',
@@ -1386,6 +1386,7 @@ export class DialogAjouterEmplacment {
   couloirDroite: any
   couloirGauche: any
   emplacements: any = [];
+  manuel=false
   constructor(public dialogRef: MatDialogRef<DialogAjouterEmplacment>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.emplacement.local = data.localselect
@@ -1396,8 +1397,22 @@ export class DialogAjouterEmplacment {
     this.couloirDroite = data.couloirDroite
     console.log(this.emplacement)
   }
+  changedToggle() {
+    if (this.manuel == true) {
+      console.log("manuel")
+     }
+  }
 
   onSubmit() {
+
+    //hauteur h, longueur L , largeur l.
+    //surface =  2hL + 2hl + 2Ll
+    if(this.manuel==true){
+      this.emplacement.surface=
+      (2*this.emplacement.hauteur*this.emplacement.longeur)+(2*this.emplacement.hauteur*this.emplacement.largeur)+(2*this.emplacement.largeur*this.emplacement.longeur)
+    
+    }
+
     this.service.LastIDPos().subscribe(data => {
       this.emplacement.id = data;
       this.value = "L0" + this.emplacement.local.id_Local + "H0" + this.emplacement.halle.id + "R" + this.emplacement.rayon.libelle + "E0" + this.emplacement.etage.id + "C" + this.emplacement.couloir.id + "P0" + this.emplacement.id

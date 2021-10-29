@@ -16,4 +16,7 @@ export class Emplacement {
   halle:any
   couloir:any
   client:any
+  surface:any
+  longeur:any
+
 }

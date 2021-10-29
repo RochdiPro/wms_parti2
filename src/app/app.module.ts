@@ -98,8 +98,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     FabricjsEditorModule,
      MatTabsModule, 
      MatRadioModule,
-    //MatToolbarModule
-    MatSlideToggleModule
+     MatSlideToggleModule
     ],
   providers: [],
   bootstrap: [AppComponent]

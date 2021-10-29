@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Hall } from '../../Classe/Stockage/Hall';
 import { Rayon } from '../../Classe/Stockage/Rayon';
-import { StockageService } from '../stockage.service';
+import { StockageService } from '../services/stockage.service';
 
 @Component({
   selector: 'app-tableau',

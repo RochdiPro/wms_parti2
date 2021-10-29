@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
  import { Fiche_Local } from 'src/app/WMS/Classe/Stockage/Fiche_Local';
 import { FabricjsEditorComponent } from 'src/projects/angular-editor-fabric-js/src/public-api';
-import { StockageService } from '../../stockage.service';
+import { StockageService } from '../../services/stockage.service';
 
 @Component({
   selector: 'app-espace-travail-cartographie',

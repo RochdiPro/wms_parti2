@@ -7,11 +7,18 @@
          <ng-template matStepLabel>Local</ng-template>
          <div class="row">
             <div class="col-md-6 offset-md-9">
-               <button class="btn" (click)="OpenDialogZoneReserver()">Reserve</button>
-            </div>
+
+               <button class="mb-2 mr-2 border-0 btn-transition btn btn-outline-primary"  (click)="OpenDialogAddLocal()">
+                  Ajouter Local
+               </button>
+   
+             </div>
             <div class="col-md-6 offset-md-9">
-               <button class="btn" (click)="OpenDialogAddLocal()">Ajouter Local</button>
+               <button class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info" (click)="OpenDialogZoneReserver()">Reservée
+               </button>
+    
             </div>
+           
          </div>
          <div class="row">
             <div class="col-md-4 mb-3" *ngFor="let local of locals;  let i = index">
@@ -23,7 +30,7 @@
                         Adresse : {{local.adresse}} <br>
                         Telephone :{{local.tel}} <br>
                         Surface : {{local.surface}}
-                        <div (click)="openDialogInformationLocal(local)">Plus</div>
+                        <div  class="text-right" (click)="openDialogInformationLocal(local)"> <u>Plus</u></div>
                      </div>
                      <div class="card-footer"><button class="btn btn-info" (click)="SelectLocal(local,local.id_Local)">
                            <img src="../../../../assets/icon/accede.png" width="20" height="20">
@@ -365,9 +372,6 @@
                         </div>
                      </li>
                   </ul>
-
-
-
 
                </div>
             </div>
