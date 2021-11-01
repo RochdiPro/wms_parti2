@@ -37,16 +37,19 @@ export class AjouterEmplacmentDialogComponent implements OnInit {
       console.log("manuel")
      }
   }
+  valuechange(newValue:any) {
+     console.log(newValue)
+     
+      this.emplacement.surface=
+      (2*this.emplacement.hauteur*this.emplacement.longeur)+(2*this.emplacement.hauteur*this.emplacement.largeur)+(2*this.emplacement.largeur*this.emplacement.longeur)
+    
 
+  }
+  
   onSubmit() {
 
     //hauteur h, longueur L , largeur l.
     //surface =  2hL + 2hl + 2Ll
-    if(this.manuel==true){
-      this.emplacement.surface=
-      (2*this.emplacement.hauteur*this.emplacement.longeur)+(2*this.emplacement.hauteur*this.emplacement.largeur)+(2*this.emplacement.largeur*this.emplacement.longeur)
-    
-    }
 
     this.service.LastIDPos().subscribe(data => {
       this.emplacement.id = data;

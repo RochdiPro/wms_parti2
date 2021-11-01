@@ -23,6 +23,8 @@ export class EditHalleDialogComponent implements OnInit {
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<EditHalleDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.dataTab = data
+    console.log(this.dataTab)
+
     this.hall = data.hall
     this.service.ListeFamilleLogistique().subscribe((data: any) => {
       this.Famille_Logistique = data;
@@ -52,8 +54,10 @@ export class EditHalleDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.dataTab.idRayon)
-    this.service.editHall(this.dataTab.idHalle, this.hall).subscribe(data => {
+    console.log(this.dataTab.hall.id)
+    console.log(this.hall.id)
+
+    this.service.editHall(this.hall.id, this.hall).subscribe(data => {
       this.close();
     }
       , error => console.log(error));

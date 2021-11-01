@@ -5,7 +5,7 @@ export class Etage {
     local:any;
     ordre:any
     sousFamilleLogistique:any
-    largeur:any;
-    hauteur:any;
+    largeur:any=0;
+    hauteur:any=0;
     emplacements:any
 }

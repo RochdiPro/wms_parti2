@@ -4,8 +4,8 @@ export class Emplacement {
   libelle:any
   etage:any;
   etat :any='Libre';
-  largeur:any;
-  hauteur:any;
+  largeur:any=0;
+  hauteur:any=0;
  qr_code:any;
   barre_code:any;
   local:any
@@ -16,7 +16,7 @@ export class Emplacement {
   halle:any
   couloir:any
   client:any
-  surface:any
-  longeur:any
+  surface:any=0
+  longeur:any=0
 
 }

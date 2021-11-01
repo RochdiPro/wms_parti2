@@ -570,6 +570,12 @@ export class CartographieComponent implements OnInit {
         this.couloirDroite = this.rayonselect.coloirDroite
         this.couloirGauche = this.rayonselect.coloirGauche
       }, error => console.log(error));
+      this.service.getEmplacementParEtageCouloir(this.couloirGauche.id, this.etageselect.id).subscribe(data => {
+        this.emplacementCouloir1 = data;
+      }, error => console.log(error));
+      this.service.getEmplacementParEtageCouloir(this.couloirDroite.id, this.etageselect.id).subscribe(data => {
+        this.emplacementCouloir2 = data;
+      }, error => console.log(error));
     });
   }
 

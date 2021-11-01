@@ -131,7 +131,7 @@ ajoutZone(zone:Zone): Observable<any> {
  );
 }
 //service modifier halle
-editHall(id: number, hall: Hall): Observable<Object>{
+editHall(id: any, hall: Hall): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_Hall"}/${id}`, hall);
 }
 

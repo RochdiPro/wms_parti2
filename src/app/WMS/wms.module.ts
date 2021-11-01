@@ -50,6 +50,7 @@ import { EditOrdreRayonComponent } from './Stockage/cartographie/dialogue_cartog
 import { TableauComponent } from './Stockage/tableau/tableau.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from '../app-routing.module';
+import { AjouterEtageDialogComponent } from './Stockage/cartographie/dialogue_cartographie/ajouter-etage-dialog/ajouter-etage-dialog.component';
  
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { AppRoutingModule } from '../app-routing.module';
     EditHalleDialogComponent,
     EditRayonDialogComponent,
     EditEtageDialogComponent,
-    EditEmplacementDialogComponent,
+     AjouterEtageDialogComponent,
+     EditEmplacementDialogComponent,
     OpenZoneInvalideComponent,
     OpenInfoLocalComponent,
     OpenCartographieV2Component,

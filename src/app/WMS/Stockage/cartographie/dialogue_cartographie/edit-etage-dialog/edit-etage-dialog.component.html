@@ -1,1 +1,34 @@
-<p>edit-etage-dialog works!</p>
+<h1 mat-dialog-title>Modifier Etage {{etage.id}}</h1>
+
+<div mat-dialog-content>
+    <form>
+    
+        <div class="form-group">
+            <label>Libelle</label>
+            <input type="text" class ="form-control" id = "libelle"     [(ngModel)] = "etage.libelle"   name = "libelle">
+        </div>
+        <div class="form-group">
+            <label>Hauteur (CM)</label>
+            <input type="number" class ="form-control" id = "hauteur"     [(ngModel)] = "etage.hauteur"   name = "hauteur">
+        </div>
+      
+        <div class="form-group">
+            <label>Ordre </label>
+            <input type="number" class ="form-control" id = "ordre"     [(ngModel)] = "etage.ordre"   name = "ordre">
+        </div>
+        <mat-form-field appearance="fill">
+            <mat-label>Sous Famille Logistique</mat-label>
+            <mat-select name="famille" [(ngModel)] = "etage.sousFamilleLogistique.libelle" id = "famille" >
+               <mat-option value="option1"></mat-option>             
+               <mat-option *ngFor="let f of Sous_Famille"  [value]="f.libelle"   >{{f.libelle}}</mat-option>
+            </mat-select>
+         </mat-form-field>
+    
+    </form>
+</div>
+
+<div mat-dialog-actions class="float-right">
+    <button class="mb-2 mr-2 btn btn-success"   (click) = "onSubmit()">Valider</button>
+    <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>
+
+</div>
