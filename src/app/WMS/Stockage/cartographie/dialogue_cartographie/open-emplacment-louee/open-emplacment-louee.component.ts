@@ -52,7 +52,7 @@ export class OpenEmplacmentLoueeComponent implements OnInit {
   //filtre des zone par local
   filterByLocal(emp_reserver: Emplacement[]) {
     return emp_reserver.filter((b) => {
-      return b.halle.local.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
+      return b.halle.local.nom_Local.toString().toLowerCase().includes(this.filters.keyword.toLowerCase());
     })
   }
   //filtrer la liste de zone 
