@@ -18,20 +18,8 @@ import { Rayon } from '../../Classe/Stockage/Rayon';
 import { Zone } from '../../Classe/Stockage/Zone';
 
 import { StockageService } from '../services/stockage.service';
-import { AjouterLocalDialogComponent } from './dialogue_cartographie/ajouter-local-dialog/ajouter-local-dialog.component';
-import { EditHalleDialogComponent } from './dialogue_cartographie/edit-halle-dialog/edit-halle-dialog.component';
-import { AjouterHalleDialogComponent } from './dialogue_cartographie/ajouter-halle-dialog/ajouter-halle-dialog.component';
-import { EditRayonDialogComponent } from './dialogue_cartographie/edit-rayon-dialog/edit-rayon-dialog.component';
-import { AjouterRayonDialogComponent } from './dialogue_cartographie/ajouter-rayon-dialog/ajouter-rayon-dialog.component';
-import { AjouterEtageDialogComponent } from './dialogue_cartographie/ajouter-etage-dialog/ajouter-etage-dialog.component';
-import { EditEtageDialogComponent } from './dialogue_cartographie/edit-etage-dialog/edit-etage-dialog.component';
-import { OpenCartographieV2Component } from './dialogue_cartographie/open-cartographie-v2/open-cartographie-v2.component';
-import { OpenInfoLocalComponent } from './dialogue_cartographie/open-info-local/open-info-local.component';
-import { EditEmplacementDialogComponent } from './dialogue_cartographie/edit-emplacement-dialog/edit-emplacement-dialog.component';
-import { AjouterEmplacmentDialogComponent } from './dialogue_cartographie/ajouter-emplacment-dialog/ajouter-emplacment-dialog.component';
-import { OpenEmplacmentLoueeComponent } from './dialogue_cartographie/open-emplacment-louee/open-emplacment-louee.component';
-import { OpenZoneInvalideComponent } from './dialogue_cartographie/open-zone-invalide/open-zone-invalide.component';
-
+import { AjouterEmplacmentDialogComponent, AjouterEtageDialogComponent, AjouterHalleDialogComponent, AjouterLocalDialogComponent, AjouterRayonDialogComponent, EditEmplacementDialogComponent, EditEtageDialogComponent, EditHalleDialogComponent, EditRayonDialogComponent, OpenCartographieV2Component, OpenEmplacmentLoueeComponent, OpenInfoLocalComponent, OpenZoneInvalideComponent } from './dialogue-cartographie/dialogue-cartographie.component';
+ 
 @Component({
   selector: 'app-cartographie',
   templateUrl: './cartographie.component.html',
@@ -332,7 +320,7 @@ export class CartographieComponent implements OnInit {
     //ouvrir la boite dialogue DialogEditRayon 
     const dialogRef = this.dialog.open(EditRayonDialogComponent, {
       width: 'auto',
-      data: { idRayon: numero, rayon: rayon }
+      data: { idRayon: numero, rayon: rayon,local:this.localselect,hall:this.halleselect }
     });
     dialogRef.afterClosed().subscribe(result => {
       this.service.getHallById(this.halleselect.id).subscribe(data => {
@@ -427,7 +415,7 @@ export class CartographieComponent implements OnInit {
   SelectZoneInvalide(zone: any, i: any, j: any) {
     console.log("zone", i + 1, " ", j + 1)
 
-    const dialogRef = this.dialog.open(OpenZoneInvalideComponent, {
+    const dialogRef = this.dialog.open(OpenZoneInvalideComponent,{
       width: 'auto',
       data: { hall: this.halleselect, zone: zone, x: i + 1, y: j + 1 }
     });

@@ -20,31 +20,28 @@ import { FabricjsEditorModule } from 'src/projects/angular-editor-fabric-js/src/
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MenuComponent } from '../menu/menu.component';
-import { AppComponent } from '../app.component';
-import { ChildComponent } from '../child/child.component';
-import { SubChildComponent } from '../sub-child/sub-child.component';
-import { MenuWmsComponent } from './menu-wms/menu-wms.component';
-import { SortPipe } from './Stockage/cartographie/sort';
-import { EditStockageComponent } from './Stockage/entree/edit-stockage/edit-stockage.component';
-import { EntreeBonReceptionComponent } from './Stockage/entree/entree-bon-reception/entree-bon-reception.component';
-import { FamilleLogistiqueComponent } from './Stockage/famille-logistique/famille-logistique.component';
-import { CartographieComponent } from './Stockage/cartographie/cartographie.component';
-import { EspaceTravailCartographieComponent } from './Stockage/cartographie/espace-travail-cartographie/espace-travail-cartographie.component';
- import { TableauComponent } from './Stockage/tableau/tableau.component';
+  import { AddZoneInvalideHalleComponent, AjouterEmplacmentDialogComponent, 
+    AjouterEtageDialogComponent, AjouterHalleDialogComponent, 
+    AjouterLocalDialogComponent, AjouterRayonDialogComponent, DialogueCartographieComponent, 
+    EditEmplacementDialogComponent, EditEtageDialogComponent, EditHalleDialogComponent,
+     EditOrdreRayonComponent, EditRayonDialogComponent, OpenCartographieComponent,
+      OpenCartographieV2Component, OpenClientReserveComponent, OpenEmplacmentLoueeComponent, OpenInfoLocalComponent, OpenZoneInvalideComponent } from './dialogue-cartographie/dialogue-cartographie.component';
+import { MenuWmsComponent } from '../../menu-wms/menu-wms.component';
+import { SortPipe } from './sort';
+import { EditStockageComponent } from '../entree/edit-stockage/edit-stockage.component';
+import { CartographieComponent } from './cartographie.component';
+import { EspaceTravailCartographieComponent } from './espace-travail-cartographie/espace-travail-cartographie.component';
+import { TableauComponent } from '../tableau/tableau.component';
 import { HttpClientModule } from '@angular/common/http';
- import { AppRoutingModule } from '../app-routing.module';
-import { AddZoneInvalideHalleComponent, AjouterEmplacmentDialogComponent, AjouterEtageDialogComponent, AjouterHalleDialogComponent, AjouterLocalDialogComponent, AjouterRayonDialogComponent, DialogueCartographieComponent, EditEmplacementDialogComponent, EditEtageDialogComponent, EditHalleDialogComponent, EditOrdreRayonComponent, EditRayonDialogComponent, OpenCartographieComponent, OpenCartographieV2Component, OpenClientReserveComponent, OpenEmplacmentLoueeComponent, OpenInfoLocalComponent, OpenZoneInvalideComponent } from './Stockage/cartographie/dialogue-cartographie/dialogue-cartographie.component';
+import { AppRoutingModule } from 'src/app/app-routing.module';
+import { AppComponent } from 'src/app/app.component';
   
 @NgModule({
   declarations: [
     MenuWmsComponent,
     SortPipe,
     //stockage
-    EditStockageComponent,
-    EntreeBonReceptionComponent,
-    FamilleLogistiqueComponent,
-    CartographieComponent,
+     CartographieComponent,
     EspaceTravailCartographieComponent,
 
     AjouterRayonDialogComponent,
@@ -64,12 +61,8 @@ import { AddZoneInvalideHalleComponent, AjouterEmplacmentDialogComponent, Ajoute
     OpenEmplacmentLoueeComponent,
     OpenClientReserveComponent,
     EditOrdreRayonComponent,
-    TableauComponent,
     AddZoneInvalideHalleComponent,
 
-    EditStockageComponent,
-    EntreeBonReceptionComponent,
-    FamilleLogistiqueComponent,
     CartographieComponent,
     EspaceTravailCartographieComponent,
     DialogueCartographieComponent,
@@ -105,6 +98,6 @@ import { AddZoneInvalideHalleComponent, AjouterEmplacmentDialogComponent, Ajoute
          
    ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponentt]
 })
 export class WmsModule { }

@@ -1,0 +1,89 @@
+<h1 mat-dialog-title>Nouveau Hall</h1>
+
+<div mat-dialog-content>
+    <form>
+    
+        <div class="form-group">
+            <label>Libelle</label>
+            <input type="text" class ="form-control" id = "libelle"     [(ngModel)] = "hall.libelle"   name = "libelle">
+        </div>
+    
+        <div class="row">
+            <div class="col-md-5">
+                <mat-slide-toggle name="manuel" [(ngModel)]="manuel" color="primary"
+                    (change)="changedToggle()">Surface manuel</mat-slide-toggle>
+            </div>
+        </div>
+
+        <div class="form-group" *ngIf="manuel">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Largeur (CM)</label>
+                        <input type="number" class ="form-control" id = "largeur"     [(ngModel)]="hall.largeur"   name = "largeur">
+                    </div>
+
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Hauteur (CM)</label>
+                        <input type="number" class ="form-control" id = "hauteur"     [(ngModel)]="hall.hauteur"   name = "hauteur">
+                    </div>
+                    
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Longeur (CM)</label>
+                        <input type="number" class ="form-control" id = "longeur"     [(ngModel)]="hall.longeur"   name = "longeur">
+                    </div>
+                    
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Surface (M<sup>3</sup>)</label>
+                        <input type="number" class ="form-control" id = "surface"     [(ngModel)]="hall.surface"   name = "surface">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" *ngIf="!manuel">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Largeur (CM)</label>
+                        <input type="number" class ="form-control" id = "largeur"  (change)="valuechange($event)"    [(ngModel)]="hall.largeur"   name = "largeur">
+                    </div>
+
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Hauteur (CM)</label>
+                        <input type="number" class ="form-control" id = "hauteur"    (change)="valuechange($event)"  [(ngModel)]="hall.hauteur"   name = "hauteur">
+                    </div>
+                    
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Longeur (CM)</label>
+                        <input type="number" class ="form-control" id = "longeur"    (change)="valuechange($event)"  [(ngModel)]="hall.longeur"   name = "longeur">
+                    </div>
+                    
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Surface (M<sup>3</sup>)</label>
+                        <input type="number" class ="form-control" id = "surface"  [disabled]="true"   [(ngModel)]="hall.surface"   name = "surface">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div mat-dialog-actions class="float-right">
+    <button class="mb-2 mr-2 btn btn-success"   (click) = "onSubmit()">Valider</button>
+    <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>
+
+</div>

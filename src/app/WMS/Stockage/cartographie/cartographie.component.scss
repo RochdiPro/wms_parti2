@@ -43,7 +43,12 @@
     width: 300px;
     background: #ccd8ff;
      cursor: pointer;
-
+   }
+#cartoEchelle{
+   background-color: blue;
+  color: red;
+  //transform : scale(0.7,0.7); /* Réduction */
+  transform-origin:top left;
 
    }
    #vide {
