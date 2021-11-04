@@ -388,12 +388,19 @@ MaxOrdreY(hall: any): Observable<any>{
 }
 
 
+//get couloir by zone 
+CouloirDroiteByZone(hall:any,x:any,y:any): Observable<any>{
+  return this.httpClient.get<Couloir>(wms+"WMS/CouloirDroiteZone",{params:{ hall: hall,x:x,y:y}}).pipe(
+    catchError(this.handleError)
+  );
+}
 
-
-
-
-
-
+//get couloir by zone 
+CouloirGaucheByZone(hall:any,x:any,y:any): Observable<any>{
+  return this.httpClient.get<Couloir>(wms+"WMS/CouloirGaucheZone",{params:{ hall: hall,x:x,y:y}}).pipe(
+    catchError(this.handleError)
+  );
+}
 
 //afficher Message erreur
 private handleError(error:any) {

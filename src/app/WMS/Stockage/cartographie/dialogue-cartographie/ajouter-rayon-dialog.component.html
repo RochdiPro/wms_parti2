@@ -9,8 +9,10 @@
                     <label>Libelle</label>
                     <input type="text" class="form-control" id="libelle" [(ngModel)]="rayon.libelle" name="libelle">
                 </div>
+
+
                 <div class="col-md-5">
-                    <label>Famille Logistique</label>
+                    <label>Famille Logistique</label>  
                     <mat-form-field appearance="fill">
                         <mat-label>Famille Logistique</mat-label>
                         <mat-select name="famille" [(ngModel)]="rayon.familleLogistique" id="famille">
@@ -23,11 +25,11 @@
         </div>
 
 
-        
+
         <div class="row">
             <div class="col-md-5">
-                <mat-slide-toggle name="manuel" [(ngModel)]="manuel" color="primary"
-                    (change)="changedToggle()">Surface manuel</mat-slide-toggle>
+                <mat-slide-toggle name="manuel" [(ngModel)]="manuel" color="primary" (change)="changedToggle()">Surface
+                    manuel</mat-slide-toggle>
             </div>
         </div>
 
@@ -36,28 +38,32 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Largeur (CM)</label>
-                        <input type="number" class ="form-control" id = "largeur"     [(ngModel)]="rayon.largeur"   name = "largeur">
+                        <input type="number" class="form-control" id="largeur" [(ngModel)]="rayon.largeur"
+                            name="largeur">
                     </div>
 
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Hauteur (CM)</label>
-                        <input type="number" class ="form-control" id = "hauteur"     [(ngModel)]="rayon.hauteur"   name = "hauteur">
+                        <input type="number" class="form-control" id="hauteur" [(ngModel)]="rayon.hauteur"
+                            name="hauteur">
                     </div>
-                    
+
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Longeur (CM)</label>
-                        <input type="number" class ="form-control" id = "longeur"     [(ngModel)]="rayon.longeur"   name = "longeur">
+                        <input type="number" class="form-control" id="longeur" [(ngModel)]="rayon.longeur"
+                            name="longeur">
                     </div>
-                    
+
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Surface (M<sup>3</sup>)</label>
-                        <input type="number" class ="form-control" id = "surface"     [(ngModel)]="rayon.surface"   name = "surface">
+                        <input type="number" class="form-control" id="surface" [(ngModel)]="rayon.surface"
+                            name="surface">
                     </div>
                 </div>
             </div>
@@ -68,34 +74,38 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Largeur (CM)</label>
-                        <input type="number" class ="form-control" id = "largeur"  (change)="valuechange($event)"    [(ngModel)]="rayon.largeur"   name = "largeur">
+                        <input type="number" class="form-control" id="largeur" (change)="valuechange($event)"
+                            [(ngModel)]="rayon.largeur" name="largeur">
                     </div>
 
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Hauteur (CM)</label>
-                        <input type="number" class ="form-control" id = "hauteur"    (change)="valuechange($event)"  [(ngModel)]="rayon.hauteur"   name = "hauteur">
+                        <input type="number" class="form-control" id="hauteur" (change)="valuechange($event)"
+                            [(ngModel)]="rayon.hauteur" name="hauteur">
                     </div>
-                    
+
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Longeur (CM)</label>
-                        <input type="number" class ="form-control" id = "longeur"    (change)="valuechange($event)"  [(ngModel)]="rayon.longeur"   name = "longeur">
+                        <input type="number" class="form-control" id="longeur" (change)="valuechange($event)"
+                            [(ngModel)]="rayon.longeur" name="longeur">
                     </div>
-                    
+
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Surface (M<sup>3</sup>)</label>
-                        <input type="number" class ="form-control" id = "surface"  [disabled]="true"   [(ngModel)]="rayon.surface"   name = "surface">
+                        <input type="number" class="form-control" id="surface" [disabled]="true"
+                            [(ngModel)]="rayon.surface" name="surface">
                     </div>
                 </div>
             </div>
         </div>
 
-Zones:
+        Zones:
         <div class="form-group">
             <div class="row">
                 <div class="col-md-5">
@@ -111,26 +121,41 @@ Zones:
 
         </div>
 
-        <div class="form-group">
+        <div class="form-group"  >
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-5" *ngIf="!murGauche">
                     <label>Coloir Gauche</label>
 
-                    <mat-form-field appearance="fill">
+                    <mat-form-field appearance="fill" *ngIf="selectColoirGauche">
                         <mat-label>Coloir Gauche</mat-label>
-                        <mat-select name="couloirGauche" [(ngModel)]="rayon.coloirGauche" id="couloirGauche">
-                            <mat-option value="Ajouter un Couloir">Ajouter un Couloir</mat-option>
-                            <mat-option *ngFor="let c of couloirsGauche" [value]="c">{{c.libelle}}</mat-option>
-                        </mat-select>
+                        <mat-select [disabled]="disableGauche" name="couloirGauche" [(ngModel)]="rayon.coloirGauche"
+                            id="couloirGauche">
+                            <mat-option  *ngFor="let c of couloirsGauche" [value]="c">{{c.libelle}}</mat-option>
+                         </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill"  *ngIf="!selectColoirGauche">
+                        <mat-label>Coloir Gauche</mat-label>
+                        <mat-select [disabled]="disableGauche" name="couloirGauche2" [(ngModel)]="rayon.coloirGauche"
+                            id="couloirGauche2">
+                            <mat-option    [value]="rayon.coloirGauche">{{rayon.coloirGauche.libelle}}</mat-option>
+                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-md-5">
                     <label>Coloir Droite</label>
 
-                    <mat-form-field appearance="fill">
+                    <mat-form-field appearance="fill"   *ngIf="selectColoirDroite">
                         <mat-label>Coloir Droite</mat-label>
-                        <mat-select name="couloirDroite" [(ngModel)]="rayon.coloirDroite" id="couloirDroite">
-                             <mat-option *ngFor="let c of couloirsDroite" [value]="c">{{c.libelle}}</mat-option>
+                        <mat-select [disabled]="disableDroit" name="couloirDroite" [(ngModel)]="rayon.coloirDroite"
+                            id="couloirDroite">
+                            <mat-option *ngFor="let c of couloirsDroite" [value]="c">{{c.libelle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill"   *ngIf="!selectColoirDroite">
+                        <mat-label>Coloir Droite</mat-label>
+                        <mat-select [disabled]="disableDroit" name="couloirDroite" [(ngModel)]="rayon.coloirDroite"
+                            id="couloirDroite">
+                            <mat-option   [value]="rayon.coloirDroite">{{rayon.coloirDroite.libelle}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <button (click)="addColoirToggle()" mat-icon-button color="primary"
@@ -140,9 +165,7 @@ Zones:
                 </div>
             </div>
         </div>
-
-
-
+ 
 
         <div class="form-group" *ngIf="addColoirShow">
             <div class="card-shadow-primary border mb-3 card card-body border-primary">
@@ -165,11 +188,12 @@ Zones:
                     <div class="col-md-3">
 
                         <label>Libelle</label>
-                      <input type="text" class="form-control" id="couloirlibelle" [(ngModel)]="couloir.libelle" name="couloirlibelle">
-                         
-                      
+                        <input type="text" class="form-control" id="couloirlibelle" [(ngModel)]="couloir.libelle"
+                            name="couloirlibelle">
+
+
                     </div>
-           
+
                 </div>
                 <button class="mb-2 mr-2 btn btn-success" (click)="ajouterCouloir()">Valider</button>
 

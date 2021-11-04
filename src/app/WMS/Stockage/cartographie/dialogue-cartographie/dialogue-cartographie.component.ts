@@ -156,9 +156,13 @@ export class AjouterRayonDialogComponent implements OnInit {
   addColoirShow: boolean = false
   couloir: Couloir = new Couloir()
   manuel=false
-
+  murGauche=false
+ selectColoirGauche=true
+ selectColoirDroite=true
   hall: any
   local: any
+  disableGauche=false
+  disableDroit=false
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<AjouterRayonDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
 
@@ -176,10 +180,8 @@ export class AjouterRayonDialogComponent implements OnInit {
 
   }
   addZone() {
-    console.log("add zone")
-
-    this.service.OrdreRayonExiste(this.rayon.local.id_Local, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
-      console.log("odre eee", data)
+     this.service.OrdreRayonExiste(this.rayon.hall.id, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
+      console.log("odre existe", data)
       if (data != null) {
         Swal.fire(
           'Erreur',
@@ -208,10 +210,38 @@ export class AjouterRayonDialogComponent implements OnInit {
               this.zones.push(data)
 
               Swal.fire(
-                'Erreur',
+                'Success',
                 'Cette zone ajouté',
                 'success'
               )
+              if(this.zone.ordreY==1)
+              {
+                this.murGauche=true
+                console.log("muur")
+               }
+               if( this.zone.ordreY !=1 )
+               {
+                 console.log("couloiir")
+                this.service.CouloirDroiteByZone(this.rayon.hall.id,this.zone.ordreX,this.zone.ordreY-1).subscribe(data => {
+                  console.log("Couloir Droite",data);
+                  if (data!= null){
+                  this.rayon.coloirDroite=data
+                  this.disableDroit=true
+                  }
+                },
+                error => console.log(error));
+                this.service.CouloirGaucheByZone(this.rayon.hall.id,this.zone.ordreX,this.zone.ordreY-1).subscribe(data => {
+                  console.log("Couloir Gauche",data);
+                  if (data!= null){
+                    this.rayon.coloirGauche=data
+                    this.disableGauche=true
+                  }
+                },
+                error => console.log(error));
+               }
+            
+             
+
               this.zone = new Zone()
               this.rayon.espace = this.zones.length
 
@@ -228,6 +258,7 @@ export class AjouterRayonDialogComponent implements OnInit {
 
 
   }
+
   //recuperer la liste des couloirs
   actualiserListCouloirs() {
     this.service.getCouloirParHall(this.hall.id).subscribe((data: any) => {
@@ -294,19 +325,16 @@ export class AjouterRayonDialogComponent implements OnInit {
         )
       }
       if (data == false) {
-
-
-
         this.service.ajoutRayon(this.rayon).subscribe(data => {
           console.log("rayon",data);
           this.rayon = data
-              this.couloirDroite = this.rayon.coloirDroite
+             this.couloirDroite = this.rayon.coloirDroite
              this.couloirGauche = this.rayon.coloirGauche
              this.couloirGauche.rayonDroite = this.rayon
              this.couloirDroite.rayonGauche = this.rayon
          //  console.log(this.couloirGauche, this.couloirsDroite)
              this.service.editCouloirRayon(this.couloirGauche.id, this.couloirDroite.id,this.rayon.id).subscribe(data => {
-               console.log("rayon", data)
+               console.log("edit couloir rayon ", data)
              }
                , error => console.log(error));
            
@@ -336,6 +364,8 @@ export class AjouterRayonDialogComponent implements OnInit {
         , error => console.log(error));
 
     }
+ 
+
     this.dialogRef.close();
   }
 
@@ -666,6 +696,8 @@ export class EditHalleDialogComponent implements OnInit {
   Famille_Logistique: any = [];
   zones_invalide: any = []
   emp_reserver: any = []
+  manuel=false
+
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<EditHalleDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
     this.dataTab = data
@@ -712,7 +744,21 @@ export class EditHalleDialogComponent implements OnInit {
   close() {
     this.dialogRef.close();
   }
+  
+  changedToggle() {
+    if (this.manuel == true) {
+      console.log("manuel")
+     }
+  }
 
+  //changer valeur l'une des dimension (longeur/largeur/hauteur)
+  valuechange(newValue:any) {
+     console.log(newValue)
+     //surface= hauteur* largeur* longeur
+      this.hall.surface=this.hall.hauteur*this.hall.longeur*this.hall.hauteur
+    
+
+  }
   ngOnInit(): void {
   }
 

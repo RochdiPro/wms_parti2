@@ -1,22 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit, Pipe, PipeTransform, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component,  OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { NgxBarcodeComponent } from 'ngx-barcode';
-import { Fiche_Local } from '../../Classe/Stockage/Fiche_Local';
-import Swal from 'sweetalert2';
-import { Client } from '../../Classe/Stockage/Client';
-import { Couloir } from '../../Classe/Stockage/Couloir';
-import { Emplacement } from '../../Classe/Stockage/Emplacement';
-import { Etage } from '../../Classe/Stockage/Etage';
-import { Hall } from '../../Classe/Stockage/Hall';
-import { Rayon } from '../../Classe/Stockage/Rayon';
-import { Zone } from '../../Classe/Stockage/Zone';
-
+ import Swal from 'sweetalert2';
+ import { Couloir } from '../../Classe/Stockage/Couloir';
+ 
 import { StockageService } from '../services/stockage.service';
 import { AjouterEmplacmentDialogComponent, AjouterEtageDialogComponent, AjouterHalleDialogComponent, AjouterLocalDialogComponent, AjouterRayonDialogComponent, EditEmplacementDialogComponent, EditEtageDialogComponent, EditHalleDialogComponent, EditRayonDialogComponent, OpenCartographieV2Component, OpenEmplacmentLoueeComponent, OpenInfoLocalComponent, OpenZoneInvalideComponent } from './dialogue-cartographie/dialogue-cartographie.component';
  
@@ -107,7 +100,28 @@ export class CartographieComponent implements OnInit {
   x: number
   y: number
   arr: any[][] = [];
+   scaleRatio = 1.0;
 
+  getScale() {
+    return `scale(${this.scaleRatio})`;
+  }
+
+  zoomIn() {
+    if (this.scaleRatio > 2.5) {
+      return;
+    }
+    console.log(this.scaleRatio);
+    this.scaleRatio += 0.1;
+  }
+  zoomOut() {
+    if (this.scaleRatio < 0.5) {
+      return;
+    }
+    this.scaleRatio -= 0.1;
+  }
+  reset() {
+    this.scaleRatio = 1.0;
+  }
   constructor(public dialog: MatDialog, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient, private sanitizer: DomSanitizer) {
 
   }

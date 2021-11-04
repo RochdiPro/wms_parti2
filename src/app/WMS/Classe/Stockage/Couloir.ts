@@ -7,5 +7,7 @@ export class Couloir {
     rayonDroite:any
     rayonGauche:any
     emplacments:any
+    description:any
+
   }
   

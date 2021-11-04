@@ -117,8 +117,20 @@
                   </div>
                </div>
             </div>
+            <div style="width: 200px; display: flex; justify-content: space-between ;  left: 50%;            ;">
 
-            <div id="cartoEchelle">
+ 
+               <button    class="  mb-1 mr-1 btn "(click)="zoomIn()" >
+                  <img src="../../../../assets/icon/Zoom-In-icon.png"   width="20" height="20">
+               </button>
+               <button class="  mb-1 mr-1 btn " (click)="zoomOut()" >
+                  <img src="../../../../assets/icon/Zoom-Out-icon.png"   width="20" height="20">
+                </button>
+               <button class="  mb-1 mr-1 btn " (click)="reset()" >
+                 <img src="../../../../assets/icon/undo.png"   width="20" height="20"> 
+               </button>
+             </div>
+            <div id="cartoEchelle"   [style.transform]="getScale()">
             <div class="mb-3 card text-white card-body" style="background-color: #ccd8ff      ;">
 
                <div class="row">

@@ -28,14 +28,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
       OpenCartographieV2Component, OpenClientReserveComponent, OpenEmplacmentLoueeComponent, OpenInfoLocalComponent, OpenZoneInvalideComponent } from './dialogue-cartographie/dialogue-cartographie.component';
 import { MenuWmsComponent } from '../../menu-wms/menu-wms.component';
 import { SortPipe } from './sort';
-import { EditStockageComponent } from '../entree/edit-stockage/edit-stockage.component';
-import { CartographieComponent } from './cartographie.component';
+ import { CartographieComponent } from './cartographie.component';
 import { EspaceTravailCartographieComponent } from './espace-travail-cartographie/espace-travail-cartographie.component';
-import { TableauComponent } from '../tableau/tableau.component';
-import { HttpClientModule } from '@angular/common/http';
+ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { AppComponent } from 'src/app/app.component';
-  
+   
 @NgModule({
   declarations: [
     MenuWmsComponent,
@@ -43,7 +41,7 @@ import { AppComponent } from 'src/app/app.component';
     //stockage
      CartographieComponent,
     EspaceTravailCartographieComponent,
-
+AppComponent,
     AjouterRayonDialogComponent,
     AjouterLocalDialogComponent,
     AjouterHalleDialogComponent,
@@ -98,6 +96,6 @@ import { AppComponent } from 'src/app/app.component';
          
    ],
   providers: [],
-  bootstrap: [AppComponentt]
+  bootstrap: [CartoghraphieModule]
 })
-export class WmsModule { }
+export class CartoghraphieModule { }
