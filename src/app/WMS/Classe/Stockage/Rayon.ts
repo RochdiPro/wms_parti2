@@ -11,6 +11,8 @@ export class Rayon {
     hall: any;
     coloirGauche: any;
     coloirDroite: any;
+    coloirBas:any
+    coloirHaut:any
     zones:any
     espace:any
     surface:any=0

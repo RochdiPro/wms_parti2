@@ -1,13 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
- import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconModule } from '@angular/material/icon';
+ import { NgModule } from '@angular/core';
+ import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
-
- 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
  import { PortalModule } from '@angular/cdk/portal';
@@ -26,23 +22,16 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     EditEmplacementDialogComponent, EditEtageDialogComponent, EditHalleDialogComponent,
      EditOrdreRayonComponent, EditRayonDialogComponent, OpenCartographieComponent,
       OpenCartographieV2Component, OpenClientReserveComponent, OpenEmplacmentLoueeComponent, OpenInfoLocalComponent, OpenZoneInvalideComponent } from './dialogue-cartographie/dialogue-cartographie.component';
-import { MenuWmsComponent } from '../../menu-wms/menu-wms.component';
-import { SortPipe } from './sort';
- import { CartographieComponent } from './cartographie.component';
-import { EspaceTravailCartographieComponent } from './espace-travail-cartographie/espace-travail-cartographie.component';
- import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from 'src/app/app-routing.module';
-import { AppComponent } from 'src/app/app.component';
+  import { EspaceTravailCartographieComponent } from './espace-travail-cartographie/espace-travail-cartographie.component';
+  import { CartoRoutingModule } from './cartographie-routing.module';
+import { CommonModule } from '@angular/common';
    
 @NgModule({
   declarations: [
-    MenuWmsComponent,
-    SortPipe,
-    //stockage
-     CartographieComponent,
-    EspaceTravailCartographieComponent,
-AppComponent,
-    AjouterRayonDialogComponent,
+     
+     //stockage
+     EspaceTravailCartographieComponent,
+     AjouterRayonDialogComponent,
     AjouterLocalDialogComponent,
     AjouterHalleDialogComponent,
     AjouterEmplacmentDialogComponent,
@@ -59,10 +48,7 @@ AppComponent,
     OpenEmplacmentLoueeComponent,
     OpenClientReserveComponent,
     EditOrdreRayonComponent,
-    AddZoneInvalideHalleComponent,
-
-    CartographieComponent,
-    EspaceTravailCartographieComponent,
+     EspaceTravailCartographieComponent,
     DialogueCartographieComponent,
  
   ],
@@ -72,11 +58,10 @@ AppComponent,
 
   ],
   imports: [
-    HttpClientModule,
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    FormsModule, ReactiveFormsModule,
+   
+    CommonModule,
+    CartoRoutingModule,
+     FormsModule, ReactiveFormsModule,
     MatIconModule,
     MatStepperModule,
     MatInputModule,
@@ -93,9 +78,10 @@ AppComponent,
     MatTabsModule,
     MatRadioModule,
     MatSlideToggleModule,
-         
+       
+    
+     
    ],
   providers: [],
-  bootstrap: [CartoghraphieModule]
-})
+ })
 export class CartoghraphieModule { }

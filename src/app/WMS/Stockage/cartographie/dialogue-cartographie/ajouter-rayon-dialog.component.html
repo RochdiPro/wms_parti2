@@ -105,7 +105,7 @@
             </div>
         </div>
 
-        Zones:
+      <h3>Zones:</h3>  
         <div class="form-group">
             <div class="row">
                 <div class="col-md-5">
@@ -121,9 +121,40 @@
 
         </div>
 
+        <div class="row">
+            <div class="table-responsive">
+                <table class="mb-0 table">
+                    <thead>
+                        <tr>
+                            <th>X</th>
+                            <th>Y</th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let zone  of zones; let i=index">
+                             <td>{{zone.ordreX}}</td>
+                            <td> {{zone.ordreY}} </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+<br>
+<br>
+
         <div class="form-group"  >
+           <div class="row"><h3>Alentours: </h3>
+            <button (click)="addColoirToggle()" mat-icon-button color="primary"
+            aria-label="Example icon button with a home icon">
+            <mat-icon>add</mat-icon>
+        </button>
+
+           </div>
+           
             <div class="row">
-                <div class="col-md-5" *ngIf="!murGauche">
+                <div class="col-md-5"  >
                     <label>Coloir Gauche</label>
 
                     <mat-form-field appearance="fill" *ngIf="selectColoirGauche">
@@ -135,11 +166,8 @@
                     </mat-form-field>
                     <mat-form-field appearance="fill"  *ngIf="!selectColoirGauche">
                         <mat-label>Coloir Gauche</mat-label>
-                        <mat-select [disabled]="disableGauche" name="couloirGauche2" [(ngModel)]="rayon.coloirGauche"
-                            id="couloirGauche2">
-                            <mat-option    [value]="rayon.coloirGauche">{{rayon.coloirGauche.libelle}}</mat-option>
-                         </mat-select>
-                    </mat-form-field>
+                        <input type="text" [disabled]="true" class="form-control" id="coloirGauche2" 
+                        [(ngModel)]="rayon.coloirGauche.libelle" name="coloirGauche2">                    </mat-form-field>
                 </div>
                 <div class="col-md-5">
                     <label>Coloir Droite</label>
@@ -153,16 +181,47 @@
                     </mat-form-field>
                     <mat-form-field appearance="fill"   *ngIf="!selectColoirDroite">
                         <mat-label>Coloir Droite</mat-label>
-                        <mat-select [disabled]="disableDroit" name="couloirDroite" [(ngModel)]="rayon.coloirDroite"
-                            id="couloirDroite">
-                            <mat-option   [value]="rayon.coloirDroite">{{rayon.coloirDroite.libelle}}</mat-option>
+                        <input type="text"[disabled]="true" class="form-control" id="couloirDroite2" 
+                        [(ngModel)]="rayon.coloirDroite.libelle" name="couloirDroite2">
+
+                     </mat-form-field>
+                 
+                </div>
+                <div class="col-md-5"  >
+                    <label>Coloir Haut</label>
+                    <mat-form-field appearance="fill" *ngIf="selectColoirHaut">
+                        <mat-label>Coloir Haut</mat-label>
+                        <mat-select [disabled]="disableHaut" name="coloirHaut" [(ngModel)]="rayon.coloirHaut"
+                            id="coloirHaut">
+                            <mat-option  *ngFor="let c of couloirsHaut" [value]="c">{{c.libelle}}</mat-option>
+                         </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill"  *ngIf="!selectColoirHaut">
+                        <mat-label>Couloir Haut</mat-label>
+                        <input type="text" [disabled]="true" class="form-control" id="coloirHaut2" 
+                        [(ngModel)]="rayon.coloirHaut.libelle" name="coloirHaut1">                    </mat-form-field>
+                </div>
+                <div class="col-md-5">
+                    <label>Coloir Bas</label>
+
+                    <mat-form-field appearance="fill"   *ngIf="selectColoirBas">
+                        <mat-label>Coloir Bas</mat-label>
+                        <mat-select [disabled]="disableBas" name="coloirBas" [(ngModel)]="rayon.coloirBas"
+                            id="coloirBas">
+                            <mat-option *ngFor="let c of couloirsBas" [value]="c">{{c.libelle}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button (click)="addColoirToggle()" mat-icon-button color="primary"
-                        aria-label="Example icon button with a home icon">
-                        <mat-icon>add</mat-icon>
-                    </button>
+                    <mat-form-field appearance="fill"   *ngIf="!selectColoirBas">
+                        <mat-label>Coloir Bas</mat-label>
+                        <input type="text"[disabled]="true" class="form-control" id="coloirBas2" 
+                        [(ngModel)]="rayon.coloirBas.libelle" name="coloirBas">
+
+                     </mat-form-field>
+                 
                 </div>
+
+
+
             </div>
         </div>
  

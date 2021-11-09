@@ -149,20 +149,32 @@ export class AjouterRayonDialogComponent implements OnInit {
   couloirs: any = []
   couloirsGauche: any = []
   couloirsDroite: any = []
+  couloirsHaut: any = []
+  couloirsBas: any = []
+
   couloirGauche: Couloir = new Couloir()
   couloirDroite: Couloir = new Couloir()
-  zones: any = []
+  couloirHaut: Couloir = new Couloir()
+  couloirBas: Couloir = new Couloir()
+
+  zones: Zone[] = []
+  zonesNew: Zone[] = []
   zone: Zone = new Zone()
   addColoirShow: boolean = false
   couloir: Couloir = new Couloir()
   manuel=false
   murGauche=false
+   murHaut=false
  selectColoirGauche=true
  selectColoirDroite=true
+ selectColoirBas=true
+ selectColoirHaut=true
   hall: any
   local: any
   disableGauche=false
   disableDroit=false
+  disableHaut=false
+  disableBas=false
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<AjouterRayonDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
 
@@ -202,22 +214,45 @@ export class AjouterRayonDialogComponent implements OnInit {
           if (data == false) {
             this.zone.etat = "Disponible"
             this.zone.hall = this.hall
-            this.service.ajoutZone(this.zone).subscribe(data => {
-              console.log(data);
-              /* console.log("zones", this.zones)
-              this.rayon.zones = this.zones */
-              console.log(this.rayon)
-              this.zones.push(data)
-
-              Swal.fire(
-                'Success',
-                'Cette zone ajouté',
-                'success'
-              )
+            this.zones.push(this.zone)
+            console.log("zones",this.zones)
+            Swal.fire(
+              'Success',
+              'Cette zone ajouté',
+              'success'
+            )
               if(this.zone.ordreY==1)
               {
-                this.murGauche=true
-                console.log("muur")
+                 console.log("couloir gauche mur")
+                this.service.getCouloirByLibelle(this.local.id_Local, "M2G").subscribe(data => {
+                  console.log("Mur gauche",data);
+                  this.couloirGauche=data
+                  this.rayon.coloirGauche=data
+                  this.disableGauche=true
+                  this.selectColoirGauche=false
+                },
+                error => console.log(error));
+               }
+               if(this.zone.ordreX==1)
+              {
+                this.service.getCouloirByLibelle(this.local.id_Local, "M1H").subscribe(data => {
+                  console.log("Mur haut",data);
+                   console.log("couloir haut mur")
+                  this.disableHaut=true
+                  this.selectColoirHaut=false
+                  this.rayon.coloirHaut=data
+                  this.couloirHaut=data
+                },
+                error => console.log(error));
+                this.service.CouloirDroiteByZone(this.rayon.hall.id,this.zone.ordreX,this.zone.ordreY-1).subscribe(data => {
+                  console.log("Couloir Droite",data);
+                  if (data!= null){
+                  this.rayon.coloirDroite=data
+                  this.disableDroit=true
+                  this.selectColoirDroite=false
+                  }
+                },
+                error => console.log(error));
                }
                if( this.zone.ordreY !=1 )
                {
@@ -227,6 +262,8 @@ export class AjouterRayonDialogComponent implements OnInit {
                   if (data!= null){
                   this.rayon.coloirDroite=data
                   this.disableDroit=true
+                  this.selectColoirDroite=false
+
                   }
                 },
                 error => console.log(error));
@@ -235,20 +272,13 @@ export class AjouterRayonDialogComponent implements OnInit {
                   if (data!= null){
                     this.rayon.coloirGauche=data
                     this.disableGauche=true
+                    this.selectColoirGauche=false
                   }
                 },
                 error => console.log(error));
                }
-            
-             
-
-              this.zone = new Zone()
-              this.rayon.espace = this.zones.length
-
-            },
-              error => console.log(error));
-
-
+               this.zone=new Zone()
+               this.rayon.espace = this.zones.length
           }
         },
           error => console.log(error));
@@ -258,7 +288,6 @@ export class AjouterRayonDialogComponent implements OnInit {
 
 
   }
-
   //recuperer la liste des couloirs
   actualiserListCouloirs() {
     this.service.getCouloirParHall(this.hall.id).subscribe((data: any) => {
@@ -269,6 +298,12 @@ export class AjouterRayonDialogComponent implements OnInit {
     });
     this.service.CouloirRayonGaucheNull(this.hall.id).subscribe((data: any) => {
       this.couloirsDroite = data;
+    });
+    this.service.CouloirRayonHautNull(this.hall.id).subscribe((data: any) => {
+      this.couloirsBas = data;
+    });
+    this.service.CouloirRayonBasNull(this.hall.id).subscribe((data: any) => {
+      this.couloirsHaut = data;
     });
   }
   //affiher formulaire ajout couloir
@@ -307,15 +342,24 @@ export class AjouterRayonDialogComponent implements OnInit {
           this.actualiserListCouloirs()
 
 
-        },
-          error => console.log(error));
+     
 
-      }
-    },
+      },
       error => console.log(error));
+    }
+  },
+  error => console.log(error));
   }
   //valider l'ajout du rayon
-  onSubmit() {
+  async onSubmit() {
+    console.log("liste zone",this.zones)
+    for (var i = 0; i < this.zones.length; i++) {
+      console.log(this.zones[i])
+     var  data=await  this.service.ajoutZone(this.zones[i]).toPromise();
+      console.log(data, "  ",i)
+      this.zonesNew.push(data)
+    }
+
     this.service.LibelleRayonExiste(this.rayon.local.id_Local, this.rayon.libelle).subscribe(data => {
       if (data == true) {
         Swal.fire(
@@ -330,10 +374,16 @@ export class AjouterRayonDialogComponent implements OnInit {
           this.rayon = data
              this.couloirDroite = this.rayon.coloirDroite
              this.couloirGauche = this.rayon.coloirGauche
+             this.couloirHaut = this.rayon.coloirHaut
+             this.couloirBas = this.rayon.coloirBas
+
              this.couloirGauche.rayonDroite = this.rayon
              this.couloirDroite.rayonGauche = this.rayon
-         //  console.log(this.couloirGauche, this.couloirsDroite)
-             this.service.editCouloirRayon(this.couloirGauche.id, this.couloirDroite.id,this.rayon.id).subscribe(data => {
+             this.couloirHaut.rayonBas = this.rayon
+             this.couloirBas.rayonHaut = this.rayon
+            
+              this.service.editCouloirRayon(this.couloirGauche.id, this.couloirDroite.id,
+              this.couloirHaut.id, this.couloirBas.id,this.rayon.id).subscribe(data => {
                console.log("edit couloir rayon ", data)
              }
                , error => console.log(error));
@@ -356,9 +406,9 @@ export class AjouterRayonDialogComponent implements OnInit {
   //fermer dialogue
   close() {
     console.log(this.rayon)
-    for (var i = 0; i < this.zones.length; i++) {
-      console.log("zone[i]", this.zones[i])
-      this.service.editRayonZone(this.zones[i].id, this.rayon.id).subscribe(data => {
+    for (var i = 0; i < this.zonesNew.length; i++) {
+      console.log("zone[i]", this.zonesNew[i])
+      this.service.editRayonZone(this.zonesNew[i].id, this.rayon.id).subscribe(data => {
         console.log("zone modif", data)
       }
         , error => console.log(error));
@@ -923,6 +973,9 @@ export class AjouterEmplacmentDialogComponent implements OnInit {
   value: any
   couloirDroite: any
   couloirGauche: any
+  couloirHaut: any
+  couloirBas: any
+
   emplacements: any = [];
   manuel=false
   constructor(public dialogRef: MatDialogRef<AjouterEmplacmentDialogComponent>,
@@ -933,6 +986,9 @@ export class AjouterEmplacmentDialogComponent implements OnInit {
     this.emplacement.halle = data.halleselect
     this.couloirGauche = data.couloirGauche
     this.couloirDroite = data.couloirDroite
+    this.couloirHaut = data.couloirHaut
+    this.couloirBas = data.couloirBas
+
     console.log(this.emplacement)
   }
   changedToggle() {

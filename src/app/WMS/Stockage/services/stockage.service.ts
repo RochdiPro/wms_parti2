@@ -35,7 +35,12 @@ AjoutLocal(form:any): Observable<any>{
 
 }
 
-
+//service ajouter Local
+Ajout_local(local:Fiche_Local): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajout_local",local).pipe(
+    catchError(this.handleError)
+ );
+}
 //service  récupérer local by id
 getLocalById(Id_Local: any): Observable<any>{
   return this.httpClient.get<any>(wms+"WMS/Local",{params:{ Id_Local: Id_Local}}).pipe(
@@ -61,7 +66,7 @@ LibelleHallExiste(local: any,lib: any): Observable<any>{
  
 }
 
-//CRUD famille logistique
+//************CRUD famille logistique
 //service récupérer la liste des famille
 ListeFamilleLogistique(): Observable<any> {  
   return this.httpClient.get(wms+"WMS/Touts_FamilleLogistiques").pipe(
@@ -84,49 +89,19 @@ SouFamilleLogistiqueParFamille(famille:any): Observable<any> {
 
  );
 }
+/////************* */
 
-//////CRUD hall
-
+//////**************CRUD hall
 //service recuperer halle par id
 getHallById(Id_Hall: any): Observable<any>{
     return this.httpClient.get<Hall>(wms+"WMS/Hall",{params:{ Id_Hall: Id_Hall}}).pipe(
       catchError(this.handleError)
     );
 }
-//service ajouter hall
-Ajout_local(local:Fiche_Local): Observable<any> {  
-  return this.httpClient.post(wms+"WMS/Ajout_local",local).pipe(
-    catchError(this.handleError)
- );
-}
 
-//service ajouter nouveau Client
-Ajout_Client(client:Client): Observable<any> {  
-  return this.httpClient.post(wms+"WMS/Ajout_Client",client).pipe(
-    catchError(this.handleError)
- );
-}
 //service ajouter hall
 ajoutHall(hall:Hall): Observable<any> {  
   return this.httpClient.post(wms+"WMS/Ajout_Hall",hall).pipe(
-    catchError(this.handleError)
- );
-}
-
-//service ajouter zone invalide
-ajoutZoneInvalide(zone:Zone): Observable<any> {  
-  return this.httpClient.post(wms+"WMS/AddZone",zone).pipe(
-    catchError(this.handleError)
- );
-}
-editZone(id: number, zone: Zone): Observable<Object>{
-  return this.httpClient.put(`${wms+"/WMS/Modifier_zone"}/${id}`, zone);
-}
-
-
-//service ajouter zone invalide
-ajoutZone(zone:Zone): Observable<any> {  
-  return this.httpClient.post(wms+"WMS/Ajouter_Zone",zone).pipe(
     catchError(this.handleError)
  );
 }
@@ -135,20 +110,30 @@ editHall(id: any, hall: Hall): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_Hall"}/${id}`, hall);
 }
 
-LouerEmplacment( client: Client,id: any): Observable<Object>{
-  return this.httpClient.put(wms+"/WMS/Louer_Emplacment",client,{params:{ id : id}} );
+//service supprimer  halle
+supprimerHall(id: number): Observable<any> {  
+  return this.httpClient.delete(`${wms+"/WMS/Supprimer_Hall"}/${id}`);
 }
 
- annulerLocationEm00000p(id: any): Observable<Object>{
-  return this.httpClient.put(wms+"/WMS/Louer_Emplacment",{params:{ id : id}} );
-}
-
-annulerLocationEmp(id: any): Observable<any>{
-  return this.httpClient.get<Emplacement>(wms+"WMS/annuler_Location_Emplacement",{params:{ id:id}}).pipe(
+//service ajouter zone invalide
+ajoutZoneInvalide(zone:Zone): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/AddZone",zone).pipe(
     catchError(this.handleError)
-  );
- 
+ );
 }
+// service modifier zone
+editZone(id: number, zone: Zone): Observable<Object>{
+  return this.httpClient.put(`${wms+"/WMS/Modifier_zone"}/${id}`, zone);
+}
+
+//service ajouter zone
+ajoutZone(zone:Zone): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajouter_Zone",zone).pipe(
+    catchError(this.handleError)
+ );
+}
+
+
 //service récupérer la liste des famille
 getEmplacementParEtageCouloir(id_couloir:any,id_etage:any): Observable<any> {  
   return this.httpClient.get(wms+"WMS/Emplacement_Par_Etage_Couloir",{params:{ id_couloir:id_couloir,id_etage:id_etage}}).pipe(
@@ -158,21 +143,13 @@ getEmplacementParEtageCouloir(id_couloir:any,id_etage:any): Observable<any> {
 }
 
 
-//service supprimer  halle
-supprimerHall(id: number): Observable<any> {  
-  return this.httpClient.delete(`${wms+"/WMS/Supprimer_Hall"}/${id}`);
-}
 //service ZonneExiste
 ZoneInvalideExiste(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
   return this.httpClient.get<Zone>(wms+"WMS/ZoneInvalideExiste",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
     catchError(this.handleError)
   );
 }
-listeClient(): Observable<any>{
-  return this.httpClient.get<Client>(wms+"WMS/Tout_Clients").pipe(
-    catchError(this.handleError)
-  );
-}
+
 //service recuperer zone by halle,x,y
 getZoneInvalideByHallX_Y(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
   return this.httpClient.get<Zone>(wms+"WMS/ZoneInvalide",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
@@ -198,27 +175,6 @@ ZoneInvalideParLocal(local: any): Observable<any>{
     catchError(this.handleError)
   );
 }
-//service Zonne invalide
-EmplacmentsReserveParLocal(local: any): Observable<any>{
-  return this.httpClient.get<Emplacement[]>(wms+"WMS/EmplacmentsReserveParLocal",{params:{ local: local}}).pipe(
-    catchError(this.handleError)
-  );
-}
-//service Zonne invalide
-getAllEmplacmentReserve(): Observable<any>{
-  return this.httpClient.get<Emplacement[]>(wms+"WMS/TousEmplacmentReserve").pipe(
-    catchError(this.handleError)
-  );
-}
-
-
-//service ZonneExiste
-EmplacmentsReserveParClient(client: any): Observable<any>{
-  return this.httpClient.get<Emplacement>(wms+"WMS/EmplacmentsReserveParClient",{params:{ client: client}}).pipe(
-    catchError(this.handleError)
-  );
-}
-
 
 ///////CRUD rayon
 
@@ -315,6 +271,8 @@ supprimerEmplacment(id: number): Observable<any> {
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Emplacment"}/${id}`);
 }
 
+
+
 //recupere ID dernier position ajoutéé
 LastIDPos(): Observable<any> {  
   return this.httpClient.get(wms+"WMS/LastIDPos").pipe(
@@ -322,8 +280,40 @@ LastIDPos(): Observable<any> {
 
  );
 }
+//service Zonne invalide
+EmplacmentsReserveParLocal(local: any): Observable<any>{
+  return this.httpClient.get<Emplacement[]>(wms+"WMS/EmplacmentsReserveParLocal",{params:{ local: local}}).pipe(
+    catchError(this.handleError)
+  );
+}
+//service Zonne invalide
+getAllEmplacmentReserve(): Observable<any>{
+  return this.httpClient.get<Emplacement[]>(wms+"WMS/TousEmplacmentReserve").pipe(
+    catchError(this.handleError)
+  );
+}
 
- //CRUD Couloir
+
+//recuperer la liste d'empalcement reserve par un client
+EmplacmentsReserveParClient(client: any): Observable<any>{
+  return this.httpClient.get<Emplacement>(wms+"WMS/EmplacmentsReserveParClient",{params:{ client: client}}).pipe(
+    catchError(this.handleError)
+  );
+}
+
+//reserver un emplacment pour un client
+LouerEmplacment( client: Client,id: any): Observable<Object>{
+  return this.httpClient.put(wms+"/WMS/Louer_Emplacment",client,{params:{ id : id}} );
+}
+
+//annuler la location/reservtaion d'un emplacment
+annulerLocationEmp(id: any): Observable<any>{
+  return this.httpClient.get<Emplacement>(wms+"WMS/annuler_Location_Emplacement",{params:{ id:id}}).pipe(
+    catchError(this.handleError)
+  );
+}
+////************************ */
+ //*********CRUD Couloir
 
  //recuperer couloirs par hall
 getCouloirParHall(hall: any): Observable<any> {  
@@ -337,9 +327,10 @@ editCouloir(id: number, couloir: Couloir): Observable<Object>{
 }
  
 //service modifier le rayon d'une zone
-editCouloirRayon(couloirgauche_id: any,couloirdroite_id:any, rayon_id: any): Observable<Object>{
+editCouloirRayon(couloirgauche_id: any,couloirdroite_id:any,couloirhaut_id:any,couloirbas_id:any, rayon_id: any): Observable<Object>{
   return this.httpClient.get<any>(wms+"WMS/Couloir_Rayon",
-  {params:{ couloirgauche_id: couloirgauche_id,couloirdroite_id:couloirdroite_id,rayon_id:rayon_id}}).pipe(
+  {params:{ couloirgauche_id: couloirgauche_id,couloirdroite_id:couloirdroite_id,
+            couloirhaut_id:couloirhaut_id,couloirbas_id:couloirbas_id, rayon_id:rayon_id}}).pipe(
    catchError(this.handleError)
  );
 
@@ -360,6 +351,29 @@ CouloirRayonDroiteNull(hall: any): Observable<any> {
 
  );
 }
+
+ //recuperer couloirs par hall qui ont un rayon bas null
+ CouloirRayonBasNull(hall: any): Observable<any> {  
+  return this.httpClient.get(wms+"WMS/CouloirRayonBasNull",{params:{ hall: hall}}).pipe(
+    catchError(this.handleError)
+
+ );
+}
+
+ //recuperer couloirs par hall qui ont un rayon haut null
+CouloirRayonHautNull(hall: any): Observable<any> {  
+  return this.httpClient.get(wms+"WMS/CouloirRayonHautNull",{params:{ hall: hall}}).pipe(
+    catchError(this.handleError)
+
+ );
+}
+//get couloir by libelle
+getCouloirByLibelle(local: any,lib: any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/CouloirByLibelle",{params:{ local: local,lib:lib}}).pipe(
+    catchError(this.handleError)
+  );
+}
+
 //service ajouter couloir
 ajoutCouloir(couloir:Couloir): Observable<any> {  
   return this.httpClient.post(wms+"WMS/Ajout_Couloir",couloir).pipe(
@@ -380,13 +394,13 @@ MaxOrdreX(hall: any): Observable<any>{
     catchError(this.handleError)
   );
 }
+
 //max ordre y rayon 
 MaxOrdreY(hall: any): Observable<any>{
   return this.httpClient.get<Hall>(wms+"WMS/maxOrdreY",{params:{ halle: hall}}).pipe(
     catchError(this.handleError)
   );
 }
-
 
 //get couloir by zone 
 CouloirDroiteByZone(hall:any,x:any,y:any): Observable<any>{
@@ -402,6 +416,19 @@ CouloirGaucheByZone(hall:any,x:any,y:any): Observable<any>{
   );
 }
 
+//service ajouter nouveau Client
+Ajout_Client(client:Client): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajout_Client",client).pipe(
+    catchError(this.handleError)
+ );
+}
+
+//recuperer liste des clients
+listeClient(): Observable<any>{
+  return this.httpClient.get<Client>(wms+"WMS/Tout_Clients").pipe(
+    catchError(this.handleError)
+  );
+}
 //afficher Message erreur
 private handleError(error:any) {
   let errorMessage = '';

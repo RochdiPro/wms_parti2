@@ -76,6 +76,9 @@ export class CartographieComponent implements OnInit {
   emplacements: any = [];
   emplacementCouloir1: any = [];
   emplacementCouloir2: any = [];
+  emplacementCouloir3: any = [];
+  emplacementCouloir4: any = [];
+
   //declaration objet(local/hall/rayon/etage/emplacement) selectionné
   localselect: any;
   halleselect: any;
@@ -87,6 +90,8 @@ export class CartographieComponent implements OnInit {
   //coloir selctionner
   couloirGauche: Couloir = new Couloir()
   couloirDroite: Couloir = new Couloir()
+  couloirHaut: Couloir = new Couloir()
+  couloirBas: Couloir = new Couloir()
 
 
   //declaration du libelle d'objet(local/hall/rayon/etage/emplacement) selectinné
@@ -106,19 +111,23 @@ export class CartographieComponent implements OnInit {
     return `scale(${this.scaleRatio})`;
   }
 
+
+  //Zoom plus
   zoomIn() {
     if (this.scaleRatio > 2.5) {
       return;
     }
-    console.log(this.scaleRatio);
-    this.scaleRatio += 0.1;
+     this.scaleRatio += 0.1;
   }
+
+    //Zoom moins
   zoomOut() {
     if (this.scaleRatio < 0.5) {
       return;
     }
     this.scaleRatio -= 0.1;
   }
+  //format d'origine
   reset() {
     this.scaleRatio = 1.0;
   }
@@ -307,6 +316,9 @@ export class CartographieComponent implements OnInit {
     this.etages = this.rayonselect.etages
     if (rayon.coloirGauche != null) { this.couloirGauche = rayon.coloirGauche }
     if (rayon.coloirDroite != null) { this.couloirDroite = rayon.coloirDroite }
+    if (rayon.coloirHaut != null) { this.couloirHaut = rayon.coloirHaut }
+    if (rayon.coloirBas != null) { this.couloirBas = rayon.coloirBas }
+
     console.log(rayon)
     console.log(this.couloirGauche)
     console.log(this.couloirDroite)
@@ -321,11 +333,8 @@ export class CartographieComponent implements OnInit {
       data: { local: this.localselect, hall: this.halleselect }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.service.getHallById(this.halleselect.id).subscribe(data => {
-        this.halleselect = data;
-        this.rayons = this.halleselect.rayons
+        this.showTableau = false;
         this.generertableayrayon(this.halleselect);
-      }, error => console.log(error));
     });
   }
 
@@ -373,11 +382,9 @@ export class CartographieComponent implements OnInit {
             'Rayon Supprimé Avec Sucées.',
             'success'
           )
-          this.service.getHallById(this.halleselect.id).subscribe(data => {
-            this.halleselect = data;
-            this.rayons = this.halleselect.rayons
+          this.showTableau=false
             this.generertableayrayon(this.halleselect)
-          }, error => console.log(error));
+   
 
         })
       }
@@ -404,20 +411,24 @@ export class CartographieComponent implements OnInit {
         data = await this.service.OrdreRayonExiste(halle.id, i + 1, j + 1).toPromise()
         if (data != null) {
           this.arr[i][j] = data;
+          this.arr[i][j].etat = "Rayon";
         }
         else {
           //ordre n'exsite pas
           verif = await this.service.ZoneInvalideExiste(halle.id, i + 1, j + 1).toPromise()
-          console.log(" invalide", verif)
           if (verif == true) {
             this.arr[i][j] = {};
             this.arr[i][j].id = -1;
             this.arr[i][j].etat = "Invalide";
+            this.arr[i][j].espace =1;
+
           }
           else {
             this.arr[i][j] = {};
             this.arr[i][j].id = 0;
             this.arr[i][j].etat = "Vide";
+            this.arr[i][j].espace =1;
+
           }
         }
       }
@@ -443,13 +454,8 @@ export class CartographieComponent implements OnInit {
     console.log(etage)
     this.libelleEtage = this.etageselect.libelle
     this.emplacements = this.etageselect.emplacments
-    this.service.getEmplacementParEtageCouloir(this.couloirGauche.id, this.etageselect.id).subscribe(data => {
-      this.emplacementCouloir1 = data;
-    }, error => console.log(error));
-    this.service.getEmplacementParEtageCouloir(this.couloirDroite.id, this.etageselect.id).subscribe(data => {
-      this.emplacementCouloir2 = data;
-    }, error => console.log(error));
-    this.goForward();
+    this.actualiserListeEmplacement()
+     this.goForward();
   }
 
   genererEmplacementParCouloir() { }
@@ -556,8 +562,9 @@ export class CartographieComponent implements OnInit {
         rayonselect: this.rayonselect,
         halleselect: this.halleselect,
         couloirDroite: this.couloirDroite,
-        couloirGauche: this.couloirGauche
-
+        couloirGauche: this.couloirGauche,
+        couloirBas: this.couloirBas,
+         couloirHaut: this.couloirHaut 
       }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -571,16 +578,31 @@ export class CartographieComponent implements OnInit {
         console.log("rayon", this.rayonselect)
         this.couloirDroite = this.rayonselect.coloirDroite
         this.couloirGauche = this.rayonselect.coloirGauche
+        this.couloirHaut = this.rayonselect.coloirHaut
+        this.couloirBas = this.rayonselect.couloirBas
+        this.actualiserListeEmplacement()
       }, error => console.log(error));
-      this.service.getEmplacementParEtageCouloir(this.couloirGauche.id, this.etageselect.id).subscribe(data => {
-        this.emplacementCouloir1 = data;
-      }, error => console.log(error));
-      this.service.getEmplacementParEtageCouloir(this.couloirDroite.id, this.etageselect.id).subscribe(data => {
-        this.emplacementCouloir2 = data;
-      }, error => console.log(error));
+    
     });
   }
-
+actualiserListeEmplacement(){
+    //recuperer les emplacement accesible via couloir gauche
+    this.service.getEmplacementParEtageCouloir(this.couloirGauche.id, this.etageselect.id).subscribe(data => {
+      this.emplacementCouloir1 = data;
+    }, error => console.log(error));
+          //recuperer les emplacement accesible via couloir droite
+    this.service.getEmplacementParEtageCouloir(this.couloirDroite.id, this.etageselect.id).subscribe(data => {
+      this.emplacementCouloir2 = data;
+    }, error => console.log(error));
+                //recuperer les emplacement accesible via couloir haut
+    this.service.getEmplacementParEtageCouloir(this.couloirHaut.id, this.etageselect.id).subscribe(data => {
+      this.emplacementCouloir3 = data;
+    }, error => console.log(error));
+                //recuperer les emplacement accesible via couloir bas
+    this.service.getEmplacementParEtageCouloir(this.couloirBas.id, this.etageselect.id).subscribe(data => {
+      this.emplacementCouloir4 = data;
+    }, error => console.log(error));
+}
 
 
   //supprimer un emplacement

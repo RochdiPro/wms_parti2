@@ -3,28 +3,24 @@ import { NgModule } from '@angular/core';
 
  import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
-import { ChildComponent } from './child/child.component';
-import { SubChildComponent } from './sub-child/sub-child.component';
-import { HttpClientModule } from '@angular/common/http';
+ import { HttpClientModule } from '@angular/common/http';
   
  import { AppRoutingModule } from './app-routing.module';
-import { WmsModule } from './WMS/wms.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
    
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
-    ChildComponent,
-    SubChildComponent,
-  ],
+   ],
   exports: [
   ],
   imports: [
     AppRoutingModule,
     HttpClientModule,
     BrowserModule,
-    WmsModule,
-    
+    BrowserAnimationsModule,
+     
     ],
   providers: [],
   bootstrap: [AppComponent]
