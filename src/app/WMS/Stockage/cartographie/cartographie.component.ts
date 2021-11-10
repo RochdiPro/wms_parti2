@@ -569,20 +569,8 @@ export class CartographieComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log("id etage seelect", this.etageselect.id)
-      /*  this.service.getEtageById(this.etageselect.id).subscribe(data => {
-         this.etageselect = data;
-         this.emplacements = this.etageselect.emplacments
-       }, error => console.log(error)); */
-      this.service.getRayonById(this.rayonselect.id).subscribe(data => {
-        this.rayonselect = data;
-        console.log("rayon", this.rayonselect)
-        this.couloirDroite = this.rayonselect.coloirDroite
-        this.couloirGauche = this.rayonselect.coloirGauche
-        this.couloirHaut = this.rayonselect.coloirHaut
-        this.couloirBas = this.rayonselect.couloirBas
-        this.actualiserListeEmplacement()
-      }, error => console.log(error));
-    
+         this.actualiserListeEmplacement()
+     
     });
   }
 actualiserListeEmplacement(){

@@ -1,5 +1,106 @@
 
 
+<div class="row">
+   <div class="col-md-9 mb-3">
+   </div>
+   <div class="col-md-3 mb-3">
+      <div class="example-button-container">
+        
+      </div>
+   </div>
+</div>
+<div style="width: 200px; display: flex; justify-content: space-between ;  left: 50%;            ;">
+
+
+   <button    class="  mb-1 mr-1 btn "(click)="zoomIn()" >
+      <img src="../../../../assets/icon/Zoom-In-icon.png"   width="20" height="20">
+   </button>
+   <button class="  mb-1 mr-1 btn " (click)="zoomOut()" >
+      <img src="../../../../assets/icon/Zoom-Out-icon.png"   width="20" height="20">
+    </button>
+   <button class="  mb-1 mr-1 btn " (click)="reset()" >
+     <img src="../../../../assets/icon/undo.png"   width="20" height="20"> 
+   </button>
+ </div>
+
+<div class="mb-3 card text-white card-body" style="background-color: #ccd8ff      ;" *ngIf="show" >
+
+   <div class="row">
+      <h5 class="text-white card-title">Local sfax</h5>
+      <div class="col-md-7">
+      </div>
+      <div class="un"></div>
+      Rayon <div id="rayon"></div>
+      <div class="un"></div>
+      Libre <div id="vide"></div>
+      <div class="un"></div>
+      Invalide <div id="hachure"></div>
+   </div>
+   <div class="row" *ngFor=" let in of counter(x) ;let i = index" >
+      <div *ngFor=" let is of counter(y) ;let j = index">
+
+         <div class="card-body" *ngIf="arr[i][j].etat =='Invalide' ">
+            <ul class="list-group">
+               <div  >
+                  <img src="../../../../assets/icon/hachuré.png " width="90px" height="300px">
+
+            </div>
+
+            </ul>
+         </div>
+
+         <div class="card-body"*ngIf="arr[i][j].etat == 'Vide' ">
+                <ul class="list-group">
+                  <div  >
+                     <img src="../../../../assets/icon/vide.png " width="90px" height="300px">
+
+               </div>
+
+               </ul>
+               
+          </div>
+
+         <div *ngIf=" arr[i][j].id != 0 &&  arr[i][j].etat != 'Invalide' ">
+            <div class="card-body" *ngIf="arr[i][j].espace==1">
+               <ul class="list-group">
+                  <button class="list-group-item-action list-group-item " style="width: 90px;
+                       height: 300px;">
+                     <br> <b>Rayon {{arr[i][j].libelle}}</b><br>
+                     <div class="row" style="align-items: center;">
+                    
+                     </div>
+                  </button>
+               </ul>
+            </div>
+         </div>
+
+         <div *ngIf="arr[i][j].id != 0  &&  arr[i][j].etat != 'invalide' && j<y ">
+            <div class="card-body" *ngIf="arr[i][j].espace!=1  && arr[i][j].id == arr[i][j+1].id ">
+               <ul class="list-group">
+                  <button class="list-group-item-action list-group-item " style="width: 220px;
+           height: 300px;">
+                     <br> <b>Rayon {{arr[i][j].libelle}}</b><br>
+                     <div class="row" style="align-items: center;">
+                      
+                       
+                     </div>
+                  </button>
+
+               </ul>
+            </div>
+         </div>
+         <div >
+          
+         </div>
+     
+
+      </div>
+   </div>
+
+</div>
+
+
+
 <div [@transformAnimation]="transformAnimationState" class="content-wrapper">
    <ng-content></ng-content>
    
