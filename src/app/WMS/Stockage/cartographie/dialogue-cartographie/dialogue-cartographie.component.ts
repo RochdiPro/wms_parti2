@@ -369,6 +369,15 @@ export class AjouterRayonDialogComponent implements OnInit {
         )
       }
       if (data == false) {
+        if((this.rayon.hauteur >= this.hall.hauteur)||(this.rayon.largeur >= this.hall.largeur)||(this.rayon.longeur >= this.hall.longeur))
+        {
+          Swal.fire(
+          'Erreur',
+          'Verifer les dimension saisies',
+          'error'
+        )
+          }
+          else{
         this.service.ajoutRayon(this.rayon).subscribe(data => {
           console.log("rayon",data);
           this.rayon = data
@@ -399,6 +408,7 @@ export class AjouterRayonDialogComponent implements OnInit {
         },
           error => console.log(error));
       }
+    }
     },
       error => console.log(error));
 
@@ -701,7 +711,16 @@ export class AjouterHalleDialogComponent implements OnInit {
           'error'
         )
       }
-      if (data == false) {
+      if (data == false) { 
+        if((this.hall.hauteur >= this.local.hauteur)||(this.hall.largeur >= this.local.largeur)||(this.hall.longeur >= this.local.longeur))
+        {
+          Swal.fire(
+          'Erreur',
+          'Verifer les dimension saisies',
+          'error'
+        )
+      }
+        else{
         this.service.ajoutHall(this.hall).subscribe(data => {
           console.log(data);
           Swal.fire(
@@ -712,6 +731,7 @@ export class AjouterHalleDialogComponent implements OnInit {
           this.close()
         },
           error => console.log(error));
+        }
       }
     },
       error => console.log(error));
@@ -1005,7 +1025,15 @@ export class AjouterEmplacmentDialogComponent implements OnInit {
   }
   
   onSubmit() {
- 
+    if((this.emplacement.hauteur >= this.emplacement.etage.hauteur)||(this.emplacement.largeur >= this.emplacement.etage.largeur))
+    {
+      Swal.fire(
+      'Erreur',
+      'Verifer les dimension saisies',
+      'error'
+    )
+      }
+      else{
 
     this.service.LastIDPos().subscribe(data => {
       this.emplacement.id = data;
@@ -1023,7 +1051,8 @@ export class AjouterEmplacmentDialogComponent implements OnInit {
         this.close()
       },
         error => console.log(error));
-    })
+    }) 
+  }
   }
   //fermer dialogue
   close() {
@@ -1056,10 +1085,9 @@ export class AjouterEtageDialogComponent implements OnInit {
 
   }
   onSubmit() {
-    console.log("eee", this.etage)
+    console.log("etage", this.etage)
     this.service.LibelleEtageExiste(this.etage.rayon.id, this.etage.libelle).subscribe(data => {
-      console.log("ddd", data)
-      if (data == true) {
+       if (data == true) {
         Swal.fire(
           'Erreur',
           'Etage avec ce libelle deja existe',
@@ -1067,6 +1095,15 @@ export class AjouterEtageDialogComponent implements OnInit {
         )
       }
       if (data == false) {
+        if((this.etage.hauteur >= this.etage.rayon.hauteur)||(this.etage.largeur >= this.etage.rayon.largeur))
+        {
+          Swal.fire(
+          'Erreur',
+          'Verifer les dimension saisies',
+          'error'
+        )
+          }
+          else{
         this.service.OrdreEtageExiste(this.etage.rayon.id, this.etage.ordre).subscribe(data => {
           console.log("odre eee", data)
           if (data != null) {
@@ -1090,7 +1127,7 @@ export class AjouterEtageDialogComponent implements OnInit {
           }
         },
           error => console.log(error));
-      }
+      } }
     },
       error => console.log(error));
   }
