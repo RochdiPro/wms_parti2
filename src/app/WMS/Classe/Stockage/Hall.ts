@@ -12,4 +12,7 @@ export class Hall
     zones:any
     couloirs:any
     surface:any=0
+    espace_x=1
+    espace_y=1
+
 }

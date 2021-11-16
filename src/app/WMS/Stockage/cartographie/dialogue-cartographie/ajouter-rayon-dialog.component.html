@@ -105,7 +105,7 @@
             </div>
         </div>
 
-      <h3>Zones:</h3>  
+      <h3>Postions:</h3>  
         <div class="form-group">
             <div class="row">
                 <div class="col-md-5">
@@ -187,38 +187,8 @@
                      </mat-form-field>
                  
                 </div>
-                <div class="col-md-5"  >
-                    <label>Coloir Haut</label>
-                    <mat-form-field appearance="fill" *ngIf="selectColoirHaut">
-                        <mat-label>Coloir Haut</mat-label>
-                        <mat-select [disabled]="disableHaut" name="coloirHaut" [(ngModel)]="rayon.coloirHaut"
-                            id="coloirHaut">
-                            <mat-option  *ngFor="let c of couloirsHaut" [value]="c">{{c.libelle}}</mat-option>
-                         </mat-select>
-                    </mat-form-field>
-                    <mat-form-field appearance="fill"  *ngIf="!selectColoirHaut">
-                        <mat-label>Couloir Haut</mat-label>
-                        <input type="text" [disabled]="true" class="form-control" id="coloirHaut2" 
-                        [(ngModel)]="rayon.coloirHaut.libelle" name="coloirHaut1">                    </mat-form-field>
-                </div>
-                <div class="col-md-5">
-                    <label>Coloir Bas</label>
-
-                    <mat-form-field appearance="fill"   *ngIf="selectColoirBas">
-                        <mat-label>Coloir Bas</mat-label>
-                        <mat-select [disabled]="disableBas" name="coloirBas" [(ngModel)]="rayon.coloirBas"
-                            id="coloirBas">
-                            <mat-option *ngFor="let c of couloirsBas" [value]="c">{{c.libelle}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field appearance="fill"   *ngIf="!selectColoirBas">
-                        <mat-label>Coloir Bas</mat-label>
-                        <input type="text"[disabled]="true" class="form-control" id="coloirBas2" 
-                        [(ngModel)]="rayon.coloirBas.libelle" name="coloirBas">
-
-                     </mat-form-field>
-                 
-                </div>
+              
+              
 
 
 

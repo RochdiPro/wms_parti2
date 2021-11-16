@@ -7,9 +7,10 @@ import { Hall} from '../../Classe/Stockage/Hall';
 import { Emplacement } from '../../Classe/Stockage/Emplacement';
 import { Rayon } from '../../Classe/Stockage/Rayon';
  import { Couloir } from '../../Classe/Stockage/Couloir';
-import { Zone } from '../../Classe/Stockage/Zone';
-import { Client } from '../../Classe/Stockage/Client';
+ import { Client } from '../../Classe/Stockage/Client';
 import { Fiche_Local } from '../../Classe/Stockage/Fiche_Local';
+import { ZoneHall } from '../../Classe/Stockage/ZoneHall';
+import { ZoneRayon } from '../../Classe/Stockage/ZoneRayon';
 
 const infonet = '/ERP/';
 const wms = '/WMS/';
@@ -115,23 +116,24 @@ supprimerHall(id: number): Observable<any> {
   return this.httpClient.delete(`${wms+"/WMS/Supprimer_Hall"}/${id}`);
 }
 
-//service ajouter zone invalide
-ajoutZoneInvalide(zone:Zone): Observable<any> {  
-  return this.httpClient.post(wms+"WMS/AddZone",zone).pipe(
+//service ajouter zone 
+ajoutZoneRayon(zone:ZoneRayon): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajouter_Zone_Rayon",zone).pipe(
+    catchError(this.handleError)
+ );
+}
+//service ajouter zone 
+ajoutZoneHall(zone:ZoneHall): Observable<any> {  
+  return this.httpClient.post(wms+"WMS/Ajouter_Zone_Hall",zone).pipe(
     catchError(this.handleError)
  );
 }
 // service modifier zone
-editZone(id: number, zone: Zone): Observable<Object>{
+editZone(id: number, zone: ZoneRayon): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_zone"}/${id}`, zone);
 }
 
-//service ajouter zone
-ajoutZone(zone:Zone): Observable<any> {  
-  return this.httpClient.post(wms+"WMS/Ajouter_Zone",zone).pipe(
-    catchError(this.handleError)
- );
-}
+ 
 
 
 //service récupérer la liste des famille
@@ -144,22 +146,28 @@ getEmplacementParEtageCouloir(id_couloir:any,id_etage:any): Observable<any> {
 
 
 //service ZonneExiste
-ZoneInvalideExiste(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
-  return this.httpClient.get<Zone>(wms+"WMS/ZoneInvalideExiste",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+ZoneInvalideHallExiste(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<ZoneRayon>(wms+"WMS/ZoneInvalideHallExiste",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+    catchError(this.handleError)
+  );
+}
+//service ZonneExiste
+ZoneInvalideLocalExiste(local: any,ordre_x:any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<ZoneHall>(wms+"WMS/ZoneInvalideLocalExiste",{params:{ local: local,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
     catchError(this.handleError)
   );
 }
 
 //service recuperer zone by halle,x,y
 getZoneInvalideByHallX_Y(hall: any,ordre_x:any,ordre_y:any): Observable<any>{
-  return this.httpClient.get<Zone>(wms+"WMS/ZoneInvalide",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+  return this.httpClient.get<ZoneRayon>(wms+"WMS/ZoneInvalideHall",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
     catchError(this.handleError)
   );
 }
 
 //service ZonneExiste
 ZoneInvalideParHall(hall: any): Observable<any>{
-  return this.httpClient.get<Zone>(wms+"WMS/ZoneInvalideParHall",{params:{ hall: hall}}).pipe(
+  return this.httpClient.get<ZoneRayon>(wms+"WMS/ZoneInvalideParHall",{params:{ hall: hall}}).pipe(
     catchError(this.handleError)
   );
 }
@@ -206,7 +214,18 @@ OrdreRayonExiste(hall: any,ordre_x: any,ordre_y:any): Observable<any>{
     catchError(this.handleError)
   );
 }
-
+//service verifer l'exsitance d'ordre du rayon dans un local
+OrdreHallExiste(local: any,ordre_x: any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/OrdreHallExiste",{params:{ local: local,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+    catchError(this.handleError)
+  );
+}
+//service recuperer la postion du hall pour ordre(x,y)
+Position_Hall(local: any,ordre_x: any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/Position_Hall",{params:{ local: local,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+    catchError(this.handleError)
+  );
+}
 //service modifier le rayon d'une zone
 editRayonZone(zone_id: any, rayon_id: any): Observable<Object>{
    return this.httpClient.get<any>(wms+"WMS/Zone_Rayon",{params:{ zone_id: zone_id,rayon_id:rayon_id}}).pipe(
@@ -214,7 +233,13 @@ editRayonZone(zone_id: any, rayon_id: any): Observable<Object>{
   );
 
 }
+//service modifier le rayon d'une zone
+editHallZone(zone_id: any, hall_id: any): Observable<Object>{
+  return this.httpClient.get<any>(wms+"WMS/Zone_Hall",{params:{ zone_id: zone_id,hall_id:hall_id}}).pipe(
+   catchError(this.handleError)
+ );
 
+}
 //service verifer l'exsitance d'ordre d'etage dans un rayon
 OrdreEtageExiste(rayon: any,ordre:any): Observable<any>{
   return this.httpClient.get<any>(wms+"WMS/OrdreEtageExiste",{params:{ rayon: rayon,ordre:ordre}}).pipe(
@@ -327,10 +352,10 @@ editCouloir(id: number, couloir: Couloir): Observable<Object>{
 }
  
 //service modifier le rayon d'une zone
-editCouloirRayon(couloirgauche_id: any,couloirdroite_id:any,couloirhaut_id:any,couloirbas_id:any, rayon_id: any): Observable<Object>{
+editCouloirRayon(couloirgauche_id: any,couloirdroite_id:any , rayon_id: any): Observable<Object>{
   return this.httpClient.get<any>(wms+"WMS/Couloir_Rayon",
   {params:{ couloirgauche_id: couloirgauche_id,couloirdroite_id:couloirdroite_id,
-            couloirhaut_id:couloirhaut_id,couloirbas_id:couloirbas_id, rayon_id:rayon_id}}).pipe(
+            rayon_id:rayon_id}}).pipe(
    catchError(this.handleError)
  );
 
@@ -394,7 +419,18 @@ MaxOrdreX(hall: any): Observable<any>{
     catchError(this.handleError)
   );
 }
-
+//max ordre x hall 
+MaxOrdreHallX(local: any): Observable<any>{
+  return this.httpClient.get<Hall>(wms+"WMS/hall_maxOrdreX",{params:{ local: local}}).pipe(
+    catchError(this.handleError)
+  );
+}
+//max ordre y hall 
+MaxOrdreHallY(local: any): Observable<any>{
+  return this.httpClient.get<Hall>(wms+"WMS/hall_maxOrdreY",{params:{ local: local}}).pipe(
+    catchError(this.handleError)
+  );
+}
 //max ordre y rayon 
 MaxOrdreY(hall: any): Observable<any>{
   return this.httpClient.get<Hall>(wms+"WMS/maxOrdreY",{params:{ halle: hall}}).pipe(

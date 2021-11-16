@@ -46,7 +46,7 @@
                   <div class="row"  *ngFor=" let in of counter(x) ;let i = index">
                      <div class="col-md-2" *ngFor=" let is of counter(y) ;let j = index">
                         
-                        <div class="card-body"   *ngIf="arr[i][j] =='invalide' ">
+                        <div class="card-body"   *ngIf="arrRayon[i][j] =='invalide' ">
                            <div> 
                                 <button  class="  mb-1 mr-1 btn "> 
                                  <img src="../../../../assets/icon/hachuré.png " width= "90px"  height="300px"  >
@@ -56,14 +56,14 @@
                            </div>
                         </div>
       
-                        <div class="card-body"   *ngIf="arr[i][j]!= null  &&  arr[i][j] != 'invalide' " >
+                        <div class="card-body"   *ngIf="arrRayon[i][j]!= null  &&  arrRayon[i][j] != 'invalide' " >
                            
                            <div>
                               <ul class="list-group">
                                  <button class="list-group-item-action list-group-item " style="width: 90px;
                              height: 300px;">
-                                    <br> <b>Rayon {{arr[i][j].libelle}}</b><br> 
-                                    <div class="row" *ngFor="let etage of arr[i][j].etages;  let i = index">
+                                    <br> <b>Rayon {{arrRayon[i][j].libelle}}</b><br> 
+                                    <div class="row" *ngFor="let etage of arrRayon[i][j].etages;  let i = index">
                                           <ul class="list-group"  style="width: 80px;">
                                              <div style="background-color:  #EDEDED ;" >
                                                 <b>Etage{{etage.libelle}} {{etage.sousFamilleLogistique.libelle}}</b>

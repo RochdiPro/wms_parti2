@@ -65,7 +65,7 @@ export class TableauComponent implements OnInit {
         }
         else {
           //ordre n'exsite pas
-          verif = await this.service.ZoneInvalideExiste(halle, i + 1, j + 1).toPromise()
+          verif = await this.service.ZoneInvalideHallExiste(halle, i + 1, j + 1).toPromise()
           if (verif == true) {
             this.arr[i][j] = {};
             this.arr[i][j].id = -1;

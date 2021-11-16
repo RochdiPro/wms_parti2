@@ -1,12 +1,11 @@
-export class Zone {
+export class ZoneHall {
 
     id: any
     libelle: any
     ordreX: any;
     ordreY: any;
-    rayon: any
-    hall: any
+     hall: any
     description: any
     etat: any
-    client:any
-}
+    pos:any
+ }

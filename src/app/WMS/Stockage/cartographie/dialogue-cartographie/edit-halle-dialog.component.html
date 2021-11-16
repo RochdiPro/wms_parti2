@@ -142,10 +142,56 @@
                 
                  </div>
         </div>
+        <div class="form-group" *ngIf="addColoirShow">
+            <div class="card-shadow-primary border mb-3 card card-body border-primary">
+                <div class="row">
+                    <div class="col-md-11">
+                        <h5 class="card-title">Ajouter Couloir
+                        </h5>
+
+                    </div>
+                    <button (click)="addColoirToggle()" mat-icon-button color="primary"
+                        aria-label="Example icon button with a home icon">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+
+
+
+
+                <div class="row">
+                    <div class="col-md-3">
+
+                        <label>Libelle</label>
+                        <input type="text" class="form-control" id="couloirlibelle" [(ngModel)]="couloir.libelle"
+                            name="couloirlibelle">
+
+                    </div>
+                    <div class="col-md-3">
+                            <label>Ordre X</label>
+                            <input type="number" class="form-control" id="couloirX" [(ngModel)]="zone.ordreX"
+                            name="couloirX">
+                          
+                    </div>
+                    <div class="col-md-3">
+                      
+                        <label>Ordre Y</label>
+                        <input type="number" class="form-control" id="couloirY" [(ngModel)]="zone.ordreY"
+                        name="couloirY">
+                </div>
+
+                </div>
+                <button class="mb-2 mr-2 btn btn-success" (click)="ajouterCouloir()">Valider</button>
+
+            </div>
+        </div>
+        
     </form>
 </div>
 
 <div mat-dialog-actions class="float-right">
+    <button class="mb-2 mr-2 btn btn-success"   (click) = "addColoirToggle()">Ajouter Couloir</button>
+
     <button class="mb-2 mr-2 btn btn-success"   (click) = "onSubmit()">Valider</button>
     <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>
 

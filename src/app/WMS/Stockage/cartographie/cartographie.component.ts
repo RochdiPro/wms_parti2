@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component,  OnInit, ViewChild } from '@angular/core';
+import { Component,  OnInit, ViewChild,HostBinding,
+  HostListener,
+  AfterContentInit,
+  ElementRef, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
@@ -12,15 +15,36 @@ import { NgxBarcodeComponent } from 'ngx-barcode';
  
 import { StockageService } from '../services/stockage.service';
 import { AjouterEmplacmentDialogComponent, AjouterEtageDialogComponent, AjouterHalleDialogComponent, AjouterLocalDialogComponent, AjouterRayonDialogComponent, EditEmplacementDialogComponent, EditEtageDialogComponent, EditHalleDialogComponent, EditRayonDialogComponent, OpenCartographieV2Component, OpenEmplacmentLoueeComponent, OpenInfoLocalComponent, OpenZoneInvalideComponent } from './dialogue-cartographie/dialogue-cartographie.component';
- 
+import {trigger,state,style,transition,animate,} from '@angular/animations';
+function clamp(n: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, n));
+}
 @Component({
   selector: 'app-cartographie',
   templateUrl: './cartographie.component.html',
   styleUrls: ['./cartographie.component.scss'],
-
+  animations: [
+    trigger('transformAnimation', [
+      state('*', style({ transform: '{{transform}}' }), {
+        params: { transform: 'scale(1)', duration: '0s' },
+      }),
+      transition('* => *', animate('{{duration}} ease')),
+    ]),
+  ],
 })
 
 export class CartographieComponent implements OnInit {
+  private scale = 1;
+  private translate: [number, number] = [0, 0];
+  private translateOnPanStart: [number, number] = [0, 0];
+
+  transformAnimationState = {
+    value:0,
+    params: {
+      transform: 'scale(1)',
+      duration: '0s',
+    },
+  };
 
   @ViewChild('stepper') private myStepper: MatStepper;
   @ViewChild("qrcode", { static: true }) qrcode: QRCodeComponent
@@ -56,7 +80,9 @@ export class CartographieComponent implements OnInit {
   marginBottom = 10;
   marginLeft = 10;
   marginRight = 10;
-  showTableau = false;
+  showTableauHall = false;
+  showTableauRayon = false;
+
   get values(): string[] {
     return this.value.split('\n');
   }
@@ -76,9 +102,7 @@ export class CartographieComponent implements OnInit {
   emplacements: any = [];
   emplacementCouloir1: any = [];
   emplacementCouloir2: any = [];
-  emplacementCouloir3: any = [];
-  emplacementCouloir4: any = [];
-
+ 
   //declaration objet(local/hall/rayon/etage/emplacement) selectionné
   localselect: any;
   halleselect: any;
@@ -90,9 +114,7 @@ export class CartographieComponent implements OnInit {
   //coloir selctionner
   couloirGauche: Couloir = new Couloir()
   couloirDroite: Couloir = new Couloir()
-  couloirHaut: Couloir = new Couloir()
-  couloirBas: Couloir = new Couloir()
-
+ 
 
   //declaration du libelle d'objet(local/hall/rayon/etage/emplacement) selectinné
   libelleLocal: any;
@@ -104,7 +126,11 @@ export class CartographieComponent implements OnInit {
 
   x: number
   y: number
-  arr: any[][] = [];
+
+  x_Local: number
+  y_Local: number
+   arrRayon: any[][] = [];
+  arrHall: any[][] = [];
    scaleRatio = 1.0;
 
   getScale() {
@@ -128,10 +154,11 @@ export class CartographieComponent implements OnInit {
     this.scaleRatio -= 0.1;
   }
   //format d'origine
-  reset() {
+  reset0() {
     this.scaleRatio = 1.0;
   }
-  constructor(public dialog: MatDialog, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient, private sanitizer: DomSanitizer) {
+  constructor(public dialog: MatDialog, private _formBuilder: FormBuilder, private service: StockageService, 
+    private elementRef: ElementRef,private router: Router, private http: HttpClient, private sanitizer: DomSanitizer) {
 
   }
 
@@ -174,6 +201,7 @@ export class CartographieComponent implements OnInit {
     console.log("Local selctionner", local)
     this.localselect = local;
     this.libelleLocal = this.localselect.nom_Local
+    this.generertablehall(local);
     this.halles = this.localselect.halles
     this.goForward();
   }
@@ -252,12 +280,8 @@ export class CartographieComponent implements OnInit {
       data: { local: this.localselect }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.service.getLocalById(this.localselect.id_Local).subscribe(data => {
-        this.localselect = data;
-        console.log("Local", this.localselect)
-        this.halles = this.localselect.halles
-      }, error => console.log(error));
-
+       this.showTableauHall = false;
+      this.generertablehall(this.localselect);
     });
   }
 
@@ -316,9 +340,7 @@ export class CartographieComponent implements OnInit {
     this.etages = this.rayonselect.etages
     if (rayon.coloirGauche != null) { this.couloirGauche = rayon.coloirGauche }
     if (rayon.coloirDroite != null) { this.couloirDroite = rayon.coloirDroite }
-    if (rayon.coloirHaut != null) { this.couloirHaut = rayon.coloirHaut }
-    if (rayon.coloirBas != null) { this.couloirBas = rayon.coloirBas }
-
+ 
     console.log(rayon)
     console.log(this.couloirGauche)
     console.log(this.couloirDroite)
@@ -333,7 +355,7 @@ export class CartographieComponent implements OnInit {
       data: { local: this.localselect, hall: this.halleselect }
     });
     dialogRef.afterClosed().subscribe(result => {
-        this.showTableau = false;
+        this.showTableauRayon = false;
         this.generertableayrayon(this.halleselect);
     });
   }
@@ -382,7 +404,7 @@ export class CartographieComponent implements OnInit {
             'Rayon Supprimé Avec Sucées.',
             'success'
           )
-          this.showTableau=false
+          this.showTableauRayon=false
             this.generertableayrayon(this.halleselect)
    
 
@@ -396,7 +418,7 @@ export class CartographieComponent implements OnInit {
   async generertableayrayon(halle: any) {
     var data: any
     var verif: any
-    this.arr = []
+    this.arrRayon = []
     this.x = await this.service.MaxOrdreX(halle.id).toPromise();
     this.y = await this.service.MaxOrdreY(halle.id).toPromise();
     console.log("y", this.y)
@@ -404,37 +426,90 @@ export class CartographieComponent implements OnInit {
     console.log("eeee", halle)
     for (let i = 0; i < this.x; i++) {
       // Creates an empty line
-      this.arr.push([]);
+      this.arrRayon.push([]);
       // Adds cols to the empty line:
-      this.arr[i].push(new Array(this.y));
+      this.arrRayon[i].push(new Array(this.y));
       for (let j = 0; j < this.y; j++) {
         data = await this.service.OrdreRayonExiste(halle.id, i + 1, j + 1).toPromise()
         if (data != null) {
-          this.arr[i][j] = data;
-          this.arr[i][j].etat = "Rayon";
+          this.arrRayon[i][j] = data;
+          this.arrRayon[i][j].etat = "Rayon";
         }
         else {
           //ordre n'exsite pas
-          verif = await this.service.ZoneInvalideExiste(halle.id, i + 1, j + 1).toPromise()
+          verif = await this.service.ZoneInvalideHallExiste(halle.id, i + 1, j + 1).toPromise()
           if (verif == true) {
-            this.arr[i][j] = {};
-            this.arr[i][j].id = -1;
-            this.arr[i][j].etat = "Invalide";
-            this.arr[i][j].espace =1;
+            this.arrRayon[i][j] = {};
+            this.arrRayon[i][j].id = -1;
+            this.arrRayon[i][j].etat = "Invalide";
+            this.arrRayon[i][j].espace =1;
 
           }
           else {
-            this.arr[i][j] = {};
-            this.arr[i][j].id = 0;
-            this.arr[i][j].etat = "Vide";
-            this.arr[i][j].espace =1;
+            this.arrRayon[i][j] = {};
+            this.arrRayon[i][j].id = 0;
+            this.arrRayon[i][j].etat = "Vide";
+            this.arrRayon[i][j].espace =1;
 
           }
         }
       }
     }
-    console.log("matrice", this.arr)
-    this.showTableau = true;
+    console.log("matrice rayons", this.arrRayon)
+    this.showTableauRayon = true;
+  }
+
+
+  //génerer la matrice du rayon pour un hall
+  async generertablehall(local: any) {
+    var data: any
+    var pos:any
+    var verif: any
+    this.arrHall = []
+    console.log(local)
+    this.x_Local = await this.service.MaxOrdreHallX(local.id_Local).toPromise();
+    this.y_Local = await this.service.MaxOrdreHallY(local.id_Local).toPromise();
+    console.log("y", this.x_Local)
+    console.log("x", this.x_Local)
+     for (let i = 0; i < this.x_Local; i++) {
+      // Creates an empty line
+      this.arrHall.push([]);
+      // Adds cols to the empty line:
+      this.arrHall[i].push(new Array(this.y_Local));
+      for (let j = 0; j < this.y_Local; j++) {
+        data = await this.service.OrdreHallExiste(local.id_Local, i + 1, j + 1).toPromise()
+        if (data != null) {
+          pos = await this.service.Position_Hall(local.id_Local, i + 1, j + 1).toPromise()
+
+          this.arrHall[i][j] = data;
+          this.arrHall[i][j].etat = "Hall";
+          this.arrHall[i][j].pos = pos.pos;
+
+        }
+        else {
+          //ordre n'exsite pas
+          verif = await this.service.ZoneInvalideLocalExiste(local.id_Local, i + 1, j + 1).toPromise()
+          if (verif == true) {
+            this.arrHall[i][j] = {};
+            this.arrHall[i][j].id = -1;
+            this.arrHall[i][j].etat = "Invalide";
+            this.arrHall[i][j].espace =1;
+            this.arrHall[i][j].pos =1;
+
+          }
+          else {
+            this.arrHall[i][j] = {};
+            this.arrHall[i][j].id = 0;
+            this.arrHall[i][j].etat = "Vide";
+            this.arrHall[i][j].espace =1;
+            this.arrHall[i][j].pos =1;
+
+          }
+        }
+      }
+    }
+    console.log("matrice", this.arrHall)
+    this.showTableauHall = true;
   }
 
   SelectZoneInvalide(zone: any, i: any, j: any) {
@@ -563,9 +638,7 @@ export class CartographieComponent implements OnInit {
         halleselect: this.halleselect,
         couloirDroite: this.couloirDroite,
         couloirGauche: this.couloirGauche,
-        couloirBas: this.couloirBas,
-         couloirHaut: this.couloirHaut 
-      }
+       }
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log("id etage seelect", this.etageselect.id)
@@ -583,14 +656,7 @@ actualiserListeEmplacement(){
       this.emplacementCouloir2 = data;
     }, error => console.log(error));
                 //recuperer les emplacement accesible via couloir haut
-    this.service.getEmplacementParEtageCouloir(this.couloirHaut.id, this.etageselect.id).subscribe(data => {
-      this.emplacementCouloir3 = data;
-    }, error => console.log(error));
-                //recuperer les emplacement accesible via couloir bas
-    this.service.getEmplacementParEtageCouloir(this.couloirBas.id, this.etageselect.id).subscribe(data => {
-      this.emplacementCouloir4 = data;
-    }, error => console.log(error));
-}
+  }
 
 
   //supprimer un emplacement
@@ -726,6 +792,100 @@ actualiserListeEmplacement(){
   //compteuur
   counter(i: number) {
     return new Array(i);
+  }
+
+  
+  @HostListener('mousewheel', ['$event'])
+  onMouseWheel(e: any) {
+    const currentScale = this.scale;
+    const newScale = clamp(this.scale + Math.sign(e.wheelDelta) / 10.0, 1, 3.0);
+    if (currentScale !== newScale) {
+      this.translate = this.calculateTranslationToZoomPoint(
+        currentScale,
+        newScale,
+        this.translate,
+        e
+      );
+      this.scale = newScale;
+
+      this.updateTransformAnimationState();
+    }
+
+    e.preventDefault();
+  }
+
+  private calculateTranslationToZoomPoint(
+    currentScale: number,
+    newScale: number,
+    currentTranslation: [number, number],
+    e: { clientX: number; clientY: number }
+  ): [number, number] {
+    // kudos to this awesome answer on stackoverflow:
+    // https://stackoverflow.com/a/27611642/1814576
+    const [eventLayerX, eventLayerY] = this.projectToLayer(e);
+
+    const xAtCurrentScale =
+      (eventLayerX - currentTranslation[0]) / currentScale;
+    const yAtCurrentScale =
+      (eventLayerY - currentTranslation[1]) / currentScale;
+
+    const xAtNewScale = xAtCurrentScale * newScale;
+    const yAtNewScale = yAtCurrentScale * newScale;
+
+    return [eventLayerX - xAtNewScale, eventLayerY - yAtNewScale];
+  }
+
+  private projectToLayer(eventClientXY: {
+    clientX: number;
+    clientY: number;
+  }): [number, number] {
+    const layerX = Math.round(eventClientXY.clientX - this.clientX);
+    const layerY = Math.round(eventClientXY.clientY - this.clientY);
+    return [layerX, layerY];
+  }
+
+  private get clientX() {
+    return (
+      this.elementRef.nativeElement as HTMLElement
+    ).getBoundingClientRect().left;
+  }
+
+  private get clientY() {
+    return (
+      this.elementRef.nativeElement as HTMLElement
+    ).getBoundingClientRect().top;
+  }
+
+  private updateTransformAnimationState(duration = '.5s') {
+    this.transformAnimationState = {
+      value: this.scale + this.translate[0] + this.translate[1],
+      params: {
+        transform: `translate3d(${this.translate[0]}px, ${this.translate[1]}px, 0px) scale(${this.scale})`,
+        duration,
+      },
+    };
+  }
+
+  reset() {
+    this.scale = 1;
+    this.translate = [0, 0];
+    this.updateTransformAnimationState();
+  }
+
+  @HostListener('panstart', ['$event'])
+  onPanStart(e: Event) {
+    this.translateOnPanStart = [...this.translate] as [number, number];
+    e.preventDefault();
+  }
+
+  @HostListener('pan', ['$event'])
+  onPan(e: Event & { deltaX: number; deltaY: number }) {
+    this.translate = [
+      this.translateOnPanStart[0] + e.deltaX,
+      this.translateOnPanStart[1] + e.deltaY,
+    ];
+    this.updateTransformAnimationState('0s');
+    e.preventDefault();
   }
 }
 
