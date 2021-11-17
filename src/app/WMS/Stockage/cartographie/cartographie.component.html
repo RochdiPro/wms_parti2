@@ -23,52 +23,54 @@
          <div class="row">
             
             <div class="col-md-4 mb-3" *ngFor="let local of locals;  let i = index">
-               <div class="card green">
+               <div class="card0 green">
                   <div class="additional">
-                    <div class="user-card">
+                    <div class="user-card0">
                       <div class="level center">
                         Depot {{i+1}}
                       </div>
                       <div class="points center">
-                        {{local.responsable}}
+                        {{local.categorie_Local}}
                       </div>
                       <svg width="110" height="110" viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc" class="center">
-                         
+
                          <circle cx="125" cy="125" r="120" fill="rgba(0,0,0,0.15)" />
-                       
                       </svg>
                     </div>
                     <div class="more-info">
                       <h1> {{local.nom_Local}}</h1>
+                   
                       <div class="coords">
-                        <span>Group Name</span>
-                        <span>Joined January 2019</span>
+                        <span>Adresse</span>
+                        <span>{{local.adresse}}</span>
                       </div>
                       <div class="coords">
-                        <span>Position/Role</span>
-                        <span>City, Country</span>
+                        <span>Responsable:</span>
+                        <span> {{local.responsable}}
+                        </span>
                       </div>
+                      <div class="coords">
+                        <span>Surface</span>
+                        <span>{{local.surface}}</span>
+                      </div>
+                      <div class="coords">
+                        <span>Longeur</span>
+                        <span>{{local.adresse}}</span>
+                      </div>
+                      <div  class="text-right" (click)="openDialogInformationLocal(local)"> <u>Plus</u></div>
                       <div class="stats">
                         <div>
-                          <div class="title">Awards</div>
-                          <i class="fa fa-trophy"></i>
-                          <div class="value">2</div>
+                          <div class="title">Telephone</div>
+                          <i class="fa fa-phone"></i>
+                          <div class="value">{{local.tel}}</div>
                         </div>
                         <div>
-                          <div class="title">Matches</div>
-                          <i class="fa fa-gamepad"></i>
-                          <div class="value">27</div>
+                          <div class="title">Email</div>
+                          <i class="fa fa-envelope"></i>
+                          <div class="value">{{local.email}}</div>
                         </div>
-                        <div>
-                          <div class="title">Pals</div>
-                          <i class="fa fa-group"></i>
-                          <div class="value">123</div>
-                        </div>
-                        <div>
-                          <div class="title">Coffee</div>
-                          <i class="fa fa-coffee"></i>
-                          <div class="value infinity">∞</div>
-                        </div>
+                      
+                      
                       </div>
                     </div>
                   </div>
@@ -118,14 +120,14 @@
                         <div  class="text-right" (click)="openDialogInformationLocal(local)"> <u>Plus</u></div>
                      </div>
                      <div class="card-footer"><button class="btn btn-info" (click)="SelectLocal(local,local.id_Local)">
-                           <img src="../../../../assets/icon/accede.png" width="20" height="20">
+                           <img src="../../../../assets/wms-images/icon/accede.png" width="20" height="20">
                            Acceder</button>
 
                         <button class="btn btn-info" (click)="OpenCartographie(local,local.id_Local)">
-                           <img src="../../../../assets/icon/1540089.png" width="20" height="20">Plan</button>
+                           <img src="../../../../assets/wms-images/icon/1540089.png" width="20" height="20">Plan</button>
 
                         <button class="btn btn-info" (click)="OpenEspaceTravail(local.id_Local)">
-                           <img src="../../../../assets/icon/modeliser.png" width="20" height="20">Modeliser</button>
+                           <img src="../../../../assets/wms-images/icon/modeliser.png" width="20" height="20">Modeliser</button>
                      </div>
 
                   </div>
@@ -164,13 +166,13 @@
                               <br> <b>Hall {{arrHall[i][j].libelle}}</b><br>
                               <div class="row" style="align-items: center;">
                                  <button class="  mb-1 mr-1 btn " (click)="SelectHalle(arrHall[i][j])">
-                                    <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
+                                    <img src="../../../../assets/wms-images/icon/Zoom-In-icon.png" width="20" height="20">
                                  </button>
                                  <button class=" mb-1 mr-1 btn " (click)="openDialogEditHalle(arrHall[i][j].id,arrHall[i][j])">
-                                    <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
+                                    <img src="../../../../assets/wms-images/icon/edit-icon.png" width="20" height="20">
                                  </button>
                                  <button class="  mb-1 mr-1 btn " (click)="supprimerHalle(arrHall[i][j].id)">
-                                    <img src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
+                                    <img src="../../../../assets/wms-images/icon/delete-image-png-6-Transparent-Images-1.png"
                                        width="20" height="20">
                                  </button>
                               </div>
@@ -187,13 +189,13 @@
                               <br> <b>Hall {{arrHall[i][j].libelle}}</b><br>
                               <div class="row" style="align-items: center;">
                                  <button class="  mb-1 mr-1 btn " (click)="SelectHalle(arrHall[i][j])">
-                                    <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
+                                    <img src="../../../../assets/wms-images/icon/Zoom-In-icon.png" width="20" height="20">
                                  </button>
                                  <button class=" mb-1 mr-1 btn " (click)="openDialogEditHalle(arrHall[i][j].id,arrHall[i][j])">
-                                    <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
+                                    <img src="../../../../assets/wms-images/icon/edit-icon.png" width="20" height="20">
                                  </button>
                                  <button class="  mb-1 mr-1 btn " (click)="supprimerHalle(arrHall[i][j].id)">
-                                    <img src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
+                                    <img src="../../../../assets/wms-images/icon/delete-image-png-6-Transparent-Images-1.png"
                                        width="20" height="20">
                                  </button>
                               </div>
@@ -211,13 +213,13 @@
                               <br> <b>Hall {{arrHall[i][j].libelle}}</b><br>
                               <div class="row" style="align-items: center;">
                                  <button class="  mb-1 mr-1 btn " (click)="SelectHalle(arrHall[i][j])">
-                                    <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
+                                    <img src="../../../../assets/wms-images/icon/Zoom-In-icon.png" width="20" height="20">
                                  </button>
                                  <button class=" mb-1 mr-1 btn " (click)="openDialogEditHalle(arrHall[i][j].id,arrHall[i][j])">
-                                    <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
+                                    <img src="../../../../assets/wms-images/icon/edit-icon.png" width="20" height="20">
                                  </button>
                                  <button class="  mb-1 mr-1 btn " (click)="supprimerHalle(arrHall[i][j].id)">
-                                    <img src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
+                                    <img src="../../../../assets/wms-images/icon/delete-image-png-6-Transparent-Images-1.png"
                                        width="20" height="20">
                                  </button>
                               </div>
@@ -229,13 +231,13 @@
 
                   <div class="card-body"  *ngIf="arrHall[i][j].etat =='Invalide' ">
                      <div>
-                        <img src="../../../../assets/icon/hachuré.png " width="190px" height="220px">
+                        <img src="../../../../assets/wms-images/icon/hachuré.png " width="190px" height="220px">
 
                      </div>
                   </div>
                   <div class="card-body"  *ngIf="arrHall[i][j].etat =='Vide' ">
                      <div >
-                        <img src="../../../../assets/icon/vide.png " width="190px" height="220px">
+                        <img src="../../../../assets/wms-images/icon/vide.png " width="190px" height="220px">
 
                      </div>
                   </div>
@@ -273,13 +275,13 @@
 
  
                <button    class="  mb-1 mr-1 btn "(click)="zoomIn()" >
-                  <img src="../../../../assets/icon/Zoom-In-icon.png"   width="20" height="20">
+                  <img src="../../../../assets/wms-images/icon/Zoom-In-icon.png"   width="20" height="20">
                </button>
                <button class="  mb-1 mr-1 btn " (click)="zoomOut()" >
-                  <img src="../../../../assets/icon/Zoom-Out-icon.png"   width="20" height="20">
+                  <img src="../../../../assets/wms-images/icon/Zoom-Out-icon.png"   width="20" height="20">
                 </button>
                <button class="  mb-1 mr-1 btn " (click)="reset()" >
-                 <img src="../../../../assets/icon/undo.png"   width="20" height="20"> 
+                 <img src="../../../../assets/wms-images/icon/undo.png"   width="20" height="20"> 
                </button>
              </div>
             <div id="cartoEchelle"     
@@ -305,7 +307,7 @@
                            <div  
                            
                                 (click)="SelectZoneInvalide(arrRayon[i][j],i,j)">
-                              <img src="../../../../assets/icon/hachuré.png " width="90px" height="300px">
+                              <img src="../../../../assets/wms-images/icon/hachuré.png " width="90px" height="300px">
 
                         </div>
 
@@ -315,7 +317,7 @@
                      <div class="card-body"*ngIf="arrRayon[i][j].etat == 'Vide' ">
                             <ul class="list-group">
                               <div  >
-                                 <img src="../../../../assets/icon/vide.png " width="90px" height="300px">
+                                 <img src="../../../../assets/wms-images/icon/vide.png " width="90px" height="300px">
    
                            </div>
    
@@ -331,14 +333,14 @@
                                  <br> <b>Rayon {{arrRayon[i][j].libelle}}</b><br>
                                  <div class="row" style="align-items: center;">
                                     <button class="  mb-1 mr-1 btn " (click)="SelectRayon(arrRayon[i][j])">
-                                       <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
+                                       <img src="../../../../assets/wms-images/icon/Zoom-In-icon.png" width="20" height="20">
                                     </button>
                                     <button class=" mb-1 mr-1 btn "
                                        (click)="openDialogEditRayon(arrRayon[i][j].id,arrRayon[i][j])">
-                                       <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
+                                       <img src="../../../../assets/wms-images/icon/edit-icon.png" width="20" height="20">
                                     </button>
                                     <button class="  mb-1 mr-1 btn " (click)="supprimerRayon(arrRayon[i][j].id)">
-                                       <img src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
+                                       <img src="../../../../assets/wms-images/icon/delete-image-png-6-Transparent-Images-1.png"
                                           width="20" height="20">
                                     </button>
                                  </div>
@@ -412,13 +414,13 @@
                         <b>Etage {{etage.libelle}}</b>
                         {{etage.sousFamilleLogistique.libelle}}
                         <button class="   mb-2 mr-2 btn " (click)="SelectEtage(etage)">
-                           <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
+                           <img src="../../../../assets/wms-images/icon/Zoom-In-icon.png" width="20" height="20">
                         </button>
                         <button class=" mb-2 mr-2 btn " (click)="openDialoEditEtage(etage.id,etage)">
-                           <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
+                           <img src="../../../../assets/wms-images/icon/edit-icon.png" width="20" height="20">
                         </button>
                         <button class=" mb-2 mr-2 btn " (click)="supprimerEtage(etage.id)">
-                           <img src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png" width="20"
+                           <img src="../../../../assets/icon/wms-images/delete-image-png-6-Transparent-Images-1.png" width="20"
                               height="20">
                         </button>
 
@@ -484,15 +486,15 @@
                                              [ngStyle]="{'background':emp.etat === 'Libre' ? 'LightGreen' : emp.etat === 'Disponible'? '#fff44f': emp.etat === 'Reservé'? 'blue' : 'LightCoral','width.cm':emp.largeur }">
                                              {{emp.libelle}} <br>
                                              <button class="  mb-2 mr-2 btn " (click)="selectEmplacment(emp)">
-                                                <img src="../../../../assets/icon/Zoom-In-icon.png" width="20"
+                                                <img src="../../../../assets/wms-images/icon/Zoom-In-icon.png" width="20"
                                                    height="20">
                                              </button>
                                              <button class="  mb-2 mr-2 btn " (click)="openDialoEditEmplacment(emp)">
-                                                <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
+                                                <img src="../../../../assets/wms-images/icon/edit-icon.png" width="20" height="20">
                                              </button>
                                              <button class="  mb-2 mr-2 btn" (click)="supprimerEmplacment(emp.id)">
                                                 <img
-                                                   src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
+                                                   src="../../../../assets/wms-images/icon/delete-image-png-6-Transparent-Images-1.png"
                                                    width="20" height="20">
                                              </button>
                                           </button>
@@ -518,15 +520,15 @@
   <button [ngStyle]="{ }" class="list-group-item-action list-group-item"
                                              [ngStyle]="{'background':emp.etat === 'Libre' ? 'LightGreen' : emp.etat === 'Disponible'? '#fff44f': emp.etat === 'Reservé'? 'blue' : 'LightCoral','width.cm':emp.largeur }">                                             {{emp.libelle}} <br>
                                              <button class="  mb-2 mr-2 btn " (click)="selectEmplacment(emp)">
-                                                <img src="../../../../assets/icon/Zoom-In-icon.png" width="20"
+                                                <img src="../../../../assets/wms-images/icon/Zoom-In-icon.png" width="20"
                                                    height="20">
                                              </button>
                                              <button class="  mb-2 mr-2 btn " (click)="openDialoEditEmplacment(emp)">
-                                                <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
+                                                <img src="../../../../assets/wms-images/icon/edit-icon.png" width="20" height="20">
                                              </button>
                                              <button class="  mb-2 mr-2 btn" (click)="supprimerEmplacment(emp.id)">
                                                 <img
-                                                   src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
+                                                   src="../../../../assets/wms-images/icon/delete-image-png-6-Transparent-Images-1.png"
                                                    width="20" height="20">
                                              </button>
                                           </button>

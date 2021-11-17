@@ -111,6 +111,37 @@
                  </div>
         </div>
         <div class="form-group">
+            <label><strong>Couloirs</strong> </label>
+            
+
+             <button class="btn" (click)="OpenZoneInvalide(hall,hall.id)">
+                <img src="../../../../assets/icon/invalide.png" width="20" height="20"></button>
+                <div class="row">
+                    <div class="table-responsive">
+                       <table class="mb-0 table">
+                            <thead>
+                           <tr>
+                                <th>Couloirs</th>
+                               <th>Position X</th>
+                               <th>Position Y</th>
+
+                            </tr>
+                           </thead>
+                           <tbody>
+                            <tr  *ngFor = "let couloir of hall.couloirs; let i=index">
+                                <td> {{couloir.libelle}} </td>
+                               <td>{{couloir.zone.ordreX}}</td>
+                               <td> {{couloir.zone.ordreY}} </td>
+
+                            </tr>
+                          
+                           </tbody>
+                       </table>
+                   </div>
+                
+                 </div>
+        </div>
+        <div class="form-group">
             <label><strong>Reserve</strong> </label>
             <button class="btn" >
                 <img src="../../../../assets/icon/reserver.png" width="20" height="20"></button>

@@ -22,7 +22,7 @@
    #hachure {
     height: 23px;
     width: 23px;
-    background-image: url("../../../../assets/icon/hachur.png");
+    background-image: url("../../../../assets/wms-images/icon/hachur.png");
     background-size: cover;
     cursor: pointer;
 
@@ -156,7 +156,7 @@
   -webkit-transform: translate(-50%, -50%);
 }
 
-.card {
+.card0 {
   width: 450px;
   height: 250px;
   background-color: #fff;
@@ -168,11 +168,11 @@
   margin: 1.5rem;
 }
 
-.card h1 {
+.card0 h1 {
   text-align: center;
 }
 
-.card .additional {
+.card0 .additional {
   position: absolute;
   width: 150px;
   height: 100%;
@@ -182,24 +182,24 @@
   z-index: 2;
 }
 
-.card.green .additional {
+.card0.green .additional {
   background: linear-gradient(#92bCa6, #A2CCB6);
 }
 
 
-.card:hover .additional {
+.card0:hover .additional {
   width: 100%;
   border-radius: 0 5px 5px 0;
 }
 
-.card .additional .user-card {
+.card0 .additional .user-card {
   width: 150px;
   height: 100%;
   position: relative;
   float: left;
 }
 
-.card .additional .user-card::after {
+.card0 .additional .user-card::after {
   content: "";
   display: block;
   position: absolute;
@@ -209,8 +209,8 @@
   border-left: 2px solid rgba(0,0,0,0.025);
 }
 
-.card .additional .user-card .level,
-.card .additional .user-card .points {
+.card0 .additional .user-card0 .level,
+.card0 .additional .user-card0 .points {
   top: 15%;
   color: #fff;
   text-transform: uppercase;
@@ -222,15 +222,15 @@
   white-space: nowrap;
 }
 
-.card .additional .user-card .points {
+.card0 .additional .user-card0 .points {
   top: 85%;
 }
 
-.card .additional .user-card svg {
+.card0 .additional .user-card0 svg {
   top: 50%;
 }
 
-.card .additional .more-info {
+.card0 .additional .more-info {
   width: 300px;
   float: left;
   position: absolute;
@@ -238,30 +238,30 @@
   height: 100%;
 }
 
-.card .additional .more-info h1 {
+.card0 .additional .more-info h1 {
   color: #fff;
   margin-bottom: 0;
 }
 
-.card.green .additional .more-info h1 {
+.card0.green .additional .more-info h1 {
   color: #224C36;
 }
 
-.card .additional .coords {
+.card0 .additional .coords {
   margin: 0 1rem;
   color: #fff;
   font-size: 1rem;
 }
 
-.card.green .additional .coords {
+.card0.green .additional .coords {
   color: #325C46;
 }
 
-.card .additional .coords span + span {
+.card0 .additional .coords span + span {
   float: right;
 }
 
-.card .additional .stats {
+.card0 .additional .stats {
   font-size: 2rem;
   display: flex;
   position: absolute;
@@ -272,36 +272,36 @@
   color: #fff;
 }
 
-.card.green .additional .stats {
+.card0.green .additional .stats {
   color: #325C46;
 }
 
-.card .additional .stats > div {
+.card0 .additional .stats > div {
   flex: 1;
   text-align: center;
 }
 
-.card .additional .stats i {
+.card0 .additional .stats i {
   display: block;
 }
 
-.card .additional .stats div.title {
-  font-size: 0.75rem;
+.card0 .additional .stats div.title {
+  font-size: 0.2rem;
   font-weight: bold;
   text-transform: uppercase;
 }
 
-.card .additional .stats div.value {
-  font-size: 1.5rem;
+.card0 .additional .stats div.value {
+  font-size: 0.8rem;
   font-weight: bold;
-  line-height: 1.5rem;
+  line-height: 0.8rem;
 }
 
-.card .additional .stats div.value.infinity {
+.card0 .additional .stats div.value.infinity {
   font-size: 2.5rem;
 }
 
-.card .general {
+.card0 .general {
   width: 300px;
   height: 100%;
   position: absolute;
@@ -313,7 +313,7 @@
   padding-top: 0;
 }
 
-.card .general .more {
+.card0 .general .more {
   position: absolute;
   bottom: 1rem;
   right: 1rem;

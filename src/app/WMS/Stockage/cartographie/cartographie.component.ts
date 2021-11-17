@@ -436,7 +436,14 @@ export class CartographieComponent implements OnInit {
           this.arrRayon[i][j].etat = "Rayon";
         }
         else {
-          //ordre n'exsite pas
+          data = await this.service.OrdreCouloirExiste(halle.id, i + 1, j + 1).toPromise()
+            if (data != null) {
+            this.arrRayon[i][j] = data;
+            this.arrRayon[i][j].etat = "Couloirs";
+          }
+          else{
+
+               //ordre n'exsite pas
           verif = await this.service.ZoneInvalideHallExiste(halle.id, i + 1, j + 1).toPromise()
           if (verif == true) {
             this.arrRayon[i][j] = {};
@@ -452,10 +459,14 @@ export class CartographieComponent implements OnInit {
             this.arrRayon[i][j].espace =1;
 
           }
+          }
+
+
+       
         }
       }
     }
-    console.log("matrice rayons", this.arrRayon)
+    console.log("matrice", this.arrRayon)
     this.showTableauRayon = true;
   }
 

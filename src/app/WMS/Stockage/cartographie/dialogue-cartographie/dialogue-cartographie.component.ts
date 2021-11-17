@@ -856,10 +856,14 @@ export class EditHalleDialogComponent implements OnInit {
   }
   zone: ZoneRayon = new ZoneRayon()
   ajouterCouloir() {
+
+
+
+
     this.zone.etat = "Couloir"
+    this.zone.hall=this.hall
     this.couloir.hall = this.hall
-    this.couloir.zone = this.zone
-    this.zone.couloir = this.couloir
+     this.couloir.zone = this.zone
     console.log(this.couloir)
     this.service.libelleCouloirexiste(this.hall.local.id_Local, this.couloir.libelle).subscribe(data => {
       if (data == true) {
@@ -870,7 +874,12 @@ export class EditHalleDialogComponent implements OnInit {
         )
       }
       if (data == false) {
-         
+          this.service.ajoutZoneRayon(this.zone).subscribe(data => {
+            this.zone=data
+            console.log("zone",data)
+            this.couloir.zone = this.zone
+
+          
         this.service.ajoutCouloir(this.couloir).subscribe(data => {
           
           console.log("couloir", data);
@@ -883,10 +892,8 @@ export class EditHalleDialogComponent implements OnInit {
 
         },
           error => console.log(error));
-
-
-
-
+        },
+        error => console.log(error));
 
       }
     },
