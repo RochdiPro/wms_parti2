@@ -451,6 +451,13 @@ CouloirDroiteByZone(hall:any,x:any,y:any): Observable<any>{
     catchError(this.handleError)
   );
 }
+//get couloir by zone 
+CouloirByZone(hall:any,x:any,y:any): Observable<any>{
+  return this.httpClient.get<Couloir>(wms+"WMS/CouloirByZone",{params:{ hall: hall,x:x,y:y}}).pipe(
+    catchError(this.handleError)
+  );
+}
+
 
 //get couloir by zone 
 CouloirGaucheByZone(hall:any,x:any,y:any): Observable<any>{

@@ -217,7 +217,7 @@ export class AjouterRayonDialogComponent implements OnInit {
             )
             if (this.zone.ordreY == 1) {
               console.log("couloir gauche mur")
-              this.service.getCouloirByLibelle(this.local.id_Local, "M2G").subscribe(data => {
+              this.service.getCouloirByLibelle(this.local.id_Local, "M1").subscribe(data => {
                 console.log("Mur gauche", data);
                 this.couloirGauche = data
                 this.rayon.coloirGauche = data
@@ -228,29 +228,20 @@ export class AjouterRayonDialogComponent implements OnInit {
             }
             if (this.zone.ordreX == 1) {
 
-              this.service.CouloirDroiteByZone(this.rayon.hall.id, this.zone.ordreX, this.zone.ordreY - 1).subscribe(data => {
-                console.log("Couloir Droite", data);
-                if (data != null) {
-                  this.rayon.coloirDroite = data
-                  this.disableDroit = true
-                  this.selectColoirDroite = false
-                }
-              },
-                error => console.log(error));
             }
             if (this.zone.ordreY != 1) {
-              console.log("couloiir")
-              this.service.CouloirDroiteByZone(this.rayon.hall.id, this.zone.ordreX, this.zone.ordreY - 1).subscribe(data => {
+
+
+              this.service.CouloirByZone(this.rayon.hall.id, this.zone.ordreX, this.zone.ordreY + 1).subscribe(data => {
                 console.log("Couloir Droite", data);
                 if (data != null) {
                   this.rayon.coloirDroite = data
                   this.disableDroit = true
                   this.selectColoirDroite = false
-
                 }
               },
                 error => console.log(error));
-              this.service.CouloirGaucheByZone(this.rayon.hall.id, this.zone.ordreX, this.zone.ordreY - 1).subscribe(data => {
+              this.service.CouloirByZone(this.rayon.hall.id, this.zone.ordreX, this.zone.ordreY - 1).subscribe(data => {
                 console.log("Couloir Gauche", data);
                 if (data != null) {
                   this.rayon.coloirGauche = data

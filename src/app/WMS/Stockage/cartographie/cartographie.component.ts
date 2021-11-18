@@ -439,7 +439,7 @@ export class CartographieComponent implements OnInit {
           data = await this.service.OrdreCouloirExiste(halle.id, i + 1, j + 1).toPromise()
             if (data != null) {
             this.arrRayon[i][j] = data;
-            this.arrRayon[i][j].etat = "Couloirs";
+            this.arrRayon[i][j].etat = "Couloir";
           }
           else{
 

@@ -299,83 +299,114 @@
                   <div class="un"></div>
                   Invalide <div id="hachure"></div>
                </div>
-               <div class="row" *ngFor=" let in of counter(x) ;let i = index" >
-                  <div *ngFor=" let is of counter(y) ;let j = index">
+               <div class="row" >
+                  <div >
 
-                     <div class="card-body" *ngIf="arrRayon[i][j].etat =='Invalide' ">
-                        <ul class="list-group">
-                           <div  
-                           
-                                (click)="SelectZoneInvalide(arrRayon[i][j],i,j)">
-                              <img src="../../../../assets/wms-images/icon/hachuré.png " width="90px" height="300px">
+<table >
+   <tr *ngFor=" let in of counter(x) ;let i = index" >
+      <td style=" border: 1px solid #333;" *ngFor=" let is of counter(y) ;let j = index">
 
-                        </div>
 
-                        </ul>
-                     </div>
 
-                     <div class="card-body"*ngIf="arrRayon[i][j].etat == 'Vide' ">
-                            <ul class="list-group">
-                              <div  >
-                                 <img src="../../../../assets/wms-images/icon/vide.png " width="90px" height="300px">
-   
-                           </div>
-   
-                           </ul>
-                           
-                      </div>
+         <div class="card-body" *ngIf="arrRayon[i][j].etat =='Invalide' ">
+            <ul class="list-group">
+               <div  
+               
+                    (click)="SelectZoneInvalide(arrRayon[i][j],i,j)">
+                  <img src="../../../../assets/wms-images/icon/hachuré.png " width="90px" height="300px">
 
-                     <div *ngIf=" arrRayon[i][j].id != 0 &&  arrRayon[i][j].etat != 'Invalide' ">
-                        <div class="card-body" *ngIf="arrRayon[i][j].espace==1">
-                           <ul class="list-group">
-                              <button class="list-group-item-action list-group-item " style="width: 90px;
-                                   height: 300px;">
-                                 <br> <b>Rayon {{arrRayon[i][j].libelle}}</b><br>
-                                 <div class="row" style="align-items: center;">
-                                    <button class="  mb-1 mr-1 btn " (click)="SelectRayon(arrRayon[i][j])">
-                                       <img src="../../../../assets/wms-images/icon/Zoom-In-icon.png" width="20" height="20">
-                                    </button>
-                                    <button class=" mb-1 mr-1 btn "
-                                       (click)="openDialogEditRayon(arrRayon[i][j].id,arrRayon[i][j])">
-                                       <img src="../../../../assets/wms-images/icon/edit-icon.png" width="20" height="20">
-                                    </button>
-                                    <button class="  mb-1 mr-1 btn " (click)="supprimerRayon(arrRayon[i][j].id)">
-                                       <img src="../../../../assets/wms-images/icon/delete-image-png-6-Transparent-Images-1.png"
-                                          width="20" height="20">
-                                    </button>
-                                 </div>
-                              </button>
-                           </ul>
-                        </div>
-                     </div>
+            </div>
 
-                     <div *ngIf="arrRayon[i][j].id != 0  &&  arrRayon[i][j].etat != 'invalide' && j<y ">
-                        <div class="card-body" *ngIf="arrRayon[i][j].espace!=1  && arrRayon[i][j].id == arrRayon[i][j+1].id ">
-                           <ul class="list-group">
-                              <button class="list-group-item-action list-group-item " style="width: 220px;
+            </ul>
+         </div>
+
+         <div class="card-body"*ngIf="arrRayon[i][j].etat == 'Vide' ">
+                <ul class="list-group">
+                  <div  >
+                     <img src="../../../../assets/wms-images/icon/vide.png " width="90px" height="300px">
+
+               </div>
+
+               </ul>
+               
+          </div>
+
+          <div *ngIf=" arrRayon[i][j].id != 0 &&  arrRayon[i][j].etat == 'Couloir' ">
+            <div class="card-body" >
+               <ul class="list-group">
+                  <button class="list-group-item-action list-group-item " style="width: 30px;
                        height: 300px;">
-                                 <br> <b>Rayon {{arrRayon[i][j].libelle}}</b><br>
-                                 <div class="row" style="align-items: center;">
-                                    <button class="  mb-1 mr-1 btn " (click)="SelectRayon(arrRayon[i][j])">
-                                       <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
-                                    </button>
-                                    <button class=" mb-1 mr-1 btn "
-                                       (click)="openDialogEditRayon(arrRayon[i][j].id,arrRayon[i][j])">
-                                       <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
-                                    </button>
-                                    <button class="  mb-1 mr-1 btn " (click)="supprimerRayon(arrRayon[i][j].id)">
-                                       <img src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
-                                          width="20" height="20">
-                                    </button>
-                                 </div>
-                              </button>
+                     <br> <b>Couloir {{arrRayon[i][j].libelle}}</b><br>
+                 
+                  </button>
+               </ul>
+            </div>
+         </div>
 
-                           </ul>
-                        </div>
+
+
+         <div *ngIf=" arrRayon[i][j].id != 0 &&  arrRayon[i][j].etat != 'Invalide' ">
+            <div class="card-body" *ngIf="arrRayon[i][j].espace==1">
+               <ul class="list-group">
+                  <button class="list-group-item-action list-group-item " style="width: 90px;
+                       height: 300px;">
+                     <br> <b>Rayon {{arrRayon[i][j].libelle}}</b><br>
+                     <div class="row" style="align-items: center;">
+                        <button class="  mb-1 mr-1 btn " (click)="SelectRayon(arrRayon[i][j])">
+                           <img src="../../../../assets/wms-images/icon/Zoom-In-icon.png" width="20" height="20">
+                        </button>
+                        <button class=" mb-1 mr-1 btn "
+                           (click)="openDialogEditRayon(arrRayon[i][j].id,arrRayon[i][j])">
+                           <img src="../../../../assets/wms-images/icon/edit-icon.png" width="20" height="20">
+                        </button>
+                        <button class="  mb-1 mr-1 btn " (click)="supprimerRayon(arrRayon[i][j].id)">
+                           <img src="../../../../assets/wms-images/icon/delete-image-png-6-Transparent-Images-1.png"
+                              width="20" height="20">
+                        </button>
                      </div>
-                     <div >
-                      
+                  </button>
+               </ul>
+            </div>
+         </div>
+
+         <div *ngIf="arrRayon[i][j].id != 0  &&  arrRayon[i][j].etat != 'invalide' && j<y-1 && i<x ">
+            <div class="card-body" *ngIf="arrRayon[i][j].espace!=1  && arrRayon[i][j].id == arrRayon[i][j+1].id ">
+               <ul class="list-group">
+                  <button class="list-group-item-action list-group-item " style="width: 220px;
+           height: 300px;">
+                     <br> <b>Rayon {{arrRayon[i][j].libelle}}</b><br>
+                     <div class="row" style="align-items: center;">
+                        <button class="  mb-1 mr-1 btn " (click)="SelectRayon(arrRayon[i][j])">
+                           <img src="../../../../assets/icon/Zoom-In-icon.png" width="20" height="20">
+                        </button>
+                        <button class=" mb-1 mr-1 btn "
+                           (click)="openDialogEditRayon(arrRayon[i][j].id,arrRayon[i][j])">
+                           <img src="../../../../assets/icon/edit-icon.png" width="20" height="20">
+                        </button>
+                        <button class="  mb-1 mr-1 btn " (click)="supprimerRayon(arrRayon[i][j].id)">
+                           <img src="../../../../assets/icon/delete-image-png-6-Transparent-Images-1.png"
+                              width="20" height="20">
+                        </button>
                      </div>
+                  </button>
+
+               </ul>
+            </div>
+         </div>
+         <div >
+          
+         </div>
+
+
+      </td>
+   </tr>
+</table>
+
+
+
+
+
+
                  
 
                   </div>
