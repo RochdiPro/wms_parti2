@@ -251,7 +251,7 @@ export class CartographieComponent implements OnInit {
   //ouvrir l'espace de travail pour modiliser le plan du local
   OpenEspaceTravail(id: any) {
     console.log(id)
-    this.router.navigate(['/Menu/WMS-Stockage/Cartographie/Espace-Travail', id]);
+    this.router.navigate(['/Menu/WMS/WMS-Stockage/Cartographie/Espace-Travail/', id]);
   }
 
   //selectionner un halle et passer a la sttep du rayons

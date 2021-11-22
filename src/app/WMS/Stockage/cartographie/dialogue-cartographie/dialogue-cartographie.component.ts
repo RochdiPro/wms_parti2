@@ -846,6 +846,7 @@ export class EditHalleDialogComponent implements OnInit {
     }
   }
   zone: ZoneRayon = new ZoneRayon()
+  
   ajouterCouloir() {
 
 
@@ -1292,7 +1293,8 @@ export class AddZoneInvalideHalleComponent implements OnInit {
   zone: ZoneRayon = new ZoneRayon()
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<AddZoneInvalideHalleComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private _formBuilder: FormBuilder, private service: StockageService, private router: Router, private http: HttpClient) {
-    this.hall = data.hall;
+    console.log(data)
+      this.hall = data.hall;
     this.zone.hall = this.hall
     this.zone.etat = 'Invalide'
   }

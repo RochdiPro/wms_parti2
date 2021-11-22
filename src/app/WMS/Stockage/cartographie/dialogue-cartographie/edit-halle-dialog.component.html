@@ -85,7 +85,7 @@
             
 
              <button class="btn" (click)="OpenZoneInvalide(hall,hall.id)">
-                <img src="../../../../assets/icon/invalide.png" width="20" height="20"></button>
+                <img src="../../../../../assets/wms-images/icon/invalide.png" width="20" height="20"></button>
                 <div class="row">
                     <div class="table-responsive">
                        <table class="mb-0 table">
@@ -111,11 +111,16 @@
                  </div>
         </div>
         <div class="form-group">
-            <label><strong>Couloirs</strong> </label>
+            <label><strong>Couloirs</strong>
+                <button  (click) = "addColoirToggle()" mat-icon-button color="primary"
+                aria-label="Example icon button with a home icon">
+                <mat-icon>plus</mat-icon>
+            </button>
+                
+            </label>
             
 
-             <button class="btn" (click)="OpenZoneInvalide(hall,hall.id)">
-                <img src="../../../../assets/icon/invalide.png" width="20" height="20"></button>
+          
                 <div class="row">
                     <div class="table-responsive">
                        <table class="mb-0 table">
@@ -144,7 +149,7 @@
         <div class="form-group">
             <label><strong>Reserve</strong> </label>
             <button class="btn" >
-                <img src="../../../../assets/icon/reserver.png" width="20" height="20"></button>
+                <img src="../../../../../assets/wms-images/icon/reserver.png" width="20" height="20"></button>
 
                 <div class="row">
                     <div class="table-responsive">
@@ -221,7 +226,6 @@
 </div>
 
 <div mat-dialog-actions class="float-right">
-    <button class="mb-2 mr-2 btn btn-success"   (click) = "addColoirToggle()">Ajouter Couloir</button>
 
     <button class="mb-2 mr-2 btn btn-success"   (click) = "onSubmit()">Valider</button>
     <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>

@@ -133,6 +133,21 @@ editZone(id: number, zone: ZoneRayon): Observable<Object>{
   return this.httpClient.put(`${wms+"/WMS/Modifier_zone"}/${id}`, zone);
 }
 
+//Récupérer détails produit
+Detail_carto(Id:any): Observable<any> {
+ 
+  return this.httpClient.get(wms+"WMS/DetailCartographie"
+  ,{params:{
+    Id_Local:Id
+  }, responseType: 'blob'}).pipe(catchError(this.handleError)) 
+}
+saveCarto(form:any): Observable<Object>{
+  return this.httpClient.put(wms+"/WMS/Modifier_Cartographie", form);
+
+}
+
+
+
  
 
 

@@ -1,5 +1,7 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { fabric } from 'fabric';
+import { StockageService } from 'src/app/WMS/Stockage/services/stockage.service';
 
 @Component({
   selector: 'angular-editor-fabric-js',
@@ -29,8 +31,8 @@ export class FabricjsEditorComponent implements AfterViewInit {
   public textString: string;
   public url: string | ArrayBuffer = '';
   public size: any = {
-    width: 500,
-    height: 800
+    width: 900,
+    height: 700
   };
 
   public json: any;
@@ -40,7 +42,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
   public figureEditor = false;
   public selected: any;
 
-  constructor() { }
+  constructor(private sanitizer: DomSanitizer,private service: StockageService) { }
 
   ngAfterViewInit(): void {
 
@@ -104,7 +106,10 @@ export class FabricjsEditorComponent implements AfterViewInit {
     this.canvas.on('mouse:down', (e) => {
       const canvasElement: any = document.getElementById('canvas');
     });
-
+var json = ''
+this.canvas.loadFromJSON(json, this.canvas.renderAll.bind(this.canvas), function(o:any, object:any) {
+    fabric.log(o, object);
+});
   }
 
 
@@ -565,13 +570,28 @@ export class FabricjsEditorComponent implements AfterViewInit {
     w.document.write(this.canvas.toSVG());
     return 'data:image/svg+xml;utf8,' + encodeURIComponent(this.canvas.toSVG());
   }
+  url0:any;
+  carto:any
+   saveCanvasToJSON(local:any) {
+    var formData: any = new FormData();
 
-  saveCanvasToJSON() {
     const json = JSON.stringify(this.canvas);
     localStorage.setItem('Kanvas', json);
     console.log('json');
     console.log(json);
+    const blob = new Blob([JSON.stringify(this.canvas)], { type: 'application/json' });
+    var myFile = this.convertBlobFichier(blob, "assets/cartographie.json");
+    formData.append('Id_Local', local);
+    formData.append('Detail', myFile);
+     console.log(blob)
+     this.service.saveCarto(formData).subscribe( data =>{
+      console.log("carto change",data);
+      },
+   error => console.log(error)); 
 
+
+
+    
   }
 
   loadCanvasFromJSON() {
@@ -595,7 +615,11 @@ export class FabricjsEditorComponent implements AfterViewInit {
   }
 
   rasterizeJSON() {
+    var formData: any = new FormData();
     this.json = JSON.stringify(this.canvas, null, 2);
+    const userBlob = new Blob((this.json),{ type: "application/json"});
+    formData.append('cartographie', userBlob);
+    console.log(formData)
   }
 
   resetPanels() {
@@ -603,5 +627,23 @@ export class FabricjsEditorComponent implements AfterViewInit {
     this.imageEditor = false;
     this.figureEditor = false;
   }
-
+  public blobToFile = (theBlob: Blob, fileName: string): File => {
+    var b: any = theBlob;
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    b.lastModifiedDate = new Date();
+    b.name = fileName;
+  
+    //Cast to a File() type
+    return <File>theBlob;
+  }
+  
+  
+  //convertir blob à un fichier  
+  convertBlobFichier = (theBlob: Blob, fileName: string): File => {
+    var b: any = theBlob;
+    b.lastModifiedDate = new Date();
+    b.name = fileName;
+    return <File>theBlob;
+  }
+  
 }

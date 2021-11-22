@@ -24,6 +24,10 @@ title = 'angular-editor-fabric-js';
       this.local = data
       console.log(this.local)
      }, error => console.log(error));
+
+     this.service.Detail_carto(this.idLocal).subscribe(data => {
+       console.log("carto",data)
+     }, error => console.log(error));
    
   }
  
@@ -34,9 +38,12 @@ title = 'angular-editor-fabric-js';
   public rasterizeSVG() {
     this.canvas.rasterizeSVG();
   }
-
+  url0:any;
+  carto:any
   public saveCanvasToJSON() {
-    this.canvas.saveCanvasToJSON();
+   this.canvas.saveCanvasToJSON(this.idLocal);
+ 
+
   }
 
   public loadCanvasFromJSON() {
@@ -153,5 +160,32 @@ title = 'angular-editor-fabric-js';
 
   public rasterizeJSON() {
     this.canvas.rasterizeJSON();
+  }
+  saveCarto(){
+    var formData: any = new FormData();
+    formData.append('id', this.idLocal);
+    this.service.saveCarto(formData).subscribe( data =>{
+      console.log("carto change",data);
+      },
+   error => console.log(error)); 
+  }
+
+  public blobToFile = (theBlob: Blob, fileName: string): File => {
+    var b: any = theBlob;
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    b.lastModifiedDate = new Date();
+    b.name = fileName;
+  
+    //Cast to a File() type
+    return <File>theBlob;
+  }
+  
+  
+  //convertir blob à un fichier  
+  convertBlobFichier = (theBlob: Blob, fileName: string): File => {
+    var b: any = theBlob;
+    b.lastModifiedDate = new Date();
+    b.name = fileName;
+    return <File>theBlob;
   }
 }

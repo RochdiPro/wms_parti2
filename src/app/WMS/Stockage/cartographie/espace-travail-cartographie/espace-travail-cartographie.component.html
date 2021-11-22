@@ -21,7 +21,7 @@
     </div>
     <hr>
     <div class="row">
-        <div class="col-xl-3">
+        <div class="col-xl-2">
             <div class="card">
                 <div class="card-header">Taille</div>
                 <div class="card-body">
@@ -83,12 +83,12 @@
             <div class="card">
                 <div class="card-header">Ajouter images</div>
                 <div class="card-body max-height">
-                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/fabric/camion.svg">
-                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/fabric/forklift.svg">
-                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/fabric/wc.svg">
-                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/fabric/exit.svg">
-                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/fabric/enter.svg">
-                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/fabric/fireEctinceur.svg">
+                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/camion.svg">
+                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/forklift.svg">
+                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/wc.svg">
+                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/exit.svg">
+                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/enter.svg">
+                    <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/fireEctinceur.svg">
 
 
                 </div>
@@ -115,25 +115,25 @@
                 <div class="card-body text-center max-height">
                     <div class="btn-group btn-group-vertical" role="group" aria-label="...">
                         <button type="button" class="btn btn-primary" (click)="addFigure('rectangle');">
-                            <img src="../../../../../assets/icon/carre.png" width="30px" height="20px" >
+                            <img src="../../../../../assets/wms-images/icon/carre.png" width="30px" height="20px" >
                             Rectangle</button>
                         <button type="button" class="btn btn-primary" (click)="addFigure('square');">
-                            <img src="../../../../../assets/icon/carre.png" width="20px" height="20px" >
+                            <img src="../../../../../assets/wms-images/icon/carre.png" width="20px" height="20px" >
                             Carré</button>
                         <button type="button" class="btn btn-primary" (click)="addFigure('triangle');">
-                            <img src="../../../../../assets/icon/triangle.png" width="20px" height="20px" >
+                            <img src="../../../../../assets/wms-images/icon/triangle.png" width="20px" height="20px" >
                             Triangle</button>
                         <button type="button" class="btn btn-primary" (click)="addFigure('circle');">
-                            <img src="../../../../../assets/icon/circle.png" width="20px" height="20px" >
+                            <img src="../../../../../assets/wms-images/icon/circle.png" width="20px" height="20px" >
                             Circle</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-6">
+        <div class="col-xl-8">
             <angular-editor-fabric-js #canvas></angular-editor-fabric-js>
         </div>
-        <div class="col-xl-3">
+        <div class="col-xl-2">
             <div class="card">
                 <div class="card-header">Options</div>
                 <div class="card-body text-center">
