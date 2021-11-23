@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
  import { Fiche_Local } from 'src/app/WMS/Classe/Stockage/Fiche_Local';
 import { FabricjsEditorComponent } from 'src/projects/angular-editor-fabric-js/src/public-api';
+import Swal from 'sweetalert2';
 import { StockageService } from '../../services/stockage.service';
 
 @Component({
@@ -22,12 +23,7 @@ title = 'angular-editor-fabric-js';
 
     this.service.getLocalById(this.idLocal).subscribe(data => {
       this.local = data
-      console.log(this.local)
-     }, error => console.log(error));
-
-     this.service.Detail_carto(this.idLocal).subscribe(data => {
-       console.log("carto",data)
-     }, error => console.log(error));
+      }, error => console.log(error));
    
   }
  
@@ -41,8 +37,24 @@ title = 'angular-editor-fabric-js';
   url0:any;
   carto:any
   public saveCanvasToJSON() {
-   this.canvas.saveCanvasToJSON(this.idLocal);
- 
+   Swal.fire({
+    title: 'Do you want to save the changes?',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Save',
+    denyButtonText: `Don't save`,
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+     this.canvas.saveCanvasToJSON(this.idLocal);
+    //   this.canvas.saveCanvasToJSON();
+
+      Swal.fire('Modifications Enregistrée!', '', 'success')
+    } else if (result.isDenied) {
+      Swal.fire('Les modifications ne sont pas enregistrées', '', 'info')
+    }
+  })
+  
 
   }
 

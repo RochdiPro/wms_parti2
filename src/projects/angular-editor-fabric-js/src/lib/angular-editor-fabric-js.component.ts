@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { fabric } from 'fabric';
 import { StockageService } from 'src/app/WMS/Stockage/services/stockage.service';
 
@@ -10,7 +11,7 @@ import { StockageService } from 'src/app/WMS/Stockage/services/stockage.service'
 })
 export class FabricjsEditorComponent implements AfterViewInit {
   @ViewChild('htmlCanvas') htmlCanvas: ElementRef;
-
+  idLocal:any
   private canvas: fabric.Canvas;
   public props:any = {
     canvasFill: '#ffffff',
@@ -42,9 +43,23 @@ export class FabricjsEditorComponent implements AfterViewInit {
   public figureEditor = false;
   public selected: any;
 
-  constructor(private sanitizer: DomSanitizer,private service: StockageService) { }
+  constructor(private sanitizer: DomSanitizer,private service: StockageService, private route: ActivatedRoute) {
+    this.idLocal = this.route.snapshot.params['id'];
+    }
 
   ngAfterViewInit(): void {
+    var json = ''
+
+
+    
+    this.service.Detail_carto(this.idLocal).subscribe((detail: any) => {        
+       json = JSON.stringify(detail);
+     console.log(json)
+
+     this.canvas.loadFromJSON(json, this.canvas.renderAll.bind(this.canvas), function(o:any, object:any) {
+      fabric.log(o, object);
+  });
+  })
 
     // setup front side canvas
     this.canvas = new fabric.Canvas(this.htmlCanvas.nativeElement, {
@@ -53,12 +68,16 @@ export class FabricjsEditorComponent implements AfterViewInit {
       selectionBorderColor: 'blue'
     });
 
+ 
     this.canvas.on({
-      'object:moving': (e) => { },
-      'object:modified': (e) => { },
-      'object:selected': (e) => {
-
+      'object:moving': (e) => {      console.log("move")
+    },
+      'object:modified': (e) => {       console.log("modif")
+    },
+      'mouse:dblclick': (e) => {
         const selectedObject = e.target;
+        console.log("selectt",selectedObject.type)
+
         this.selected = selectedObject;
         selectedObject.hasRotatingPoint = true;
         selectedObject.transparentCorners = false;
@@ -70,6 +89,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
 
           this.getId();
           this.getOpacity();
+          console.log("selectt",selectedObject.type)
 
           switch (selectedObject.type) {
             case 'rect':
@@ -91,14 +111,18 @@ export class FabricjsEditorComponent implements AfterViewInit {
             case 'image':
               break;
           }
+      
         }
       },
       'selection:cleared': (e) => {
+        console.log("cleaar")
+
         this.selected = null;
         this.resetPanels();
-      }
-    });
-
+      }      
+ 
+    }
+ );
     this.canvas.setWidth(this.size.width);
     this.canvas.setHeight(this.size.height);
 
@@ -106,10 +130,14 @@ export class FabricjsEditorComponent implements AfterViewInit {
     this.canvas.on('mouse:down', (e) => {
       const canvasElement: any = document.getElementById('canvas');
     });
-var json = ''
-this.canvas.loadFromJSON(json, this.canvas.renderAll.bind(this.canvas), function(o:any, object:any) {
-    fabric.log(o, object);
-});
+  
+
+
+
+
+
+
+
   }
 
 
@@ -254,7 +282,7 @@ this.canvas.loadFromJSON(json, this.canvas.renderAll.bind(this.canvas), function
 
   extend(obj:any, id:any) {
     obj.toObject = ((toObject) => {
-      return function(this:any) {
+      return () => {
         return fabric.util.object.extend(toObject.call(this), {
           id
         });
