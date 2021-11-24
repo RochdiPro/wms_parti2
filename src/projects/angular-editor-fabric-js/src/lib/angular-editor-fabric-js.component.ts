@@ -74,7 +74,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
     },
       'object:modified': (e) => {       console.log("modif")
     },
-      'mouse:dblclick': (e) => {
+      'object:selected': (e) => {
         const selectedObject = e.target;
         console.log("selectt",selectedObject.type)
 
@@ -282,7 +282,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
 
   extend(obj:any, id:any) {
     obj.toObject = ((toObject) => {
-      return () => {
+      return function(this:any) {
         return fabric.util.object.extend(toObject.call(this), {
           id
         });

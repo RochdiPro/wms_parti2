@@ -225,12 +225,17 @@ export class AjouterRayonDialogComponent implements OnInit {
                 this.selectColoirGauche = false
               },
                 error => console.log(error));
-            }
-            if (this.zone.ordreX == 1) {
-
-            }
+                this.service.CouloirByZone(this.rayon.hall.id, this.zone.ordreX, this.zone.ordreY + 1).subscribe(data => {
+                  console.log("Couloir Droite", data);
+                  if (data != null) {
+                    this.rayon.coloirDroite = data
+                    this.disableDroit = true
+                    this.selectColoirDroite = false
+                  }
+                },
+                  error => console.log(error));
+            }           
             if (this.zone.ordreY != 1) {
-
 
               this.service.CouloirByZone(this.rayon.hall.id, this.zone.ordreX, this.zone.ordreY + 1).subscribe(data => {
                 console.log("Couloir Droite", data);
@@ -241,6 +246,7 @@ export class AjouterRayonDialogComponent implements OnInit {
                 }
               },
                 error => console.log(error));
+
               this.service.CouloirByZone(this.rayon.hall.id, this.zone.ordreX, this.zone.ordreY - 1).subscribe(data => {
                 console.log("Couloir Gauche", data);
                 if (data != null) {
@@ -250,8 +256,22 @@ export class AjouterRayonDialogComponent implements OnInit {
                 }
               },
                 error => console.log(error));
-            }
-            this.zone = new ZoneRayon()
+           
+           
+           
+           
+           
+           
+              }
+           
+           
+           
+           
+           
+           
+           
+           
+              this.zone = new ZoneRayon()
             this.rayon.espace = this.zones.length
           }
         },
@@ -567,6 +587,9 @@ export class EditRayonDialogComponent implements OnInit {
     this.service.CouloirRayonGaucheNull(this.hall.id).subscribe((data: any) => {
       this.couloirsDroite = data;
     });
+    console.log(this.couloirsDroite)
+    console.log(this.couloirsGauche)
+
   }
   //affiher formulaire ajout couloir
   addColoirToggle() {
@@ -1191,7 +1214,7 @@ export class AjouterEtageDialogComponent implements OnInit {
         )
       }
       if (data == false) {
-        if ((this.etage.hauteur >= this.etage.rayon.hauteur) || (this.etage.largeur >= this.etage.rayon.largeur)) {
+        if ((this.etage.hauteur > this.etage.rayon.hauteur) || (this.etage.largeur > this.etage.rayon.largeur)) {
           Swal.fire(
             'Erreur',
             'Verifer les dimension saisies',

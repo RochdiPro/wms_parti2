@@ -12,7 +12,7 @@
 
 
                 <div class="col-md-5">
-                    <label>Famille Logistique</label>  
+                    <label>Famille Logistique</label>
                     <mat-form-field appearance="fill">
                         <mat-label>Famille Logistique</mat-label>
                         <mat-select name="famille" [(ngModel)]="rayon.familleLogistique" id="famille">
@@ -105,7 +105,7 @@
             </div>
         </div>
 
-      <h3>Postions:</h3>  
+        <h3>Postions:</h3>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-5">
@@ -128,11 +128,11 @@
                         <tr>
                             <th>X</th>
                             <th>Y</th>
-                         </tr>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let zone  of zones; let i=index">
-                             <td>{{zone.ordreX}}</td>
+                            <td>{{zone.ordreX}}</td>
                             <td> {{zone.ordreY}} </td>
                         </tr>
 
@@ -141,60 +141,65 @@
             </div>
 
         </div>
-<br>
-<br>
+        <br>
+        <br>
 
-        <div class="form-group"  >
-           <div class="row"><h3>Alentours: </h3>
-            <button (click)="addColoirToggle()" mat-icon-button color="primary"
-            aria-label="Example icon button with a home icon">
-            <mat-icon>add</mat-icon>
-        </button>
-
-           </div>
-           
+        <div class="form-group">
             <div class="row">
-                <div class="col-md-5"  >
-                    <label>Coloir Gauche</label>
+                <h3>Alentours: </h3>
+                <button (click)="addColoirToggle()" mat-icon-button color="primary"
+                    aria-label="Example icon button with a home icon">
+                    <mat-icon>add</mat-icon>
+                </button>
 
-                    <mat-form-field appearance="fill" *ngIf="selectColoirGauche">
-                        <mat-label>Coloir Gauche</mat-label>
-                        <mat-select [disabled]="disableGauche" name="couloirGauche" [(ngModel)]="rayon.coloirGauche"
-                            id="couloirGauche">
-                            <mat-option  *ngFor="let c of couloirsGauche" [value]="c">{{c.libelle}}</mat-option>
-                         </mat-select>
-                    </mat-form-field>
-                    <mat-form-field appearance="fill"  *ngIf="!selectColoirGauche">
-                        <mat-label>Coloir Gauche</mat-label>
-                        <input type="text" [disabled]="true" class="form-control" id="coloirGauche2" 
-                        [(ngModel)]="rayon.coloirGauche.libelle" name="coloirGauche2">                    </mat-form-field>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Coloir Gauche</label>
+                    <div *ngIf="selectColoirGauche">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Coloir Gauche</mat-label>
+                            <mat-select [disabled]="disableGauche" name="couloirGauche" [(ngModel)]="rayon.coloirGauche"
+                                id="couloirGauche">
+                                <mat-option *ngFor="let c of couloirsGauche" [value]="c">{{c.libelle}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="!selectColoirGauche">
+                       
+                            <mat-label>Coloir Gauche</mat-label>
+                            <input type="text" [disabled]="true" class="form-control" id="coloirGauche2"
+                                [(ngModel)]="rayon.coloirGauche.libelle" name="coloirGauche2">
+                        
+                    </div>
                 </div>
                 <div class="col-md-5">
                     <label>Coloir Droite</label>
+                    <div *ngIf="selectColoirDroite">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Coloir Droite</mat-label>
+                            <mat-select   [disabled]="disableDroit" name="couloirDroite" [(ngModel)]="rayon.coloirDroite"
+                                id="couloirDroite">
+                                <mat-option *ngFor="let c of couloirsDroite" [value]="c">{{c.libelle}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="!selectColoirDroite">
+                             <mat-label>Coloir Droite</mat-label>
+                            <input matInput  type="text" [disabled]="true" class="form-control" id="couloirDroite2"
+                                [(ngModel)]="rayon.coloirDroite.libelle" name="couloirDroite2">
 
-                    <mat-form-field appearance="fill"   *ngIf="selectColoirDroite">
-                        <mat-label>Coloir Droite</mat-label>
-                        <mat-select [disabled]="disableDroit" name="couloirDroite" [(ngModel)]="rayon.coloirDroite"
-                            id="couloirDroite">
-                            <mat-option *ngFor="let c of couloirsDroite" [value]="c">{{c.libelle}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field appearance="fill"   *ngIf="!selectColoirDroite">
-                        <mat-label>Coloir Droite</mat-label>
-                        <input type="text"[disabled]="true" class="form-control" id="couloirDroite2" 
-                        [(ngModel)]="rayon.coloirDroite.libelle" name="couloirDroite2">
-
-                     </mat-form-field>
-                 
+                     </div>
                 </div>
-              
-              
+
+
 
 
 
             </div>
         </div>
- 
+
 
         <div class="form-group" *ngIf="addColoirShow">
             <div class="card-shadow-primary border mb-3 card card-body border-primary">

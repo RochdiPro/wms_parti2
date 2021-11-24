@@ -54,7 +54,7 @@ import { CommonModule } from '@angular/common';
   ],
   exports: [
 
-
+    MatInputModule,
 
   ],
   imports: [
@@ -78,7 +78,7 @@ import { CommonModule } from '@angular/common';
     MatTabsModule,
     MatRadioModule,
     MatSlideToggleModule,
-       
+     
     
      
    ],
