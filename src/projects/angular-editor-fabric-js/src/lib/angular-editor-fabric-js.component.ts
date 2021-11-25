@@ -49,7 +49,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     var json = ''
-
+ 
 
     
     this.service.Detail_carto(this.idLocal).subscribe((detail: any) => {        
@@ -74,7 +74,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
     },
       'object:modified': (e) => {       console.log("modif")
     },
-      'object:selected': (e) => {
+      'selection:created': (e) => {
         const selectedObject = e.target;
         console.log("selectt",selectedObject.type)
 

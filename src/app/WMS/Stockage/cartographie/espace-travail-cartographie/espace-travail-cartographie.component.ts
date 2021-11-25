@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FabricjsEditorComponent } from 'src/projects/angular-editor-fabric-js/src/public-api';
 import Swal from 'sweetalert2';
 import { StockageService } from '../../services/stockage.service';
+import { I18nInterface } from './image-drawing/i18n';
 
 @Component({
   selector: 'app-espace-travail-cartographie',
@@ -17,7 +18,8 @@ idLocal:any
 title = 'angular-editor-fabric-js';
 
   constructor(private service: StockageService,
-    private route: ActivatedRoute,private router: Router) { }
+    private route: ActivatedRoute,private router: Router) {    this.locale = this.getNavigatorLanguage();
+    }
   ngOnInit(): void {
     this.idLocal = this.route.snapshot.params['id'];
 
@@ -200,4 +202,30 @@ title = 'angular-editor-fabric-js';
     b.name = fileName;
     return <File>theBlob;
   }
+
+
+
+  public locale: string = "en";
+  public width = window.innerWidth - 150;
+  public height = window.innerHeight - 180;
+
+  public i18n: I18nInterface = {
+    saveBtn: "Salvar imagem como JPEG",
+    sizes: {
+      extra: "Extra"
+    }
+  };
+
+ 
+
+  public saveBtn($event:any) {
+   }
+
+  private getNavigatorLanguage = () =>
+    navigator.languages && navigator.languages.length
+      ? navigator.languages[0]
+      : (navigator as any).userLanguage ||
+        navigator.language ||
+        (navigator as any).browserLanguage ||
+        "en";
 }

@@ -25,6 +25,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   import { EspaceTravailCartographieComponent } from './espace-travail-cartographie/espace-travail-cartographie.component';
   import { CartoRoutingModule } from './cartographie-routing.module';
 import { CommonModule } from '@angular/common';
+import { ImageDrawingModule } from './espace-travail-cartographie/image-drawing/image-drawing.module';
    
 @NgModule({
   declarations: [
@@ -58,7 +59,7 @@ import { CommonModule } from '@angular/common';
 
   ],
   imports: [
-   
+    ImageDrawingModule,
     CommonModule,
     CartoRoutingModule,
      FormsModule, ReactiveFormsModule,

@@ -201,7 +201,7 @@ export class AjouterRayonDialogComponent implements OnInit {
           if (data == true) {
             Swal.fire(
               'Erreur',
-              'Cette zone est invalide',
+              'Cette Position est invalide',
               'error'
             )
           }
@@ -212,7 +212,7 @@ export class AjouterRayonDialogComponent implements OnInit {
             console.log("zones", this.zones)
             Swal.fire(
               'Success',
-              'Cette zone ajouté',
+              'Cette Position ajouté',
               'success'
             )
             if (this.zone.ordreY == 1) {
@@ -263,14 +263,7 @@ export class AjouterRayonDialogComponent implements OnInit {
            
            
               }
-           
-           
-           
-           
-           
-           
-           
-           
+
               this.zone = new ZoneRayon()
             this.rayon.espace = this.zones.length
           }
@@ -889,6 +882,27 @@ export class EditHalleDialogComponent implements OnInit {
         )
       }
       if (data == false) {
+        this.service.OrdreExiste(this.hall.id, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
+          console.log("odre existe", data)
+          if (data != null) {
+            Swal.fire(
+              'Erreur',
+              'Ordre Non Disponible',
+              'error'
+            )
+          }
+          if (data == null) {
+            this.service.ZoneInvalideHallExiste(this.hall.id, this.zone.ordreX, this.zone.ordreY).subscribe(data => {
+              console.log(data)
+              if (data == true) {
+                Swal.fire(
+                  'Erreur',
+                  'Cette Position est invalide',
+                  'error'
+                )
+              }
+              if (data == false) {
+
           this.service.ajoutZoneRayon(this.zone).subscribe(data => {
             this.zone=data
             console.log("zone",data)
@@ -913,6 +927,15 @@ export class EditHalleDialogComponent implements OnInit {
       }
     },
       error => console.log(error));
+    }
+  },
+    error => console.log(error));
+  
+  
+  
+  }
+},
+  error => console.log(error));
   }
 
 
@@ -1330,7 +1353,7 @@ export class AddZoneInvalideHalleComponent implements OnInit {
       if (data == true) {
         Swal.fire(
           'Erreur',
-          'Zone Deja existe',
+          'Position Deja existe',
           'error'
         )
       }
@@ -1339,7 +1362,7 @@ export class AddZoneInvalideHalleComponent implements OnInit {
           console.log("new zone ", data);
           Swal.fire(
             'Ajout Effecté',
-            'Zone Ajouté Avec Sucées',
+            'Position Ajouté Avec Sucées',
             'success'
           )
           this.close()

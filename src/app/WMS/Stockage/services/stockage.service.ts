@@ -236,6 +236,13 @@ OrdreCouloirExiste(hall: any,ordre_x: any,ordre_y:any): Observable<any>{
     catchError(this.handleError)
   );
 }
+
+//service verifer l'exsitance d'ordre dans un hall
+OrdreExiste(hall: any,ordre_x: any,ordre_y:any): Observable<any>{
+  return this.httpClient.get<any>(wms+"WMS/ordre_existe",{params:{ hall: hall,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
+    catchError(this.handleError)
+  );
+}
 //service verifer l'exsitance d'ordre du rayon dans un local
 OrdreHallExiste(local: any,ordre_x: any,ordre_y:any): Observable<any>{
   return this.httpClient.get<any>(wms+"WMS/OrdreHallExiste",{params:{ local: local,ordre_x:ordre_x,ordre_y:ordre_y}}).pipe(
