@@ -289,7 +289,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
       };
     })(obj.toObject);
   }
-
+//arriere plan image
   setCanvasImage() {
     const self = this;
     if (this.props.canvasImage) {
@@ -299,6 +299,36 @@ export class FabricjsEditorComponent implements AfterViewInit {
       });
     }
   }
+//arriere plan image
+setCanvasImageBack(url:any) {
+  if (url) {
+    fabric.Image.fromURL(url, (image) => {
+      image.set({
+        left: 10,
+        top: 10,
+        angle: 0,
+        padding: 10,
+        cornerSize: 10,
+        hasRotatingPoint: true
+      });
+      image.scaleToWidth(200);
+      image.scaleToHeight(200);
+      this.extend(image, this.randomId());
+      this.canvas.add(image);
+      this.selectItemAfterAdded(image);
+    });
+  }
+
+
+
+  const self = this;
+  if (this.props.canvasImage) {
+    this.canvas.setBackgroundColor(new fabric.Pattern({ source: this.props.canvasImage, repeat: 'repeat' }), () => {
+      self.props.canvasFill = '';
+      self.canvas.renderAll();
+    });
+  }
+}
 
   randomId() {
     return Math.floor(Math.random() * 999999) + 1;

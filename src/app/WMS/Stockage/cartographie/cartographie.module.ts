@@ -25,8 +25,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   import { EspaceTravailCartographieComponent } from './espace-travail-cartographie/espace-travail-cartographie.component';
   import { CartoRoutingModule } from './cartographie-routing.module';
 import { CommonModule } from '@angular/common';
-import { ImageDrawingModule } from './espace-travail-cartographie/image-drawing/image-drawing.module';
-   
+import { ScrollbarModule } from '../../../../projects/angular-editor-fabric-js/src/lib/scrollbar/scrollbar.module';
+    
 @NgModule({
   declarations: [
      
@@ -59,8 +59,7 @@ import { ImageDrawingModule } from './espace-travail-cartographie/image-drawing/
 
   ],
   imports: [
-    ImageDrawingModule,
-    CommonModule,
+      CommonModule,
     CartoRoutingModule,
      FormsModule, ReactiveFormsModule,
     MatIconModule,

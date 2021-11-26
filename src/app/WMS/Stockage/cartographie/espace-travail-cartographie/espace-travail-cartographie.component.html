@@ -1,8 +1,8 @@
-<div  >
+ 
     <div class="row">
         <div class="col-xl-12">
             <div class="row">
-                <div class="col-xl-12 text-right">
+                <div class="col-xl-10 text-right">
                     <button data-toggle="tooltip" data-placement="bottom" title="Export to image" type="button" class="btn btn-primary" (click)="rasterize();">
                         <i class="fa fa-download" aria-hidden="true"></i> Exporter image</button>
                     <button data-toggle="tooltip" data-placement="bottom" title="Export to SVG" type="button" class="btn btn-primary" (click)="rasterizeSVG();">
@@ -59,6 +59,21 @@
                            <div class="custom-item-body">
                                <input type="text" class="form-control" placeholder="http://example.jpg" [(ngModel)]="canvas.props.canvasImage" (keyup)="setCanvasImage()">
                            </div>
+                           <div class="card-body text-center">
+                            <img id="testImage" *ngIf="canvas.url" class="images-item-upload" [src]="canvas.url" [(ngModel)]="canvas.props.canvasImage" (click)="setCanvasImage();">
+                            <input type="file" (change)="readUrl($event);">
+                            <br/>
+           
+                            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeWhite(canvas.url);">
+                                        <i class="fa fa-times" aria-hidden="true"></i> Supprimer</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                        </div>
                    </div>
                 </div>
@@ -145,6 +160,7 @@
             <angular-editor-fabric-js #canvas></angular-editor-fabric-js>
         </div>
         <div class="col-xl-2">
+         
             <div class="card">
                 <div class="card-header">Options</div>
                 <div class="card-body text-center">
@@ -286,7 +302,22 @@
             </div>
         </div>
     </div>
-    <div class="row">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <div class="row">
         <div class="col-xl-12">
             <br/>
             <div class="card">
@@ -299,17 +330,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <br>
     <br>
-  </div>
-  <div class="container-fluid">
-    <div class="row p-1">
-        <image-drawing [width]="width" [height]="height" borderCss="1px solid black"  [showCancelButton]="false"
-            [enableLoadAnotherImage]="true" [enableRemoveImage]="true"
-            src="https://images.unsplash.com/photo-1565199953730-2ea3b119ae22?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80"
-            (save)="saveBtn($event)" [i18n]="i18n" [locale]="locale"
-            [drawingSizes]="{ small: 5, medium: 10, large: 25, extra: 50 }">
-        </image-drawing>
-    </div>
-</div>
+  
