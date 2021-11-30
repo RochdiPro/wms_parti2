@@ -12,8 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { QRCodeModule } from 'angularx-qrcode';
  import { ColorPickerModule } from 'ngx-color-picker';
-import { FabricjsEditorModule } from 'src/projects/angular-editor-fabric-js/src/public-api';
-import { MatTabsModule } from '@angular/material/tabs';
+ import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   import { AddZoneInvalideHalleComponent, AjouterEmplacmentDialogComponent, 
@@ -22,11 +21,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     EditEmplacementDialogComponent, EditEtageDialogComponent, EditHalleDialogComponent,
      EditOrdreRayonComponent, EditRayonDialogComponent, OpenCartographieComponent,
       OpenCartographieV2Component, OpenClientReserveComponent, OpenEmplacmentLoueeComponent, OpenInfoLocalComponent, OpenZoneInvalideComponent } from './dialogue-cartographie/dialogue-cartographie.component';
-  import { EspaceTravailCartographieComponent } from './espace-travail-cartographie/espace-travail-cartographie.component';
+  import { EspaceTravailCartographieComponent } from '../espace-travail-cartographie/espace-travail-cartographie.component';
   import { CartoRoutingModule } from './cartographie-routing.module';
 import { CommonModule } from '@angular/common';
-import { ScrollbarModule } from '../../../../projects/angular-editor-fabric-js/src/lib/scrollbar/scrollbar.module';
-    
+import { FabricjsEditorModule } from '../espace-travail-cartographie/angular-editor-fabric-js/src/public-api';
+     
 @NgModule({
   declarations: [
      
@@ -49,7 +48,6 @@ import { ScrollbarModule } from '../../../../projects/angular-editor-fabric-js/s
     OpenEmplacmentLoueeComponent,
     OpenClientReserveComponent,
     EditOrdreRayonComponent,
-     EspaceTravailCartographieComponent,
     DialogueCartographieComponent,
  
   ],

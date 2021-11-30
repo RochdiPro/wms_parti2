@@ -95,11 +95,13 @@ export class ScrollbarComponent {
   @HostListener("init.end", ["$event"])
   @HostListener("document:mouseup.silent")
   onDragEnd() {
-    this.verticalThumbActive = false;
-    this.horizontalThumbActive = false;
+    this.verticalThumbActive = true;
+    this.horizontalThumbActive = true;
   }
 
   onVerticalStart({ target, clientY }: any) {
+    console.log("vert strar")
+
     const { top, height } = (target as HTMLElement).getBoundingClientRect();
 
     this.verticalThumbDragOffset = (clientY - top) / height;
@@ -107,6 +109,7 @@ export class ScrollbarComponent {
   }
 
   onHorizontalStart({ target, clientX }: any) {
+    console.log("horizentale sta")
     const { left, width } = (target as HTMLElement).getBoundingClientRect();
 
     this.horizontalThumbDragOffset = (clientX - left) / width;
@@ -116,6 +119,8 @@ export class ScrollbarComponent {
   @shouldCall(isVerticalActive)
   @HostListener("init.vertical", ["$event"])
   onVerticalMove({ clientY }: any, { offsetHeight }: HTMLElement) {
+    console.log("verti mve")
+
     const { nativeElement } = this.elementRef;
     const { top, height } = nativeElement.getBoundingClientRect();
     const maxScrollTop = nativeElement.scrollHeight - height;
@@ -129,6 +134,7 @@ export class ScrollbarComponent {
   @shouldCall(isHorizontalActive)
   @HostListener("init.horizontal", ["$event"])
   onHorizontalMove({ clientX }: any, { offsetWidth }: HTMLElement) {
+    console.log("horzi mve")
     const { nativeElement } = this.elementRef;
     const { left, width } = nativeElement.getBoundingClientRect();
     const maxScrollLeft = nativeElement.scrollWidth - width;

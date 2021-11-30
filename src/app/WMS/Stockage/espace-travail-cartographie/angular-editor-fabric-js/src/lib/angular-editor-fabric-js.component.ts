@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { fabric } from 'fabric';
@@ -9,13 +9,14 @@ import { StockageService } from 'src/app/WMS/Stockage/services/stockage.service'
   templateUrl: './angular-editor-fabric-js.component.html',
   styleUrls: ['./angular-editor-fabric-js.component.css'],
 })
-export class FabricjsEditorComponent implements AfterViewInit {
+export class FabricjsEditorComponent implements AfterViewInit, AfterViewChecked {
   @ViewChild('htmlCanvas') htmlCanvas: ElementRef;
   idLocal:any
   private canvas: fabric.Canvas;
   public props:any = {
     canvasFill: '#ffffff',
     canvasImage: '',
+    canvasImageBack: '',
     id: null,
     opacity: null,
     fill: null,
@@ -31,6 +32,8 @@ export class FabricjsEditorComponent implements AfterViewInit {
 
   public textString: string;
   public url: string | ArrayBuffer = '';
+  public urlback: string | ArrayBuffer = '';
+
   public size: any = {
     width: 900,
     height: 700
@@ -46,7 +49,8 @@ export class FabricjsEditorComponent implements AfterViewInit {
   constructor(private sanitizer: DomSanitizer,private service: StockageService, private route: ActivatedRoute) {
     this.idLocal = this.route.snapshot.params['id'];
     }
-
+    ngAfterViewChecked() {
+     }
   ngAfterViewInit(): void {
     var json = ''
  
@@ -225,6 +229,16 @@ export class FabricjsEditorComponent implements AfterViewInit {
     }
   }
 
+  readUrlBack(event:any) {
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (readerEvent) => {
+        this.urlback = readerEvent.target.result;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  }
+
   removeWhite(url:any) {
     this.url = '';
   }
@@ -256,6 +270,23 @@ export class FabricjsEditorComponent implements AfterViewInit {
           radius: 50, left: 10, top: 10, fill: '#ff5722'
         });
         break;
+        case 'line':
+            add=new fabric.Line([50, 100, 200, 200], {
+                left: 170,
+                top: 150,
+                stroke: 'black'
+            }
+                 );
+        break;
+        case 'dotted':
+         add= new fabric.Line([50, 100, 200, 200], {
+            left: 170,
+            top: 150,
+            strokeDashArray: [5, 5],
+            stroke: 'black'
+        });
+        
+      break;
     }
     this.extend(add, this.randomId());
     this.canvas.add(add);
@@ -301,33 +332,16 @@ export class FabricjsEditorComponent implements AfterViewInit {
   }
 //arriere plan image
 setCanvasImageBack(url:any) {
-  if (url) {
-    fabric.Image.fromURL(url, (image) => {
-      image.set({
-        left: 10,
-        top: 10,
-        angle: 0,
-        padding: 10,
-        cornerSize: 10,
-        hasRotatingPoint: true
-      });
-      image.scaleToWidth(200);
-      image.scaleToHeight(200);
-      this.extend(image, this.randomId());
-      this.canvas.add(image);
-      this.selectItemAfterAdded(image);
-    });
-  }
-
-
 
   const self = this;
-  if (this.props.canvasImage) {
-    this.canvas.setBackgroundColor(new fabric.Pattern({ source: this.props.canvasImage, repeat: 'repeat' }), () => {
-      self.props.canvasFill = '';
-      self.canvas.renderAll();
-    });
-  }
+    if (url) {
+      this.canvas.setBackgroundColor(new fabric.Pattern({ source: this.props.canvasImageBack, repeat: 'repeat' }), () => {
+        self.props.canvasFill = '';
+        self.canvas.renderAll();
+      });
+    }
+
+
 }
 
   randomId() {

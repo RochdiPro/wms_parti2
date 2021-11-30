@@ -14,8 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { QRCodeModule } from 'angularx-qrcode';
  import { ColorPickerModule } from 'ngx-color-picker';
-import { FabricjsEditorModule } from 'src/projects/angular-editor-fabric-js/src/public-api';
-import { MatTabsModule } from '@angular/material/tabs';
+ import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
  import { HttpClientModule } from '@angular/common/http';
@@ -26,6 +25,7 @@ import { EditStockageComponent } from './entree/edit-stockage/edit-stockage.comp
 import { EntreeBonReceptionComponent } from './entree/entree-bon-reception/entree-bon-reception.component';
 import { TableauComponent } from './tableau/tableau.component';
 import { StockageRoutingModule } from './stockage-routing.module';
+import { FabricjsEditorModule } from './espace-travail-cartographie/angular-editor-fabric-js/src/public-api';
   
 @NgModule({
   declarations: [

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router'; 
 import { CartographieComponent } from './cartographie.component';
-import { EspaceTravailCartographieComponent } from './espace-travail-cartographie/espace-travail-cartographie.component';
+import { EspaceTravailCartographieComponent } from '../espace-travail-cartographie/espace-travail-cartographie.component';
 const routes: Routes =
 
   [

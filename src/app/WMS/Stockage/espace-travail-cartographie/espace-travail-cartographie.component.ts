@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
  import { Fiche_Local } from 'src/app/WMS/Classe/Stockage/Fiche_Local';
-import { FabricjsEditorComponent } from 'src/projects/angular-editor-fabric-js/src/public-api';
-import Swal from 'sweetalert2';
-import { StockageService } from '../../services/stockage.service';
+ import Swal from 'sweetalert2';
+import { StockageService } from '../services/stockage.service';
+import { FabricjsEditorComponent } from './angular-editor-fabric-js/src/public-api';
  
 @Component({
   selector: 'app-espace-travail-cartographie',
@@ -35,9 +35,7 @@ title = 'angular-editor-fabric-js';
   public rasterizeSVG() {
     this.canvas.rasterizeSVG();
   }
-  url0:any;
-  carto:any
-  public saveCanvasToJSON() {
+   public saveCanvasToJSON() {
    Swal.fire({
     title: 'Do you want to save the changes?',
     showDenyButton: true,
@@ -86,7 +84,10 @@ title = 'angular-editor-fabric-js';
   public readUrl(event:any) {
     this.canvas.readUrl(event);
   }
-
+  public readUrlBack(event:any) {
+    this.canvas.readUrlBack(event);
+  }
+  
   public removeWhite(url:any) {
     this.canvas.removeWhite(url);
   }
