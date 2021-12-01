@@ -625,7 +625,7 @@ setCanvasImageBack(url:any) {
   }
 
   confirmClear() {
-    if (confirm('Are you sure?')) {
+    if (confirm("Êtes-vous sûr de vider l'espace?")) {
       this.canvas.clear();
     }
   }

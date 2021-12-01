@@ -25,7 +25,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   import { CartoRoutingModule } from './cartographie-routing.module';
 import { CommonModule } from '@angular/common';
 import { FabricjsEditorModule } from '../espace-travail-cartographie/angular-editor-fabric-js/src/public-api';
-     
+import { ScrollbarComponent } from '../espace-travail-cartographie/angular-editor-fabric-js/src/lib/scrollbar/scrollbar.component';
+import { ScrollbarModule } from '../espace-travail-cartographie/angular-editor-fabric-js/src/lib/scrollbar/scrollbar.module';
+import {   CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { PerfectScrollbarEvents } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+
 @NgModule({
   declarations: [
      
@@ -57,8 +62,10 @@ import { FabricjsEditorModule } from '../espace-travail-cartographie/angular-edi
 
   ],
   imports: [
+    ScrollbarModule,
       CommonModule,
     CartoRoutingModule,
+     PerfectScrollbarModule,
      FormsModule, ReactiveFormsModule,
     MatIconModule,
     MatStepperModule,
@@ -81,5 +88,9 @@ import { FabricjsEditorModule } from '../espace-travail-cartographie/angular-edi
      
    ],
   providers: [],
+  schemas: [
+  CUSTOM_ELEMENTS_SCHEMA
+],
+
  })
 export class CartoghraphieModule { }

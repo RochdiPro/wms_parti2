@@ -26,6 +26,7 @@ import { EntreeBonReceptionComponent } from './entree/entree-bon-reception/entre
 import { TableauComponent } from './tableau/tableau.component';
 import { StockageRoutingModule } from './stockage-routing.module';
 import { FabricjsEditorModule } from './espace-travail-cartographie/angular-editor-fabric-js/src/public-api';
+import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
   
 @NgModule({
   declarations: [
@@ -43,6 +44,8 @@ import { FabricjsEditorModule } from './espace-travail-cartographie/angular-edit
   imports: [
     CommonModule,
     StockageRoutingModule,
+     PerfectScrollbarModule,
+
     FormsModule, ReactiveFormsModule,
     MatIconModule,
     MatStepperModule,
@@ -64,5 +67,7 @@ import { FabricjsEditorModule } from './espace-travail-cartographie/angular-edit
     
    
    ],
+ 
   })
+  
 export class StockageModule { }

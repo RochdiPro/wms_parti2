@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PerfectScrollbarComponent, PerfectScrollbarConfigInterface, PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
  import { Fiche_Local } from 'src/app/WMS/Classe/Stockage/Fiche_Local';
  import Swal from 'sweetalert2';
 import { StockageService } from '../services/stockage.service';
@@ -37,11 +38,11 @@ title = 'angular-editor-fabric-js';
   }
    public saveCanvasToJSON() {
    Swal.fire({
-    title: 'Do you want to save the changes?',
+    title: 'Voulez-vous enregistrer les modifications?',
     showDenyButton: true,
     showCancelButton: true,
-    confirmButtonText: 'Save',
-    denyButtonText: `Don't save`,
+    confirmButtonText: 'Oui',
+    denyButtonText: `Non, Annuler`,
   }).then((result) => {
     /* Read more about isConfirmed, isDenied below */
     if (result.isConfirmed) {
@@ -210,6 +211,68 @@ title = 'angular-editor-fabric-js';
   public locale: string = "en";
   public width = window.innerWidth - 150;
   public height = window.innerHeight - 180;
+  public type: string = 'component';
 
-  
+  public disabled: boolean = false;
+
+  public config: PerfectScrollbarConfigInterface = {
+    useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false
+  };
+
+  @ViewChild(PerfectScrollbarComponent) componentRef?: PerfectScrollbarComponent;
+  @ViewChild(PerfectScrollbarDirective) directiveRef?: PerfectScrollbarDirective;
+
+ 
+  public toggleType(): void {
+    this.type = (this.type === 'component') ? 'directive' : 'component';
+  }
+
+  public toggleDisabled(): void {
+    this.disabled = !this.disabled;
+  }
+
+  public scrollToXY(x: number, y: number): void {
+    if (this.type === 'directive' && this.directiveRef) {
+      this.directiveRef.scrollTo(x, y, 500);
+    } else if (this.type === 'component' && this.componentRef && this.componentRef.directiveRef) {
+      this.componentRef.directiveRef.scrollTo(x, y, 500);
+    }
+  }
+
+  public scrollToTop(): void {
+    if (this.type === 'directive' && this.directiveRef) {
+      this.directiveRef.scrollToTop();
+    } else if (this.type === 'component' && this.componentRef && this.componentRef.directiveRef) {
+      this.componentRef.directiveRef.scrollToTop();
+    }
+  }
+
+  public scrollToLeft(): void {
+    if (this.type === 'directive' && this.directiveRef) {
+      this.directiveRef.scrollToLeft();
+    } else if (this.type === 'component' && this.componentRef && this.componentRef.directiveRef) {
+      this.componentRef.directiveRef.scrollToLeft();
+    }
+  }
+
+  public scrollToRight(): void {
+    if (this.type === 'directive' && this.directiveRef) {
+      this.directiveRef.scrollToRight();
+    } else if (this.type === 'component' && this.componentRef && this.componentRef.directiveRef) {
+      this.componentRef.directiveRef.scrollToRight();
+    }
+  }
+
+  public scrollToBottom(): void {
+    if (this.type === 'directive' && this.directiveRef) {
+      this.directiveRef.scrollToBottom();
+    } else if (this.type === 'component' && this.componentRef && this.componentRef.directiveRef) {
+      this.componentRef.directiveRef.scrollToBottom();
+    }
+  }
+
+  public onScrollEvent(event: any): void {
+    console.log(event);
+  }
+
 }

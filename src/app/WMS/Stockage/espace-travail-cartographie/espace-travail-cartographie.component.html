@@ -9,7 +9,7 @@
                         <i class="fa fa-download" aria-hidden="true"></i> Exporter  SVG</button>
                     <button data-toggle="tooltip" data-placement="bottom" title="Save in localStorage" type="button" class="btn btn-primary"
                         (click)="saveCanvasToJSON();">
-                        <i class="fa fa-save" aria-hidden="true"></i> Enregistrer local</button>
+                        <i class="fa fa-save" aria-hidden="true"></i> Enregistrer</button>
                     <!-- <button data-toggle="tooltip" data-placement="bottom" title="Load from localStorage" type="button" class="btn btn-primary"
                         (click)="loadCanvasFromJSON();">
                         <i class="fa fa-save" aria-hidden="true"></i> Enregistrer local</button> -->
@@ -23,145 +23,152 @@
 
     <div class="row">
 
-        <div class="col-xl-2">
-            <div class="card">
-                <div class="card-header">Taille</div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control" [(ngModel)]="canvas.size.width" (keyup)="changeSize()">
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                    Largeur
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group mb-4">
-                            <input type="text" class="form-control" [(ngModel)]="canvas.size.height" (keyup)="changeSize()">
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                    Longeur
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div  *ngIf="!canvas.selected">
-                        <div class="custom-item" *ngIf="!canvas.props.canvasImage">
-                           <div class="custom-item-title">Arrière-plan Color</div>
-                           <div class="custom-item-body">
-                               <input type="text" class="form-control" [cpPosition]="'bottom'" [(colorPicker)]="canvas.props.canvasFill" [style.background]="canvas.props.canvasFill"
-                                   [value]="canvas.props.canvasFill" (colorPickerChange)="setCanvasFill()">
-                           </div>
-                       </div>
+             <div class="col-xl-2">
+                
+                  <perfect-scrollbar style="max-width: 700px; max-height: 600px;" [config]="config">
 
-
-                       <div class="custom-item">
-                           <div class="custom-item-title">Arrière-plan Image (url)</div>
-                           <div class="custom-item-body">
-                               <input type="text" class="form-control" placeholder="http://example.jpg" [(ngModel)]="canvas.props.canvasImage" (keyup)="setCanvasImage()">
-                           </div>
-                           <div class="card-body text-center">
-                            <img id="testImage" *ngIf="canvas.urlback" class="images-item-upload" [src]="canvas.urlback" [(ngModel)]="canvas.props.canvasImageBack" (click)="setCanvasImageBack(canvas.urlback);">
-                            <input type="file" (change)="readUrlBack($event);">
-                            <br/>
-           
-                            <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeWhite(canvas.urlback);">
-                                        <i class="fa fa-times" aria-hidden="true"></i> Supprimer</button>
+                <div class="card">
+                    <div class="card-header">Taille</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control" [(ngModel)]="canvas.size.width" (keyup)="changeSize()">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        Largeur
+                                    </span>
                                 </div>
                             </div>
                         </div>
-
-
-
-                       </div>
-                       <div class="card-header">Ajouter text</div>
-                       <div class="card-body">
-                           <div class="input-group">
-                               <input type="text" class="form-control" [(ngModel)]="canvas.textString">
-                               <div class="input-group-append">
-                                   <span class="input-group-text">
-                                       <button id="add-text" data-toggle="tooltip" data-placement="bottom" title="Add text" class="btn btn-primary" (click)="addText()">
-                                           <i class="fa fa-plus" aria-hidden="true"></i>
-                                       </button>
-                                   </span>
+                        <div class="form-group">
+                            <div class="input-group mb-4">
+                                <input type="text" class="form-control" [(ngModel)]="canvas.size.height" (keyup)="changeSize()">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        Longeur
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div  *ngIf="!canvas.selected">
+                            <div class="custom-item" *ngIf="!canvas.props.canvasImage">
+                               <div class="custom-item-title">Arrière-plan Color</div>
+                               <div class="custom-item-body">
+                                   <input type="text" class="form-control" [cpPosition]="'bottom'" [(colorPicker)]="canvas.props.canvasFill" [style.background]="canvas.props.canvasFill"
+                                       [value]="canvas.props.canvasFill" (colorPickerChange)="setCanvasFill()">
                                </div>
                            </div>
-                       </div>
-                         <div class="card-header">Ajouter images</div>
-                        <div class="card-body max-height">
-                            <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/camion0.svg">
-                            <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/forklift0.svg">
-                            <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/wc-.svg">
-                            <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/ouut0.svg">
-                             <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/extinc.svg">
-                             <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/rec1.svg">
-
-                         <br>
- 
-                        </div>
-                          
-                        <div class="card-header">Ajouter figure</div>
-                        <div class="card-body text-center max-height">
-                            <div class="btn-group btn-group-vertical" role="group" aria-label="...">
-                                <div class="row">
-                                    <button type="button" class="btn btn-primary" (click)="addFigure('rectangle');">
-                                        <img src="../../../../../assets/wms-images/icon/rectangle.png"  width="30px" height="30px" >
-                                        </button>
-                                    <button type="button" class="btn btn-primary" (click)="addFigure('square');">
-                                        <img src="../../../../../assets/wms-images/icon/carre.png" width="30px" height="30px" >
-                                        </button>
-                                </div>
-                                <div class="row">
-                                    
-                                <button type="button" class="btn btn-primary" (click)="addFigure('triangle');">
-                                    <img src="../../../../../assets/wms-images/icon/triangle.png" width="30px" height="30px" >
-                                    </button>
-                                <button type="button" class="btn btn-primary" (click)="addFigure('circle');">
-                                    <img src="../../../../../assets/wms-images/icon/circle.png"width="30px" height="30px" >
-                                    </button>
-                                 </div>
-                                <div class="row">
-                                    
-                                   
-                                        <button type="button" class="btn btn-primary" (click)="addFigure('line');">
-                                            <img src="../../../../../assets/wms-images/icon/trait.png" width="30px" height="30px" >
-                                            </button>
-                                            <button type="button" class="btn btn-primary" (click)="addFigure('dotted');">
-                                                <img src="../../../../../assets/wms-images/icon/dotted.png" width="30px" height="30px" >
-                                                </button>
-            
+    
+    
+                           <div class="custom-item">
+                               <div class="custom-item-title">Arrière-plan Image (url)</div>
+                               <div class="custom-item-body">
+                                   <input type="text" class="form-control" placeholder="http://example.jpg" [(ngModel)]="canvas.props.canvasImage" (keyup)="setCanvasImage()">
+                               </div>
+                               <div class="card-body text-center">
+                                <img id="testImage" *ngIf="canvas.urlback" class="images-item-upload" [src]="canvas.urlback" [(ngModel)]="canvas.props.canvasImageBack" (click)="setCanvasImageBack(canvas.urlback);">
+                                <input type="file" (change)="readUrlBack($event);">
+                                <br/>
+               
+                                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeWhite(canvas.urlback);">
+                                            <i class="fa fa-times" aria-hidden="true"></i> Supprimer</button>
                                     </div>
-                                      
-                            </div>
-                        </div>
-                        <div class="card-header">Télécharger image</div>
-                        <div class="card-body text-center">
-                            <img id="testImage" *ngIf="canvas.url" class="images-item-upload" [src]="canvas.url" (click)="addImageOnCanvas(canvas.url);">
-                            <input type="file" (change)="readUrl($event);">
-                            <br/>
-                            <br/>
-                            <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeWhite(canvas.url);">
-                                        <i class="fa fa-times" aria-hidden="true"></i> Supprimer</button>
                                 </div>
                             </div>
-                        </div>
-                       
-                    </div>
-                </div>
+    
+    
+    
+                           </div>
+                           <div class="card-header">Ajouter text</div>
+                           <div class="card-body">
+                               <div class="input-group">
+                                   <input type="text" class="form-control" [(ngModel)]="canvas.textString">
+                                   <div class="input-group-append">
+                                       <span class="input-group-text">
+                                           <button id="add-text" data-toggle="tooltip" data-placement="bottom" title="Add text" class="btn btn-primary" (click)="addText()">
+                                               <i class="fa fa-plus" aria-hidden="true"></i>
+                                           </button>
+                                       </span>
+                                   </div>
+                               </div>
+                           </div>
+                             <div class="card-header">Ajouter images</div>
+                            <div class="card-body max-height">
+                                <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/camion0.svg">
+                                <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/forklift0.svg">
+                                <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/wc-.svg">
+                                <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/ouut0.svg">
+                                 <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/extinc.svg">
+                                 <img class="images-item" (click)="getImgPolaroid($event)" src="../../../../../assets/wms-images/fabric/rec1.svg">
+    
+                             <br>
+     
+                            </div>
+                              
+                            <div class="card-header">Ajouter figure</div>
+                            <div class="card-body text-center max-height">
+                                <div class="btn-group btn-group-vertical" role="group" aria-label="...">
+                                    <div class="row">
+                                        <button type="button" class="btn btn-primary" (click)="addFigure('rectangle');">
+                                            <img src="../../../../../assets/wms-images/icon/rectangle.png"  width="30px" height="30px" >
+                                            </button>
+                                        <button type="button" class="btn btn-primary" (click)="addFigure('square');">
+                                            <img src="../../../../../assets/wms-images/icon/carre.png" width="30px" height="30px" >
+                                            </button>
+                                    </div>
+                                    <div class="row">
+                                        
+                                    <button type="button" class="btn btn-primary" (click)="addFigure('triangle');">
+                                        <img src="../../../../../assets/wms-images/icon/triangle.png" width="30px" height="30px" >
+                                        </button>
+                                    <button type="button" class="btn btn-primary" (click)="addFigure('circle');">
+                                        <img src="../../../../../assets/wms-images/icon/circle.png"width="30px" height="30px" >
+                                        </button>
+                                     </div>
+                                    <div class="row">
+                                        
+                                       
+                                            <button type="button" class="btn btn-primary" (click)="addFigure('line');">
+                                                <img src="../../../../../assets/wms-images/icon/trait.png" width="30px" height="30px" >
+                                                </button>
+                                                <button type="button" class="btn btn-primary" (click)="addFigure('dotted');">
+                                                    <img src="../../../../../assets/wms-images/icon/dotted.png" width="30px" height="30px" >
+                                                    </button>
                 
-            </div>
+                                        </div>
+                                          
+                                </div>
+                            </div>
+                            <div class="card-header">Télécharger image</div>
+                            <div class="card-body text-center">
+                                <img id="testImage" *ngIf="canvas.url" class="images-item-upload" [src]="canvas.url" (click)="addImageOnCanvas(canvas.url);">
+                                <input type="file" (change)="readUrl($event);">
+                                <br/>
+                                <br/>
+                                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeWhite(canvas.url);">
+                                            <i class="fa fa-times" aria-hidden="true"></i> Supprimer</button>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    
+                </div>
+               
            
-       
+                
+                <br/>
+            </perfect-scrollbar>
+
+            </div>
             
-            <br/>
-            
-        </div>
+    
+
         <div class="col-xl-8">
             <angular-editor-fabric-js #canvas></angular-editor-fabric-js>
         </div>
@@ -169,9 +176,10 @@
 
 
 
-        
+
         <div class="col-xl-2">
-         
+            <perfect-scrollbar style="max-width: 700px; max-height: 600px;" [config]="config">
+    
             <div class="card">
                 <div class="card-header">Options</div>
                 <div class="card-body text-center">
@@ -311,20 +319,103 @@
                     </div>
                 </div>
             </div>
+        </perfect-scrollbar>
+
         </div>
+        
     </div>
 
 
 
 
+    <div class="col-xl-2">
+
+        <div class="box-container" fxLayout="column"  >
+            <div class="app-title">Simple example app for the ngx-perfect-scrollbar</div>
+          
+            
+          
+            <div class="horizontal-container" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="stretch" fxFlex="100%">
+              <div class="vertical-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
+                <div class="box-title">Perfect Scrollbar</div>
+          
+                <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
+                  <perfect-scrollbar *ngIf="type === 'component'" class="scroll-container" fxFlex="auto" [config]="config" [scrollIndicators]="true" (psXReachEnd)="onScrollEvent($event)" (psYReachEnd)="onScrollEvent($event)" (psXReachStart)="onScrollEvent($event)" (psYReachStart)="onScrollEvent($event)">
+                    <div class="scrollable-content">
+                      Scroll<br>
+                      me!<br>
+                      <br>
+                     
+                      I<br>
+                      am<br>
+                      an<br>
+                      example<br>
+                      content<br>
+                      text<br>
+                      for<br>
+                      this<br>
+                      really<br>
+                      cooooooooooooooooooooooooooooooooooooooooooooooooool<br>
+                      scrollable<br>
+                      area<br>
+                      in<br>
+                      this<br>
+                      example<br>
+                      app<br>
+                      which<br>
+                      is<br>
+                      using<br>
+                      the<br>
+                      angular2<br>
+                      perfect<br>
+                      scrollbar<br>
+                      library<br>
+                    </div>
+                  </perfect-scrollbar>
+          
+                  <div *ngIf="type === 'directive'" class="scroll-container ps" fxFlex="auto" [perfectScrollbar]="config" (psXReachEnd)="onScrollEvent($event)" (psYReachEnd)="onScrollEvent($event)" (psXReachStart)="onScrollEvent($event)" (psYReachStart)="onScrollEvent($event)">
+                    <div class="scrollable-content">
+                      Scroll<br>
+                      me!<br>
+                      <br>
+                      I<br>
+                      am<br>
+                      an<br>
+                      example<br>
+                      content<br>
+                      text<br>
+                      for<br>
+                      this<br>
+                      really<br>
+                      cooooooooooooooooooooooooooooooooooooooooooooooooool<br>
+                      scrollable<br>
+                      area<br>
+                      in<br>
+                      this<br>
+                      example<br>
+                      app<br>
+                      which<br>
+                      is<br>
+                      using<br>
+                      the<br>
+                      angular2<br>
+                      perfect<br>
+                      scrollbar<br>
+                      library<br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
 
 
 
+    </div>
 
 
-
-
-
+     
 
 
 
