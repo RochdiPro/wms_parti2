@@ -1,0 +1,98 @@
+<h1 mat-dialog-title>Cartographie</h1>
+
+<div mat-dialog-content>
+   <!--  les legends -->
+   <div class="row">
+
+      <div id="depot" class="col col-size">
+         <div class="row">
+            <div class="un"></div>
+            Libre <div id="carre2"></div>
+            <div class="un"></div>
+            Encore Disponible <div id="carre3"></div>
+            <div class="un"></div>
+            Plein <div id="carre1"></div>
+         </div>
+         <!-- affichage halls -->
+         <div class="row" *ngIf="hallShow">
+            <div class="mb-3 card text-white card-body" style="background-color: #eff1f7      ;">
+               <h3 class=" card-title">{{libelleLocal}}</h3>
+               <div class="row">
+                  <div class="col-md-2" *ngFor="let hall of halles;  let i = index ">
+                     <div class="card-body">
+                        <div>
+                           <ul class="list-group">
+                              <button (click)="SelectHall(hall)" class="list-group-item-action list-group-item " style="width: 150px;
+                                  height: 150px;">
+                                 <br> <b>Hall {{hall.libelle}}</b><br>
+
+                              </button>
+
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+
+
+         </div>
+         <!--   affichage rayon/etage/emplacment-->
+         <div *ngIf="rayonShow">
+ 
+               <div class="mb-3 card text-white card-body" style="background-color: #ccd8ff ;">
+                  <h5 class="text-white card-title">{{libelleLocal}} {{libelleHalle}}</h5>
+                  <div class="row"  *ngFor=" let in of counter(x) ;let i = index">
+                     <div class="col-md-2" *ngFor=" let is of counter(y) ;let j = index">
+                        
+                        <div class="card-body"   *ngIf="arrRayon[i][j] =='invalide' ">
+                           <div> 
+                                <button  class="  mb-1 mr-1 btn "> 
+                                 <img src="../../../../assets/icon/hachuré.png " width= "90px"  height="300px"  >
+                              
+                                  </button>
+                                
+                           </div>
+                        </div>
+      
+                        <div class="card-body"   *ngIf="arrRayon[i][j]!= null  &&  arrRayon[i][j] != 'invalide' " >
+                           
+                           <div>
+                              <ul class="list-group">
+                                 <button class="list-group-item-action list-group-item " style="width: 90px;
+                             height: 300px;">
+                                    <br> <b>Rayon {{arrRayon[i][j].libelle}}</b><br> 
+                                    <div class="row" *ngFor="let etage of arrRayon[i][j].etages;  let i = index">
+                                          <ul class="list-group"  style="width: 80px;">
+                                             <div style="background-color:  #EDEDED ;" >
+                                                <b>Etage{{etage.libelle}} {{etage.sousFamilleLogistique.libelle}}</b>
+                                             </div>
+                                          </ul>      
+                                       <br>
+                                    </div>
+                                 </button>
+                 
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                     
+                  </div> 
+               
+               </div>
+             
+         </div>
+
+      </div>
+   </div>
+   <!--  cartographie -->
+
+
+</div>
+
+<div mat-dialog-actions class="float-right">
+
+   <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>
+
+</div>

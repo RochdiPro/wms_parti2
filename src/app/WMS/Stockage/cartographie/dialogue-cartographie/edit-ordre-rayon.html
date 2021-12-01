@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Rayon {{rayon.id}}</h1>
+
+<div mat-dialog-content>
+    <form>
+    
+        <div class="form-group">
+            <label>Libelle</label>
+            <input type="text" class ="form-control" id = "libelle"   [disabled]="true"   [(ngModel)] = "rayon.libelle"   name = "libelle">
+        </div>
+
+     <!--    <div class="form-group">
+            <label>Ordre X</label>
+            <input type="number" class ="form-control" id = "ordreX"     [(ngModel)] = "rayon.ordreX"   name = "ordreX">
+        </div>
+        <div class="form-group">
+            <label>Ordre Y</label>
+            <input type="number" class ="form-control" id = "ordreY"     [(ngModel)] = "rayon.ordreY"   name = "ordreY">
+        </div>
+     -->
+    </form>
+</div>
+
+<div mat-dialog-actions class="float-right">
+    <button class="mb-2 mr-2 btn btn-success"   (click) = "onSubmit()">Valider</button>
+    <button class="mb-2 mr-2 btn btn-primary" (click)="close()">Fermer</button>
+
+</div>

@@ -1,0 +1,88 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.content-wrapper {
+  transform-origin: 0 0 0;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.hello {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 2rem;
+  font-family: monospace;
+  font-weight: bold;
+  color: lime;
+  background-image: url('https://i.memeful.com/media/post/1RXYDLd_700wa_0.gif');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.map {
+  border: 5px solid lime;
+  border-radius: 15px;
+}
+
+.map--hello {
+  height: 20%;
+  width: 40%;
+}
+
+.map--floor {
+  height: 30%;
+  width: 90%;
+  flex-grow: 1;
+  margin-bottom: 8px;
+}
+
+.reset-button {
+  margin: 16px;
+  padding: 8px;
+}
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.rect {
+  fill:lime;
+  opacity:0.5
+}
+
+.rect:hover {
+  fill:blue;
+  opacity:0.5
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+}
